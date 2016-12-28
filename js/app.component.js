@@ -5,26 +5,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-const core_1 = require("@angular/core"); // <-- importing Component from core
+// Import
+// importing Component from core
+const core_1 = require("@angular/core");
+// Decorator
 let AppComponent = class AppComponent {
-    constructor() {
-        this.childVisible = true;
-        this.childSavingIndicator = "start";
-    }
-    showChild() {
-        this.childVisible = true;
-        this.childSavingIndicator = "hello";
-    }
-    hideChild() {
-        this.childVisible = false;
-        this.childSavingIndicator = "world";
-    }
 };
 AppComponent = __decorate([
-    // <-- importing Component from core
     core_1.Component({
+        // the element defined in the index.html
         selector: "my-app",
-        templateUrl: "../../app/shared/parent.html" // <---this is the template to put in the component.
+        // this is the template to put in the component. Note this is the directive of showHide.component.ts
+        // the name of the directive is defined in the Decorator's selector
+        template: `<my-showHide></my-showHide>`
     })
 ], AppComponent);
 Object.defineProperty(exports, "__esModule", { value: true });

@@ -14,16 +14,16 @@ var __decorate = undefined && undefined.__decorate || function (decorators, targ
         if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     }return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var core_1 = require("@angular/core"); // <-- importing Component from core
-var AppComponent = function () {
-    function AppComponent() {
-        _classCallCheck(this, AppComponent);
+var core_1 = require("@angular/core");
+var ShowHideComponent = function () {
+    function ShowHideComponent() {
+        _classCallCheck(this, ShowHideComponent);
 
         this.childVisible = true;
         this.childSavingIndicator = "start";
     }
 
-    _createClass(AppComponent, [{
+    _createClass(ShowHideComponent, [{
         key: "showChild",
         value: function showChild() {
             this.childVisible = true;
@@ -37,14 +37,12 @@ var AppComponent = function () {
         }
     }]);
 
-    return AppComponent;
+    return ShowHideComponent;
 }();
-AppComponent = __decorate([
-// <-- importing Component from core
-core_1.Component({
-    selector: "my-app",
-    templateUrl: "../../app/shared/parent.html" // <---this is the template to put in the component.
-})], AppComponent);
+ShowHideComponent = __decorate([core_1.Component({
+    selector: "my-showHide",
+    templateUrl: "../../app/showHide/showHide.html"
+})], ShowHideComponent);
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = AppComponent;
-//# sourceMappingURL=app.component.js.map
+exports.default = ShowHideComponent;
+//# sourceMappingURL=showHide.component.js.map

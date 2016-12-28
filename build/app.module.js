@@ -12,15 +12,21 @@ var __decorate = undefined && undefined.__decorate || function (decorators, targ
         if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     }return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+// necessary imports
 var core_1 = require("@angular/core");
 var platform_browser_1 = require("@angular/platform-browser");
+// import { RouterModule }   from '@angular/router';
+// bespoke components
 var app_component_1 = require("./app.component");
+var showHide_component_1 = require("./showHide/showHide.component");
 var AppModule = function AppModule() {
     _classCallCheck(this, AppModule);
 };
 AppModule = __decorate([core_1.NgModule({
     imports: [platform_browser_1.BrowserModule],
-    declarations: [app_component_1.default],
+    //need to add every component to our declarations
+    declarations: [app_component_1.default, showHide_component_1.default],
+    // our bootstrap is AppComponent
     bootstrap: [app_component_1.default]
 })], AppModule);
 Object.defineProperty(exports, "__esModule", { value: true });

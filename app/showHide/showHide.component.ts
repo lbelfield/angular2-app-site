@@ -1,11 +1,11 @@
-import {Component} from "@angular/core"; // <-- importing Component from core
+import {Component} from "@angular/core";
 
 @Component({
-    selector: "my-app", //<----the element defined in the index.html
-    templateUrl: "../../app/shared/parent.html" // <---this is the template to put in the component.
+    selector: "my-showHide",
+    templateUrl: "../../app/showHide/showHide.html"
 })
 
-export default class AppComponent {  // <--- we need to export the class AppComponent. 
+export default class ShowHideComponent {
     public childVisible: boolean;
     public childSavingIndicator: string;
 
