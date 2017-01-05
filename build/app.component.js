@@ -24,7 +24,7 @@ AppComponent = __decorate([core_1.Component({
     selector: "my-app",
     // this is the template to put in the component. Note this is the directive of showHide.component.ts
     // the name of the directive is defined in the Decorator's selector
-    template: "<my-showHide></my-showHide>"
+    template: "<my-showHide></my-showHide> <router-outlet></router-outlet>"
 })], AppComponent);
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = AppComponent;

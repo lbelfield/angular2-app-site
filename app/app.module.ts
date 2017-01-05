@@ -1,21 +1,28 @@
 // necessary imports
 import { NgModule } from "@angular/core"; 
 import { BrowserModule } from "@angular/platform-browser"; 
-// import { RouterModule }   from '@angular/router';
+import { RouterModule, Routes }   from '@angular/router';
+import {PathLocationStrategy, LocationStrategy, HashLocationStrategy} from '@angular/common';
 
 // bespoke components
 import AppComponent from "./app.component"; 
 import ShowHideComponent from "./showHide/showHide.component";
 
+const appRoutes: Routes = [
+        {path: "myapp", component: AppComponent},
+        {path: "showHide", component: ShowHideComponent},
+  { path: '',
+    redirectTo: '/showHide',
+    pathMatch: 'full'
+  }
+];
+
 @NgModule({ 
   imports: [
-    BrowserModule
-    //routing still not working!!!!
-    // , RouterModule.forRoot([
-    //     {path: 'myapp', component: AppComponent},
-    //     {path: 'showHide', component: ShowHideComponent}
-    //   ])
+    BrowserModule,
+    RouterModule.forRoot(appRoutes)
     ], 
+    providers: [{provide: LocationStrategy, useClass : HashLocationStrategy }],
     //need to add every component to our declarations
   declarations: [
     AppComponent,

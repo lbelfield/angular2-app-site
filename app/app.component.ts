@@ -9,7 +9,7 @@ import {Component} from "@angular/core";
     
     // this is the template to put in the component. Note this is the directive of showHide.component.ts
     // the name of the directive is defined in the Decorator's selector
-    template: `<my-showHide></my-showHide>`   
+    template: `<my-showHide></my-showHide> <router-outlet></router-outlet>`   
     // template: `sup`   
 })
 

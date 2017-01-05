@@ -47,10 +47,11 @@
 	// global imports needed throughout our app in the DOM
 	"use strict";
 
-	__webpack_require__(26);
+	__webpack_require__(58);
 	__webpack_require__(3);
-	__webpack_require__(27);
-	__webpack_require__(29);
+	__webpack_require__(59);
+	__webpack_require__(61);
+	__webpack_require__(24);
 	//# sourceMappingURL=vendor.js.map
 
 /***/ },
@@ -14192,12 +14193,16177 @@
 	//# sourceMappingURL=SubjectSubscription.js.map
 
 /***/ },
-/* 21 */,
-/* 22 */,
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {/**
+	 * @license Angular v2.4.1
+	 * (c) 2010-2016 Google, Inc. https://angular.io/
+	 * License: MIT
+	 */
+	(function (global, factory) {
+	   true ? factory(exports, __webpack_require__(22), __webpack_require__(3)) :
+	  typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core'], factory) :
+	  (factory((global.ng = global.ng || {}, global.ng.platformBrowser = global.ng.platformBrowser || {}),global.ng.common,global.ng.core));
+	}(this, function (exports,_angular_common,core) { 'use strict';
+
+	  var /** @type {?} */ DebugDomRootRenderer = core.__core_private__.DebugDomRootRenderer;
+	  var /** @type {?} */ NoOpAnimationPlayer = core.__core_private__.NoOpAnimationPlayer;
+
+	  /**
+	   * @experimental
+	   */
+	  var NoOpAnimationDriver = (function () {
+	      function NoOpAnimationDriver() {
+	      }
+	      /**
+	       * @param {?} element
+	       * @param {?} startingStyles
+	       * @param {?} keyframes
+	       * @param {?} duration
+	       * @param {?} delay
+	       * @param {?} easing
+	       * @param {?=} previousPlayers
+	       * @return {?}
+	       */
+	      NoOpAnimationDriver.prototype.animate = function (element, startingStyles, keyframes, duration, delay, easing, previousPlayers) {
+	          if (previousPlayers === void 0) { previousPlayers = []; }
+	          return new NoOpAnimationPlayer();
+	      };
+	      return NoOpAnimationDriver;
+	  }());
+	  /**
+	   * @abstract
+	   */
+	  var AnimationDriver = (function () {
+	      function AnimationDriver() {
+	      }
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} startingStyles
+	       * @param {?} keyframes
+	       * @param {?} duration
+	       * @param {?} delay
+	       * @param {?} easing
+	       * @param {?=} previousPlayers
+	       * @return {?}
+	       */
+	      AnimationDriver.prototype.animate = function (element, startingStyles, keyframes, duration, delay, easing, previousPlayers) { };
+	      AnimationDriver.NOOP = new NoOpAnimationDriver();
+	      return AnimationDriver;
+	  }());
+
+	  /**
+	   * @license
+	   * Copyright Google Inc. All Rights Reserved.
+	   *
+	   * Use of this source code is governed by an MIT-style license that can be
+	   * found in the LICENSE file at https://angular.io/license
+	   */
+	  var /** @type {?} */ globalScope;
+	  if (typeof window === 'undefined') {
+	      if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) {
+	          // TODO: Replace any with WorkerGlobalScope from lib.webworker.d.ts #3492
+	          globalScope = (self);
+	      }
+	      else {
+	          globalScope = (global);
+	      }
+	  }
+	  else {
+	      globalScope = (window);
+	  }
+	  // Need to declare a new variable for global here since TypeScript
+	  // exports the original value of the symbol.
+	  var /** @type {?} */ global$1 = globalScope;
+	  // TODO: remove calls to assert in production environment
+	  // Note: Can't just export this and import in in other files
+	  // as `assert` is a reserved keyword in Dart
+	  global$1.assert = function assert(condition) {
+	      // TODO: to be fixed properly via #2830, noop for now
+	  };
+	  /**
+	   * @param {?} obj
+	   * @return {?}
+	   */
+	  function isPresent(obj) {
+	      return obj != null;
+	  }
+	  /**
+	   * @param {?} obj
+	   * @return {?}
+	   */
+	  function isBlank(obj) {
+	      return obj == null;
+	  }
+	  /**
+	   * @param {?} token
+	   * @return {?}
+	   */
+	  function stringify(token) {
+	      if (typeof token === 'string') {
+	          return token;
+	      }
+	      if (token == null) {
+	          return '' + token;
+	      }
+	      if (token.overriddenName) {
+	          return "" + token.overriddenName;
+	      }
+	      if (token.name) {
+	          return "" + token.name;
+	      }
+	      var /** @type {?} */ res = token.toString();
+	      var /** @type {?} */ newLineIndex = res.indexOf('\n');
+	      return newLineIndex === -1 ? res : res.substring(0, newLineIndex);
+	  }
+	  /**
+	   * @param {?} global
+	   * @param {?} path
+	   * @param {?} value
+	   * @return {?}
+	   */
+	  function setValueOnPath(global, path, value) {
+	      var /** @type {?} */ parts = path.split('.');
+	      var /** @type {?} */ obj = global;
+	      while (parts.length > 1) {
+	          var /** @type {?} */ name_1 = parts.shift();
+	          if (obj.hasOwnProperty(name_1) && obj[name_1] != null) {
+	              obj = obj[name_1];
+	          }
+	          else {
+	              obj = obj[name_1] = {};
+	          }
+	      }
+	      if (obj === undefined || obj === null) {
+	          obj = {};
+	      }
+	      obj[parts.shift()] = value;
+	  }
+
+	  /**
+	   * @license
+	   * Copyright Google Inc. All Rights Reserved.
+	   *
+	   * Use of this source code is governed by an MIT-style license that can be
+	   * found in the LICENSE file at https://angular.io/license
+	   */
+	  var /** @type {?} */ _DOM = null;
+	  /**
+	   * @return {?}
+	   */
+	  function getDOM() {
+	      return _DOM;
+	  }
+	  /**
+	   * @param {?} adapter
+	   * @return {?}
+	   */
+	  function setRootDomAdapter(adapter) {
+	      if (!_DOM) {
+	          _DOM = adapter;
+	      }
+	  }
+	  /**
+	   *  Provides DOM operations in an environment-agnostic way.
+	    * *
+	    * can introduce XSS risks.
+	   * @abstract
+	   */
+	  var DomAdapter = (function () {
+	      function DomAdapter() {
+	          this.resourceLoaderType = null;
+	      }
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} name
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.hasProperty = function (element /** TODO #9100 */, name) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @param {?} name
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.setProperty = function (el, name, value) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @param {?} name
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getProperty = function (el, name) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @param {?} methodName
+	       * @param {?} args
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.invoke = function (el, methodName, args) { };
+	      /**
+	       * @abstract
+	       * @param {?} error
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.logError = function (error) { };
+	      /**
+	       * @abstract
+	       * @param {?} error
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.log = function (error) { };
+	      /**
+	       * @abstract
+	       * @param {?} error
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.logGroup = function (error) { };
+	      /**
+	       * @abstract
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.logGroupEnd = function () { };
+	      Object.defineProperty(DomAdapter.prototype, "attrToPropMap", {
+	          /**
+	           *  Maps attribute names to their corresponding property names for cases
+	            * where attribute name doesn't match property name.
+	           * @return {?}
+	           */
+	          get: function () { return this._attrToPropMap; },
+	          /**
+	           * @param {?} value
+	           * @return {?}
+	           */
+	          set: function (value) { this._attrToPropMap = value; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      ;
+	      ;
+	      /**
+	       * @abstract
+	       * @param {?} templateHtml
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.parse = function (templateHtml) { };
+	      /**
+	       * @abstract
+	       * @param {?} selector
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.query = function (selector) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @param {?} selector
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.querySelector = function (el /** TODO #9100 */, selector) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @param {?} selector
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.querySelectorAll = function (el /** TODO #9100 */, selector) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @param {?} evt
+	       * @param {?} listener
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.on = function (el /** TODO #9100 */, evt /** TODO #9100 */, listener) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @param {?} evt
+	       * @param {?} listener
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.onAndCancel = function (el /** TODO #9100 */, evt /** TODO #9100 */, listener) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @param {?} evt
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.dispatchEvent = function (el /** TODO #9100 */, evt) { };
+	      /**
+	       * @abstract
+	       * @param {?} eventType
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.createMouseEvent = function (eventType) { };
+	      /**
+	       * @abstract
+	       * @param {?} eventType
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.createEvent = function (eventType) { };
+	      /**
+	       * @abstract
+	       * @param {?} evt
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.preventDefault = function (evt) { };
+	      /**
+	       * @abstract
+	       * @param {?} evt
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.isPrevented = function (evt) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getInnerHTML = function (el) { };
+	      /**
+	       *  Returns content if el is a <template> element, null otherwise.
+	       * @abstract
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getTemplateContent = function (el) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getOuterHTML = function (el) { };
+	      /**
+	       * @abstract
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.nodeName = function (node) { };
+	      /**
+	       * @abstract
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.nodeValue = function (node) { };
+	      /**
+	       * @abstract
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.type = function (node) { };
+	      /**
+	       * @abstract
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.content = function (node) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.firstChild = function (el) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.nextSibling = function (el) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.parentElement = function (el) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.childNodes = function (el) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.childNodesAsList = function (el) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.clearNodes = function (el) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.appendChild = function (el /** TODO #9100 */, node) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.removeChild = function (el /** TODO #9100 */, node) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @param {?} newNode
+	       * @param {?} oldNode
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.replaceChild = function (el /** TODO #9100 */, newNode /** TODO #9100 */, oldNode) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.remove = function (el) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.insertBefore = function (el /** TODO #9100 */, node) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @param {?} nodes
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.insertAllBefore = function (el /** TODO #9100 */, nodes) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.insertAfter = function (el /** TODO #9100 */, node) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.setInnerHTML = function (el /** TODO #9100 */, value) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getText = function (el) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.setText = function (el /** TODO #9100 */, value) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getValue = function (el) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.setValue = function (el /** TODO #9100 */, value) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getChecked = function (el) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.setChecked = function (el /** TODO #9100 */, value) { };
+	      /**
+	       * @abstract
+	       * @param {?} text
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.createComment = function (text) { };
+	      /**
+	       * @abstract
+	       * @param {?} html
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.createTemplate = function (html) { };
+	      /**
+	       * @abstract
+	       * @param {?} tagName
+	       * @param {?=} doc
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.createElement = function (tagName /** TODO #9100 */, doc) { };
+	      /**
+	       * @abstract
+	       * @param {?} ns
+	       * @param {?} tagName
+	       * @param {?=} doc
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.createElementNS = function (ns, tagName, doc) { };
+	      /**
+	       * @abstract
+	       * @param {?} text
+	       * @param {?=} doc
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.createTextNode = function (text, doc) { };
+	      /**
+	       * @abstract
+	       * @param {?} attrName
+	       * @param {?} attrValue
+	       * @param {?=} doc
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.createScriptTag = function (attrName, attrValue, doc) { };
+	      /**
+	       * @abstract
+	       * @param {?} css
+	       * @param {?=} doc
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.createStyleElement = function (css, doc) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.createShadowRoot = function (el) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getShadowRoot = function (el) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getHost = function (el) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getDistributedNodes = function (el) { };
+	      /**
+	       * @abstract
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.clone /*<T extends Node>*/ = function (node) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} name
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getElementsByClassName = function (element /** TODO #9100 */, name) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} name
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getElementsByTagName = function (element /** TODO #9100 */, name) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.classList = function (element) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} className
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.addClass = function (element /** TODO #9100 */, className) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} className
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.removeClass = function (element /** TODO #9100 */, className) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} className
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.hasClass = function (element /** TODO #9100 */, className) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} styleName
+	       * @param {?} styleValue
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.setStyle = function (element /** TODO #9100 */, styleName, styleValue) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} styleName
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.removeStyle = function (element /** TODO #9100 */, styleName) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} styleName
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getStyle = function (element /** TODO #9100 */, styleName) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} styleName
+	       * @param {?=} styleValue
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.hasStyle = function (element /** TODO #9100 */, styleName, styleValue) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.tagName = function (element) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.attributeMap = function (element) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} attribute
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.hasAttribute = function (element /** TODO #9100 */, attribute) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} ns
+	       * @param {?} attribute
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.hasAttributeNS = function (element /** TODO #9100 */, ns, attribute) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} attribute
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getAttribute = function (element /** TODO #9100 */, attribute) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} ns
+	       * @param {?} attribute
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getAttributeNS = function (element /** TODO #9100 */, ns, attribute) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} name
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.setAttribute = function (element /** TODO #9100 */, name, value) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} ns
+	       * @param {?} name
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.setAttributeNS = function (element /** TODO #9100 */, ns, name, value) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} attribute
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.removeAttribute = function (element /** TODO #9100 */, attribute) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} ns
+	       * @param {?} attribute
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.removeAttributeNS = function (element /** TODO #9100 */, ns, attribute) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.templateAwareRoot = function (el) { };
+	      /**
+	       * @abstract
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.createHtmlDocument = function () { };
+	      /**
+	       * @abstract
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.defaultDoc = function () { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getBoundingClientRect = function (el) { };
+	      /**
+	       * @abstract
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getTitle = function () { };
+	      /**
+	       * @abstract
+	       * @param {?} newTitle
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.setTitle = function (newTitle) { };
+	      /**
+	       * @abstract
+	       * @param {?} n
+	       * @param {?} selector
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.elementMatches = function (n /** TODO #9100 */, selector) { };
+	      /**
+	       * @abstract
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.isTemplateElement = function (el) { };
+	      /**
+	       * @abstract
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.isTextNode = function (node) { };
+	      /**
+	       * @abstract
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.isCommentNode = function (node) { };
+	      /**
+	       * @abstract
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.isElementNode = function (node) { };
+	      /**
+	       * @abstract
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.hasShadowRoot = function (node) { };
+	      /**
+	       * @abstract
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.isShadowRoot = function (node) { };
+	      /**
+	       * @abstract
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.importIntoDoc /*<T extends Node>*/ = function (node) { };
+	      /**
+	       * @abstract
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.adoptNode /*<T extends Node>*/ = function (node) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getHref = function (element) { };
+	      /**
+	       * @abstract
+	       * @param {?} event
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getEventKey = function (event) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} baseUrl
+	       * @param {?} href
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.resolveAndSetHref = function (element /** TODO #9100 */, baseUrl, href) { };
+	      /**
+	       * @abstract
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.supportsDOMEvents = function () { };
+	      /**
+	       * @abstract
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.supportsNativeShadowDOM = function () { };
+	      /**
+	       * @abstract
+	       * @param {?} target
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getGlobalEventTarget = function (target) { };
+	      /**
+	       * @abstract
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getHistory = function () { };
+	      /**
+	       * @abstract
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getLocation = function () { };
+	      /**
+	       * @abstract
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getBaseHref = function () { };
+	      /**
+	       * @abstract
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.resetBaseElement = function () { };
+	      /**
+	       * @abstract
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getUserAgent = function () { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} name
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.setData = function (element /** TODO #9100 */, name, value) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getComputedStyle = function (element) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} name
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getData = function (element /** TODO #9100 */, name) { };
+	      /**
+	       * @abstract
+	       * @param {?} name
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.setGlobalVar = function (name, value) { };
+	      /**
+	       * @abstract
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.supportsWebAnimation = function () { };
+	      /**
+	       * @abstract
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.performanceNow = function () { };
+	      /**
+	       * @abstract
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getAnimationPrefix = function () { };
+	      /**
+	       * @abstract
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getTransitionEnd = function () { };
+	      /**
+	       * @abstract
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.supportsAnimation = function () { };
+	      /**
+	       * @abstract
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.supportsCookies = function () { };
+	      /**
+	       * @abstract
+	       * @param {?} name
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.getCookie = function (name) { };
+	      /**
+	       * @abstract
+	       * @param {?} name
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomAdapter.prototype.setCookie = function (name, value) { };
+	      return DomAdapter;
+	  }());
+
+	  var WebAnimationsPlayer = (function () {
+	      /**
+	       * @param {?} element
+	       * @param {?} keyframes
+	       * @param {?} options
+	       * @param {?=} previousPlayers
+	       */
+	      function WebAnimationsPlayer(element, keyframes, options, previousPlayers) {
+	          var _this = this;
+	          if (previousPlayers === void 0) { previousPlayers = []; }
+	          this.element = element;
+	          this.keyframes = keyframes;
+	          this.options = options;
+	          this._onDoneFns = [];
+	          this._onStartFns = [];
+	          this._initialized = false;
+	          this._finished = false;
+	          this._started = false;
+	          this._destroyed = false;
+	          this.parentPlayer = null;
+	          this._duration = options['duration'];
+	          this.previousStyles = {};
+	          previousPlayers.forEach(function (player) {
+	              var styles = player._captureStyles();
+	              Object.keys(styles).forEach(function (prop) { return _this.previousStyles[prop] = styles[prop]; });
+	          });
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      WebAnimationsPlayer.prototype._onFinish = function () {
+	          if (!this._finished) {
+	              this._finished = true;
+	              this._onDoneFns.forEach(function (fn) { return fn(); });
+	              this._onDoneFns = [];
+	          }
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      WebAnimationsPlayer.prototype.init = function () {
+	          var _this = this;
+	          if (this._initialized)
+	              return;
+	          this._initialized = true;
+	          var /** @type {?} */ keyframes = this.keyframes.map(function (styles) {
+	              var /** @type {?} */ formattedKeyframe = {};
+	              Object.keys(styles).forEach(function (prop, index) {
+	                  var /** @type {?} */ value = styles[prop];
+	                  if (value == core.AUTO_STYLE) {
+	                      value = _computeStyle(_this.element, prop);
+	                  }
+	                  if (value != undefined) {
+	                      formattedKeyframe[prop] = value;
+	                  }
+	              });
+	              return formattedKeyframe;
+	          });
+	          var /** @type {?} */ previousStyleProps = Object.keys(this.previousStyles);
+	          if (previousStyleProps.length) {
+	              var /** @type {?} */ startingKeyframe_1 = findStartingKeyframe(keyframes);
+	              previousStyleProps.forEach(function (prop) {
+	                  if (isPresent(startingKeyframe_1[prop])) {
+	                      startingKeyframe_1[prop] = _this.previousStyles[prop];
+	                  }
+	              });
+	          }
+	          this._player = this._triggerWebAnimation(this.element, keyframes, this.options);
+	          this._finalKeyframe = _copyKeyframeStyles(keyframes[keyframes.length - 1]);
+	          // this is required so that the player doesn't start to animate right away
+	          this._resetDomPlayerState();
+	          this._player.addEventListener('finish', function () { return _this._onFinish(); });
+	      };
+	      /**
+	       * @param {?} element
+	       * @param {?} keyframes
+	       * @param {?} options
+	       * @return {?}
+	       */
+	      WebAnimationsPlayer.prototype._triggerWebAnimation = function (element, keyframes, options) {
+	          return (element.animate(keyframes, options));
+	      };
+	      Object.defineProperty(WebAnimationsPlayer.prototype, "domPlayer", {
+	          /**
+	           * @return {?}
+	           */
+	          get: function () { return this._player; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      /**
+	       * @param {?} fn
+	       * @return {?}
+	       */
+	      WebAnimationsPlayer.prototype.onStart = function (fn) { this._onStartFns.push(fn); };
+	      /**
+	       * @param {?} fn
+	       * @return {?}
+	       */
+	      WebAnimationsPlayer.prototype.onDone = function (fn) { this._onDoneFns.push(fn); };
+	      /**
+	       * @return {?}
+	       */
+	      WebAnimationsPlayer.prototype.play = function () {
+	          this.init();
+	          if (!this.hasStarted()) {
+	              this._onStartFns.forEach(function (fn) { return fn(); });
+	              this._onStartFns = [];
+	              this._started = true;
+	          }
+	          this._player.play();
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      WebAnimationsPlayer.prototype.pause = function () {
+	          this.init();
+	          this._player.pause();
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      WebAnimationsPlayer.prototype.finish = function () {
+	          this.init();
+	          this._onFinish();
+	          this._player.finish();
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      WebAnimationsPlayer.prototype.reset = function () {
+	          this._resetDomPlayerState();
+	          this._destroyed = false;
+	          this._finished = false;
+	          this._started = false;
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      WebAnimationsPlayer.prototype._resetDomPlayerState = function () {
+	          if (this._player) {
+	              this._player.cancel();
+	          }
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      WebAnimationsPlayer.prototype.restart = function () {
+	          this.reset();
+	          this.play();
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      WebAnimationsPlayer.prototype.hasStarted = function () { return this._started; };
+	      /**
+	       * @return {?}
+	       */
+	      WebAnimationsPlayer.prototype.destroy = function () {
+	          if (!this._destroyed) {
+	              this._resetDomPlayerState();
+	              this._onFinish();
+	              this._destroyed = true;
+	          }
+	      };
+	      Object.defineProperty(WebAnimationsPlayer.prototype, "totalTime", {
+	          /**
+	           * @return {?}
+	           */
+	          get: function () { return this._duration; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      /**
+	       * @param {?} p
+	       * @return {?}
+	       */
+	      WebAnimationsPlayer.prototype.setPosition = function (p) { this._player.currentTime = p * this.totalTime; };
+	      /**
+	       * @return {?}
+	       */
+	      WebAnimationsPlayer.prototype.getPosition = function () { return this._player.currentTime / this.totalTime; };
+	      /**
+	       * @return {?}
+	       */
+	      WebAnimationsPlayer.prototype._captureStyles = function () {
+	          var _this = this;
+	          var /** @type {?} */ styles = {};
+	          if (this.hasStarted()) {
+	              Object.keys(this._finalKeyframe).forEach(function (prop) {
+	                  if (prop != 'offset') {
+	                      styles[prop] =
+	                          _this._finished ? _this._finalKeyframe[prop] : _computeStyle(_this.element, prop);
+	                  }
+	              });
+	          }
+	          return styles;
+	      };
+	      return WebAnimationsPlayer;
+	  }());
+	  /**
+	   * @param {?} element
+	   * @param {?} prop
+	   * @return {?}
+	   */
+	  function _computeStyle(element, prop) {
+	      return getDOM().getComputedStyle(element)[prop];
+	  }
+	  /**
+	   * @param {?} styles
+	   * @return {?}
+	   */
+	  function _copyKeyframeStyles(styles) {
+	      var /** @type {?} */ newStyles = {};
+	      Object.keys(styles).forEach(function (prop) {
+	          if (prop != 'offset') {
+	              newStyles[prop] = styles[prop];
+	          }
+	      });
+	      return newStyles;
+	  }
+	  /**
+	   * @param {?} keyframes
+	   * @return {?}
+	   */
+	  function findStartingKeyframe(keyframes) {
+	      var /** @type {?} */ startingKeyframe = keyframes[0];
+	      // it's important that we find the LAST keyframe
+	      // to ensure that style overidding is final.
+	      for (var /** @type {?} */ i = 1; i < keyframes.length; i++) {
+	          var /** @type {?} */ kf = keyframes[i];
+	          var /** @type {?} */ offset = kf['offset'];
+	          if (offset !== 0)
+	              break;
+	          startingKeyframe = kf;
+	      }
+	      return startingKeyframe;
+	  }
+
+	  var WebAnimationsDriver = (function () {
+	      function WebAnimationsDriver() {
+	      }
+	      /**
+	       * @param {?} element
+	       * @param {?} startingStyles
+	       * @param {?} keyframes
+	       * @param {?} duration
+	       * @param {?} delay
+	       * @param {?} easing
+	       * @param {?=} previousPlayers
+	       * @return {?}
+	       */
+	      WebAnimationsDriver.prototype.animate = function (element, startingStyles, keyframes, duration, delay, easing, previousPlayers) {
+	          if (previousPlayers === void 0) { previousPlayers = []; }
+	          var /** @type {?} */ formattedSteps = [];
+	          var /** @type {?} */ startingStyleLookup = {};
+	          if (isPresent(startingStyles) && startingStyles.styles.length > 0) {
+	              startingStyleLookup = _populateStyles(startingStyles, {});
+	              startingStyleLookup['offset'] = 0;
+	              formattedSteps.push(startingStyleLookup);
+	          }
+	          keyframes.forEach(function (keyframe) {
+	              var /** @type {?} */ data = _populateStyles(keyframe.styles, startingStyleLookup);
+	              data['offset'] = Math.max(0, Math.min(1, keyframe.offset));
+	              formattedSteps.push(data);
+	          });
+	          // this is a special case when only styles are applied as an
+	          // animation. When this occurs we want to animate from start to
+	          // end with the same values. Removing the offset and having only
+	          // start/end values is suitable enough for the web-animations API
+	          if (formattedSteps.length == 1) {
+	              var /** @type {?} */ start = formattedSteps[0];
+	              start['offset'] = null;
+	              formattedSteps = [start, start];
+	          }
+	          var /** @type {?} */ playerOptions = {
+	              'duration': duration,
+	              'delay': delay,
+	              'fill': 'both' // we use `both` because it allows for styling at 0% to work with `delay`
+	          };
+	          // we check for this to avoid having a null|undefined value be present
+	          // for the easing (which results in an error for certain browsers #9752)
+	          if (easing) {
+	              playerOptions['easing'] = easing;
+	          }
+	          // there may be a chance a NoOp player is returned depending
+	          // on when the previous animation was cancelled
+	          previousPlayers = previousPlayers.filter(filterWebAnimationPlayerFn);
+	          return new WebAnimationsPlayer(element, formattedSteps, playerOptions, /** @type {?} */ (previousPlayers));
+	      };
+	      return WebAnimationsDriver;
+	  }());
+	  /**
+	   * @param {?} styles
+	   * @param {?} defaultStyles
+	   * @return {?}
+	   */
+	  function _populateStyles(styles, defaultStyles) {
+	      var /** @type {?} */ data = {};
+	      styles.styles.forEach(function (entry) { Object.keys(entry).forEach(function (prop) { data[prop] = entry[prop]; }); });
+	      Object.keys(defaultStyles).forEach(function (prop) {
+	          if (!isPresent(data[prop])) {
+	              data[prop] = defaultStyles[prop];
+	          }
+	      });
+	      return data;
+	  }
+	  /**
+	   * @param {?} player
+	   * @return {?}
+	   */
+	  function filterWebAnimationPlayerFn(player) {
+	      return player instanceof WebAnimationsPlayer;
+	  }
+
+	  /**
+	   * @license
+	   * Copyright Google Inc. All Rights Reserved.
+	   *
+	   * Use of this source code is governed by an MIT-style license that can be
+	   * found in the LICENSE file at https://angular.io/license
+	   */
+	  var __extends$1 = (this && this.__extends) || function (d, b) {
+	      for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	      function __() { this.constructor = d; }
+	      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	  };
+	  /**
+	   *  Provides DOM operations in any browser environment.
+	    * *
+	    * can introduce XSS risks.
+	   * @abstract
+	   */
+	  var GenericBrowserDomAdapter = (function (_super) {
+	      __extends$1(GenericBrowserDomAdapter, _super);
+	      function GenericBrowserDomAdapter() {
+	          var _this = this;
+	          _super.call(this);
+	          this._animationPrefix = null;
+	          this._transitionEnd = null;
+	          try {
+	              var element_1 = this.createElement('div', this.defaultDoc());
+	              if (isPresent(this.getStyle(element_1, 'animationName'))) {
+	                  this._animationPrefix = '';
+	              }
+	              else {
+	                  var domPrefixes = ['Webkit', 'Moz', 'O', 'ms'];
+	                  for (var i = 0; i < domPrefixes.length; i++) {
+	                      if (isPresent(this.getStyle(element_1, domPrefixes[i] + 'AnimationName'))) {
+	                          this._animationPrefix = '-' + domPrefixes[i].toLowerCase() + '-';
+	                          break;
+	                      }
+	                  }
+	              }
+	              var transEndEventNames_1 = {
+	                  WebkitTransition: 'webkitTransitionEnd',
+	                  MozTransition: 'transitionend',
+	                  OTransition: 'oTransitionEnd otransitionend',
+	                  transition: 'transitionend'
+	              };
+	              Object.keys(transEndEventNames_1).forEach(function (key) {
+	                  if (isPresent(_this.getStyle(element_1, key))) {
+	                      _this._transitionEnd = transEndEventNames_1[key];
+	                  }
+	              });
+	          }
+	          catch (e) {
+	              this._animationPrefix = null;
+	              this._transitionEnd = null;
+	          }
+	      }
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      GenericBrowserDomAdapter.prototype.getDistributedNodes = function (el) { return ((el)).getDistributedNodes(); };
+	      /**
+	       * @param {?} el
+	       * @param {?} baseUrl
+	       * @param {?} href
+	       * @return {?}
+	       */
+	      GenericBrowserDomAdapter.prototype.resolveAndSetHref = function (el, baseUrl, href) {
+	          el.href = href == null ? baseUrl : baseUrl + '/../' + href;
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      GenericBrowserDomAdapter.prototype.supportsDOMEvents = function () { return true; };
+	      /**
+	       * @return {?}
+	       */
+	      GenericBrowserDomAdapter.prototype.supportsNativeShadowDOM = function () {
+	          return typeof ((this.defaultDoc().body)).createShadowRoot === 'function';
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      GenericBrowserDomAdapter.prototype.getAnimationPrefix = function () { return this._animationPrefix ? this._animationPrefix : ''; };
+	      /**
+	       * @return {?}
+	       */
+	      GenericBrowserDomAdapter.prototype.getTransitionEnd = function () { return this._transitionEnd ? this._transitionEnd : ''; };
+	      /**
+	       * @return {?}
+	       */
+	      GenericBrowserDomAdapter.prototype.supportsAnimation = function () {
+	          return isPresent(this._animationPrefix) && isPresent(this._transitionEnd);
+	      };
+	      return GenericBrowserDomAdapter;
+	  }(DomAdapter));
+
+	  /**
+	   * @license
+	   * Copyright Google Inc. All Rights Reserved.
+	   *
+	   * Use of this source code is governed by an MIT-style license that can be
+	   * found in the LICENSE file at https://angular.io/license
+	   */
+	  var __extends = (this && this.__extends) || function (d, b) {
+	      for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	      function __() { this.constructor = d; }
+	      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	  };
+	  var /** @type {?} */ _attrToPropMap = {
+	      'class': 'className',
+	      'innerHtml': 'innerHTML',
+	      'readonly': 'readOnly',
+	      'tabindex': 'tabIndex',
+	  };
+	  var /** @type {?} */ DOM_KEY_LOCATION_NUMPAD = 3;
+	  // Map to convert some key or keyIdentifier values to what will be returned by getEventKey
+	  var /** @type {?} */ _keyMap = {
+	      // The following values are here for cross-browser compatibility and to match the W3C standard
+	      // cf http://www.w3.org/TR/DOM-Level-3-Events-key/
+	      '\b': 'Backspace',
+	      '\t': 'Tab',
+	      '\x7F': 'Delete',
+	      '\x1B': 'Escape',
+	      'Del': 'Delete',
+	      'Esc': 'Escape',
+	      'Left': 'ArrowLeft',
+	      'Right': 'ArrowRight',
+	      'Up': 'ArrowUp',
+	      'Down': 'ArrowDown',
+	      'Menu': 'ContextMenu',
+	      'Scroll': 'ScrollLock',
+	      'Win': 'OS'
+	  };
+	  // There is a bug in Chrome for numeric keypad keys:
+	  // https://code.google.com/p/chromium/issues/detail?id=155654
+	  // 1, 2, 3 ... are reported as A, B, C ...
+	  var /** @type {?} */ _chromeNumKeyPadMap = {
+	      'A': '1',
+	      'B': '2',
+	      'C': '3',
+	      'D': '4',
+	      'E': '5',
+	      'F': '6',
+	      'G': '7',
+	      'H': '8',
+	      'I': '9',
+	      'J': '*',
+	      'K': '+',
+	      'M': '-',
+	      'N': '.',
+	      'O': '/',
+	      '\x60': '0',
+	      '\x90': 'NumLock'
+	  };
+	  /**
+	   * A `DomAdapter` powered by full browser DOM APIs.
+	   *
+	   * @security Tread carefully! Interacting with the DOM directly is dangerous and
+	   * can introduce XSS risks.
+	   */
+	  /* tslint:disable:requireParameterType no-console */
+	  var BrowserDomAdapter = (function (_super) {
+	      __extends(BrowserDomAdapter, _super);
+	      function BrowserDomAdapter() {
+	          _super.apply(this, arguments);
+	      }
+	      /**
+	       * @param {?} templateHtml
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.parse = function (templateHtml) { throw new Error('parse not implemented'); };
+	      /**
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.makeCurrent = function () { setRootDomAdapter(new BrowserDomAdapter()); };
+	      /**
+	       * @param {?} element
+	       * @param {?} name
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.hasProperty = function (element, name) { return name in element; };
+	      /**
+	       * @param {?} el
+	       * @param {?} name
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.setProperty = function (el, name, value) { ((el))[name] = value; };
+	      /**
+	       * @param {?} el
+	       * @param {?} name
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getProperty = function (el, name) { return ((el))[name]; };
+	      /**
+	       * @param {?} el
+	       * @param {?} methodName
+	       * @param {?} args
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.invoke = function (el, methodName, args) { (_a = ((el)))[methodName].apply(_a, args); var _a; };
+	      /**
+	       * @param {?} error
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.logError = function (error) {
+	          if (window.console) {
+	              if (console.error) {
+	                  console.error(error);
+	              }
+	              else {
+	                  console.log(error);
+	              }
+	          }
+	      };
+	      /**
+	       * @param {?} error
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.log = function (error) {
+	          if (window.console) {
+	              window.console.log && window.console.log(error);
+	          }
+	      };
+	      /**
+	       * @param {?} error
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.logGroup = function (error) {
+	          if (window.console) {
+	              window.console.group && window.console.group(error);
+	          }
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.logGroupEnd = function () {
+	          if (window.console) {
+	              window.console.groupEnd && window.console.groupEnd();
+	          }
+	      };
+	      Object.defineProperty(BrowserDomAdapter.prototype, "attrToPropMap", {
+	          /**
+	           * @return {?}
+	           */
+	          get: function () { return _attrToPropMap; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      /**
+	       * @param {?} selector
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.query = function (selector) { return document.querySelector(selector); };
+	      /**
+	       * @param {?} el
+	       * @param {?} selector
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.querySelector = function (el, selector) {
+	          return (el.querySelector(selector));
+	      };
+	      /**
+	       * @param {?} el
+	       * @param {?} selector
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.querySelectorAll = function (el, selector) { return el.querySelectorAll(selector); };
+	      /**
+	       * @param {?} el
+	       * @param {?} evt
+	       * @param {?} listener
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.on = function (el, evt, listener) { el.addEventListener(evt, listener, false); };
+	      /**
+	       * @param {?} el
+	       * @param {?} evt
+	       * @param {?} listener
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.onAndCancel = function (el, evt, listener) {
+	          el.addEventListener(evt, listener, false);
+	          // Needed to follow Dart's subscription semantic, until fix of
+	          // https://code.google.com/p/dart/issues/detail?id=17406
+	          return function () { el.removeEventListener(evt, listener, false); };
+	      };
+	      /**
+	       * @param {?} el
+	       * @param {?} evt
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.dispatchEvent = function (el, evt) { el.dispatchEvent(evt); };
+	      /**
+	       * @param {?} eventType
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.createMouseEvent = function (eventType) {
+	          var /** @type {?} */ evt = document.createEvent('MouseEvent');
+	          evt.initEvent(eventType, true, true);
+	          return evt;
+	      };
+	      /**
+	       * @param {?} eventType
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.createEvent = function (eventType) {
+	          var /** @type {?} */ evt = document.createEvent('Event');
+	          evt.initEvent(eventType, true, true);
+	          return evt;
+	      };
+	      /**
+	       * @param {?} evt
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.preventDefault = function (evt) {
+	          evt.preventDefault();
+	          evt.returnValue = false;
+	      };
+	      /**
+	       * @param {?} evt
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.isPrevented = function (evt) {
+	          return evt.defaultPrevented || isPresent(evt.returnValue) && !evt.returnValue;
+	      };
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getInnerHTML = function (el) { return el.innerHTML; };
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getTemplateContent = function (el) {
+	          return 'content' in el && el instanceof HTMLTemplateElement ? el.content : null;
+	      };
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getOuterHTML = function (el) { return el.outerHTML; };
+	      /**
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.nodeName = function (node) { return node.nodeName; };
+	      /**
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.nodeValue = function (node) { return node.nodeValue; };
+	      /**
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.type = function (node) { return node.type; };
+	      /**
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.content = function (node) {
+	          if (this.hasProperty(node, 'content')) {
+	              return ((node)).content;
+	          }
+	          else {
+	              return node;
+	          }
+	      };
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.firstChild = function (el) { return el.firstChild; };
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.nextSibling = function (el) { return el.nextSibling; };
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.parentElement = function (el) { return el.parentNode; };
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.childNodes = function (el) { return el.childNodes; };
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.childNodesAsList = function (el) {
+	          var /** @type {?} */ childNodes = el.childNodes;
+	          var /** @type {?} */ res = new Array(childNodes.length);
+	          for (var /** @type {?} */ i = 0; i < childNodes.length; i++) {
+	              res[i] = childNodes[i];
+	          }
+	          return res;
+	      };
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.clearNodes = function (el) {
+	          while (el.firstChild) {
+	              el.removeChild(el.firstChild);
+	          }
+	      };
+	      /**
+	       * @param {?} el
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.appendChild = function (el, node) { el.appendChild(node); };
+	      /**
+	       * @param {?} el
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.removeChild = function (el, node) { el.removeChild(node); };
+	      /**
+	       * @param {?} el
+	       * @param {?} newChild
+	       * @param {?} oldChild
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.replaceChild = function (el, newChild, oldChild) { el.replaceChild(newChild, oldChild); };
+	      /**
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.remove = function (node) {
+	          if (node.parentNode) {
+	              node.parentNode.removeChild(node);
+	          }
+	          return node;
+	      };
+	      /**
+	       * @param {?} el
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.insertBefore = function (el, node) { el.parentNode.insertBefore(node, el); };
+	      /**
+	       * @param {?} el
+	       * @param {?} nodes
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.insertAllBefore = function (el, nodes) {
+	          nodes.forEach(function (n) { return el.parentNode.insertBefore(n, el); });
+	      };
+	      /**
+	       * @param {?} el
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.insertAfter = function (el, node) { el.parentNode.insertBefore(node, el.nextSibling); };
+	      /**
+	       * @param {?} el
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.setInnerHTML = function (el, value) { el.innerHTML = value; };
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getText = function (el) { return el.textContent; };
+	      /**
+	       * @param {?} el
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.setText = function (el, value) { el.textContent = value; };
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getValue = function (el) { return el.value; };
+	      /**
+	       * @param {?} el
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.setValue = function (el, value) { el.value = value; };
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getChecked = function (el) { return el.checked; };
+	      /**
+	       * @param {?} el
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.setChecked = function (el, value) { el.checked = value; };
+	      /**
+	       * @param {?} text
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.createComment = function (text) { return document.createComment(text); };
+	      /**
+	       * @param {?} html
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.createTemplate = function (html) {
+	          var /** @type {?} */ t = document.createElement('template');
+	          t.innerHTML = html;
+	          return t;
+	      };
+	      /**
+	       * @param {?} tagName
+	       * @param {?=} doc
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.createElement = function (tagName, doc) {
+	          if (doc === void 0) { doc = document; }
+	          return doc.createElement(tagName);
+	      };
+	      /**
+	       * @param {?} ns
+	       * @param {?} tagName
+	       * @param {?=} doc
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.createElementNS = function (ns, tagName, doc) {
+	          if (doc === void 0) { doc = document; }
+	          return doc.createElementNS(ns, tagName);
+	      };
+	      /**
+	       * @param {?} text
+	       * @param {?=} doc
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.createTextNode = function (text, doc) {
+	          if (doc === void 0) { doc = document; }
+	          return doc.createTextNode(text);
+	      };
+	      /**
+	       * @param {?} attrName
+	       * @param {?} attrValue
+	       * @param {?=} doc
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.createScriptTag = function (attrName, attrValue, doc) {
+	          if (doc === void 0) { doc = document; }
+	          var /** @type {?} */ el = (doc.createElement('SCRIPT'));
+	          el.setAttribute(attrName, attrValue);
+	          return el;
+	      };
+	      /**
+	       * @param {?} css
+	       * @param {?=} doc
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.createStyleElement = function (css, doc) {
+	          if (doc === void 0) { doc = document; }
+	          var /** @type {?} */ style = (doc.createElement('style'));
+	          this.appendChild(style, this.createTextNode(css));
+	          return style;
+	      };
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.createShadowRoot = function (el) { return ((el)).createShadowRoot(); };
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getShadowRoot = function (el) { return ((el)).shadowRoot; };
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getHost = function (el) { return ((el)).host; };
+	      /**
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.clone = function (node) { return node.cloneNode(true); };
+	      /**
+	       * @param {?} element
+	       * @param {?} name
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getElementsByClassName = function (element, name) {
+	          return element.getElementsByClassName(name);
+	      };
+	      /**
+	       * @param {?} element
+	       * @param {?} name
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getElementsByTagName = function (element, name) {
+	          return element.getElementsByTagName(name);
+	      };
+	      /**
+	       * @param {?} element
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.classList = function (element) { return Array.prototype.slice.call(element.classList, 0); };
+	      /**
+	       * @param {?} element
+	       * @param {?} className
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.addClass = function (element, className) { element.classList.add(className); };
+	      /**
+	       * @param {?} element
+	       * @param {?} className
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.removeClass = function (element, className) { element.classList.remove(className); };
+	      /**
+	       * @param {?} element
+	       * @param {?} className
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.hasClass = function (element, className) {
+	          return element.classList.contains(className);
+	      };
+	      /**
+	       * @param {?} element
+	       * @param {?} styleName
+	       * @param {?} styleValue
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.setStyle = function (element, styleName, styleValue) {
+	          element.style[styleName] = styleValue;
+	      };
+	      /**
+	       * @param {?} element
+	       * @param {?} stylename
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.removeStyle = function (element, stylename) {
+	          // IE requires '' instead of null
+	          // see https://github.com/angular/angular/issues/7916
+	          element.style[stylename] = '';
+	      };
+	      /**
+	       * @param {?} element
+	       * @param {?} stylename
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getStyle = function (element, stylename) { return element.style[stylename]; };
+	      /**
+	       * @param {?} element
+	       * @param {?} styleName
+	       * @param {?=} styleValue
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.hasStyle = function (element, styleName, styleValue) {
+	          if (styleValue === void 0) { styleValue = null; }
+	          var /** @type {?} */ value = this.getStyle(element, styleName) || '';
+	          return styleValue ? value == styleValue : value.length > 0;
+	      };
+	      /**
+	       * @param {?} element
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.tagName = function (element) { return element.tagName; };
+	      /**
+	       * @param {?} element
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.attributeMap = function (element) {
+	          var /** @type {?} */ res = new Map();
+	          var /** @type {?} */ elAttrs = element.attributes;
+	          for (var /** @type {?} */ i = 0; i < elAttrs.length; i++) {
+	              var /** @type {?} */ attrib = elAttrs[i];
+	              res.set(attrib.name, attrib.value);
+	          }
+	          return res;
+	      };
+	      /**
+	       * @param {?} element
+	       * @param {?} attribute
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.hasAttribute = function (element, attribute) {
+	          return element.hasAttribute(attribute);
+	      };
+	      /**
+	       * @param {?} element
+	       * @param {?} ns
+	       * @param {?} attribute
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.hasAttributeNS = function (element, ns, attribute) {
+	          return element.hasAttributeNS(ns, attribute);
+	      };
+	      /**
+	       * @param {?} element
+	       * @param {?} attribute
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getAttribute = function (element, attribute) {
+	          return element.getAttribute(attribute);
+	      };
+	      /**
+	       * @param {?} element
+	       * @param {?} ns
+	       * @param {?} name
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getAttributeNS = function (element, ns, name) {
+	          return element.getAttributeNS(ns, name);
+	      };
+	      /**
+	       * @param {?} element
+	       * @param {?} name
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.setAttribute = function (element, name, value) { element.setAttribute(name, value); };
+	      /**
+	       * @param {?} element
+	       * @param {?} ns
+	       * @param {?} name
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.setAttributeNS = function (element, ns, name, value) {
+	          element.setAttributeNS(ns, name, value);
+	      };
+	      /**
+	       * @param {?} element
+	       * @param {?} attribute
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.removeAttribute = function (element, attribute) { element.removeAttribute(attribute); };
+	      /**
+	       * @param {?} element
+	       * @param {?} ns
+	       * @param {?} name
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.removeAttributeNS = function (element, ns, name) {
+	          element.removeAttributeNS(ns, name);
+	      };
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.templateAwareRoot = function (el) { return this.isTemplateElement(el) ? this.content(el) : el; };
+	      /**
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.createHtmlDocument = function () {
+	          return document.implementation.createHTMLDocument('fakeTitle');
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.defaultDoc = function () { return document; };
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getBoundingClientRect = function (el) {
+	          try {
+	              return el.getBoundingClientRect();
+	          }
+	          catch (e) {
+	              return { top: 0, bottom: 0, left: 0, right: 0, width: 0, height: 0 };
+	          }
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getTitle = function () { return document.title; };
+	      /**
+	       * @param {?} newTitle
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.setTitle = function (newTitle) { document.title = newTitle || ''; };
+	      /**
+	       * @param {?} n
+	       * @param {?} selector
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.elementMatches = function (n, selector) {
+	          if (n instanceof HTMLElement) {
+	              return n.matches && n.matches(selector) ||
+	                  n.msMatchesSelector && n.msMatchesSelector(selector) ||
+	                  n.webkitMatchesSelector && n.webkitMatchesSelector(selector);
+	          }
+	          return false;
+	      };
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.isTemplateElement = function (el) {
+	          return el instanceof HTMLElement && el.nodeName == 'TEMPLATE';
+	      };
+	      /**
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.isTextNode = function (node) { return node.nodeType === Node.TEXT_NODE; };
+	      /**
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.isCommentNode = function (node) { return node.nodeType === Node.COMMENT_NODE; };
+	      /**
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.isElementNode = function (node) { return node.nodeType === Node.ELEMENT_NODE; };
+	      /**
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.hasShadowRoot = function (node) {
+	          return isPresent(node.shadowRoot) && node instanceof HTMLElement;
+	      };
+	      /**
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.isShadowRoot = function (node) { return node instanceof DocumentFragment; };
+	      /**
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.importIntoDoc = function (node) { return document.importNode(this.templateAwareRoot(node), true); };
+	      /**
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.adoptNode = function (node) { return document.adoptNode(node); };
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getHref = function (el) { return ((el)).href; };
+	      /**
+	       * @param {?} event
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getEventKey = function (event) {
+	          var /** @type {?} */ key = event.key;
+	          if (isBlank(key)) {
+	              key = event.keyIdentifier;
+	              // keyIdentifier is defined in the old draft of DOM Level 3 Events implemented by Chrome and
+	              // Safari cf
+	              // http://www.w3.org/TR/2007/WD-DOM-Level-3-Events-20071221/events.html#Events-KeyboardEvents-Interfaces
+	              if (isBlank(key)) {
+	                  return 'Unidentified';
+	              }
+	              if (key.startsWith('U+')) {
+	                  key = String.fromCharCode(parseInt(key.substring(2), 16));
+	                  if (event.location === DOM_KEY_LOCATION_NUMPAD && _chromeNumKeyPadMap.hasOwnProperty(key)) {
+	                      // There is a bug in Chrome for numeric keypad keys:
+	                      // https://code.google.com/p/chromium/issues/detail?id=155654
+	                      // 1, 2, 3 ... are reported as A, B, C ...
+	                      key = ((_chromeNumKeyPadMap))[key];
+	                  }
+	              }
+	          }
+	          return _keyMap[key] || key;
+	      };
+	      /**
+	       * @param {?} target
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getGlobalEventTarget = function (target) {
+	          if (target === 'window') {
+	              return window;
+	          }
+	          if (target === 'document') {
+	              return document;
+	          }
+	          if (target === 'body') {
+	              return document.body;
+	          }
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getHistory = function () { return window.history; };
+	      /**
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getLocation = function () { return window.location; };
+	      /**
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getBaseHref = function () {
+	          var /** @type {?} */ href = getBaseElementHref();
+	          return isBlank(href) ? null : relativePath(href);
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.resetBaseElement = function () { baseElement = null; };
+	      /**
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getUserAgent = function () { return window.navigator.userAgent; };
+	      /**
+	       * @param {?} element
+	       * @param {?} name
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.setData = function (element, name, value) {
+	          this.setAttribute(element, 'data-' + name, value);
+	      };
+	      /**
+	       * @param {?} element
+	       * @param {?} name
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getData = function (element, name) {
+	          return this.getAttribute(element, 'data-' + name);
+	      };
+	      /**
+	       * @param {?} element
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getComputedStyle = function (element) { return getComputedStyle(element); };
+	      /**
+	       * @param {?} path
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.setGlobalVar = function (path, value) { setValueOnPath(global$1, path, value); };
+	      /**
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.supportsWebAnimation = function () {
+	          return typeof ((Element)).prototype['animate'] === 'function';
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.performanceNow = function () {
+	          // performance.now() is not available in all browsers, see
+	          // http://caniuse.com/#search=performance.now
+	          return window.performance && window.performance.now ? window.performance.now() :
+	              new Date().getTime();
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.supportsCookies = function () { return true; };
+	      /**
+	       * @param {?} name
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.getCookie = function (name) { return parseCookieValue(document.cookie, name); };
+	      /**
+	       * @param {?} name
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      BrowserDomAdapter.prototype.setCookie = function (name, value) {
+	          // document.cookie is magical, assigning into it assigns/overrides one cookie value, but does
+	          // not clear other cookies.
+	          document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value);
+	      };
+	      return BrowserDomAdapter;
+	  }(GenericBrowserDomAdapter));
+	  var /** @type {?} */ baseElement = null;
+	  /**
+	   * @return {?}
+	   */
+	  function getBaseElementHref() {
+	      if (!baseElement) {
+	          baseElement = document.querySelector('base');
+	          if (!baseElement) {
+	              return null;
+	          }
+	      }
+	      return baseElement.getAttribute('href');
+	  }
+	  // based on urlUtils.js in AngularJS 1
+	  var /** @type {?} */ urlParsingNode;
+	  /**
+	   * @param {?} url
+	   * @return {?}
+	   */
+	  function relativePath(url) {
+	      if (!urlParsingNode) {
+	          urlParsingNode = document.createElement('a');
+	      }
+	      urlParsingNode.setAttribute('href', url);
+	      return (urlParsingNode.pathname.charAt(0) === '/') ? urlParsingNode.pathname :
+	          '/' + urlParsingNode.pathname;
+	  }
+	  /**
+	   * @param {?} cookieStr
+	   * @param {?} name
+	   * @return {?}
+	   */
+	  function parseCookieValue(cookieStr, name) {
+	      name = encodeURIComponent(name);
+	      for (var _i = 0, _a = cookieStr.split(';'); _i < _a.length; _i++) {
+	          var cookie = _a[_i];
+	          var /** @type {?} */ eqIndex = cookie.indexOf('=');
+	          var _b = eqIndex == -1 ? [cookie, ''] : [cookie.slice(0, eqIndex), cookie.slice(eqIndex + 1)], cookieName = _b[0], cookieValue = _b[1];
+	          if (cookieName.trim() === name) {
+	              return decodeURIComponent(cookieValue);
+	          }
+	      }
+	      return null;
+	  }
+
+	  /**
+	   * @license undefined
+	    * Copyright Google Inc. All Rights Reserved.
+	    * *
+	    * Use of this source code is governed by an MIT-style license that can be
+	    * found in the LICENSE file at https://angular.io/license
+	   * @return {?}
+	   */
+	  function supportsState() {
+	      return !!window.history.pushState;
+	  }
+
+	  /**
+	   * @license
+	   * Copyright Google Inc. All Rights Reserved.
+	   *
+	   * Use of this source code is governed by an MIT-style license that can be
+	   * found in the LICENSE file at https://angular.io/license
+	   */
+	  var __extends$2 = (this && this.__extends) || function (d, b) {
+	      for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	      function __() { this.constructor = d; }
+	      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	  };
+	  /**
+	   *  `PlatformLocation` encapsulates all of the direct calls to platform APIs.
+	    * This class should not be used directly by an application developer. Instead, use
+	    * {@link Location}.
+	   */
+	  var BrowserPlatformLocation = (function (_super) {
+	      __extends$2(BrowserPlatformLocation, _super);
+	      function BrowserPlatformLocation() {
+	          _super.call(this);
+	          this._init();
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      BrowserPlatformLocation.prototype._init = function () {
+	          this._location = getDOM().getLocation();
+	          this._history = getDOM().getHistory();
+	      };
+	      Object.defineProperty(BrowserPlatformLocation.prototype, "location", {
+	          /**
+	           * @return {?}
+	           */
+	          get: function () { return this._location; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      /**
+	       * @return {?}
+	       */
+	      BrowserPlatformLocation.prototype.getBaseHrefFromDOM = function () { return getDOM().getBaseHref(); };
+	      /**
+	       * @param {?} fn
+	       * @return {?}
+	       */
+	      BrowserPlatformLocation.prototype.onPopState = function (fn) {
+	          getDOM().getGlobalEventTarget('window').addEventListener('popstate', fn, false);
+	      };
+	      /**
+	       * @param {?} fn
+	       * @return {?}
+	       */
+	      BrowserPlatformLocation.prototype.onHashChange = function (fn) {
+	          getDOM().getGlobalEventTarget('window').addEventListener('hashchange', fn, false);
+	      };
+	      Object.defineProperty(BrowserPlatformLocation.prototype, "pathname", {
+	          /**
+	           * @return {?}
+	           */
+	          get: function () { return this._location.pathname; },
+	          /**
+	           * @param {?} newPath
+	           * @return {?}
+	           */
+	          set: function (newPath) { this._location.pathname = newPath; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      Object.defineProperty(BrowserPlatformLocation.prototype, "search", {
+	          /**
+	           * @return {?}
+	           */
+	          get: function () { return this._location.search; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      Object.defineProperty(BrowserPlatformLocation.prototype, "hash", {
+	          /**
+	           * @return {?}
+	           */
+	          get: function () { return this._location.hash; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      /**
+	       * @param {?} state
+	       * @param {?} title
+	       * @param {?} url
+	       * @return {?}
+	       */
+	      BrowserPlatformLocation.prototype.pushState = function (state, title, url) {
+	          if (supportsState()) {
+	              this._history.pushState(state, title, url);
+	          }
+	          else {
+	              this._location.hash = url;
+	          }
+	      };
+	      /**
+	       * @param {?} state
+	       * @param {?} title
+	       * @param {?} url
+	       * @return {?}
+	       */
+	      BrowserPlatformLocation.prototype.replaceState = function (state, title, url) {
+	          if (supportsState()) {
+	              this._history.replaceState(state, title, url);
+	          }
+	          else {
+	              this._location.hash = url;
+	          }
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      BrowserPlatformLocation.prototype.forward = function () { this._history.forward(); };
+	      /**
+	       * @return {?}
+	       */
+	      BrowserPlatformLocation.prototype.back = function () { this._history.back(); };
+	      BrowserPlatformLocation.decorators = [
+	          { type: core.Injectable },
+	      ];
+	      /** @nocollapse */
+	      BrowserPlatformLocation.ctorParameters = function () { return []; };
+	      return BrowserPlatformLocation;
+	  }(_angular_common.PlatformLocation));
+
+	  var BrowserGetTestability = (function () {
+	      function BrowserGetTestability() {
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      BrowserGetTestability.init = function () { core.setTestabilityGetter(new BrowserGetTestability()); };
+	      /**
+	       * @param {?} registry
+	       * @return {?}
+	       */
+	      BrowserGetTestability.prototype.addToWindow = function (registry) {
+	          global$1.getAngularTestability = function (elem, findInAncestors) {
+	              if (findInAncestors === void 0) { findInAncestors = true; }
+	              var /** @type {?} */ testability = registry.findTestabilityInTree(elem, findInAncestors);
+	              if (testability == null) {
+	                  throw new Error('Could not find testability for element.');
+	              }
+	              return testability;
+	          };
+	          global$1.getAllAngularTestabilities = function () { return registry.getAllTestabilities(); };
+	          global$1.getAllAngularRootElements = function () { return registry.getAllRootElements(); };
+	          var /** @type {?} */ whenAllStable = function (callback /** TODO #9100 */) {
+	              var /** @type {?} */ testabilities = global$1.getAllAngularTestabilities();
+	              var /** @type {?} */ count = testabilities.length;
+	              var /** @type {?} */ didWork = false;
+	              var /** @type {?} */ decrement = function (didWork_ /** TODO #9100 */) {
+	                  didWork = didWork || didWork_;
+	                  count--;
+	                  if (count == 0) {
+	                      callback(didWork);
+	                  }
+	              };
+	              testabilities.forEach(function (testability /** TODO #9100 */) {
+	                  testability.whenStable(decrement);
+	              });
+	          };
+	          if (!global$1['frameworkStabilizers']) {
+	              global$1['frameworkStabilizers'] = [];
+	          }
+	          global$1['frameworkStabilizers'].push(whenAllStable);
+	      };
+	      /**
+	       * @param {?} registry
+	       * @param {?} elem
+	       * @param {?} findInAncestors
+	       * @return {?}
+	       */
+	      BrowserGetTestability.prototype.findTestabilityInTree = function (registry, elem, findInAncestors) {
+	          if (elem == null) {
+	              return null;
+	          }
+	          var /** @type {?} */ t = registry.getTestability(elem);
+	          if (isPresent(t)) {
+	              return t;
+	          }
+	          else if (!findInAncestors) {
+	              return null;
+	          }
+	          if (getDOM().isShadowRoot(elem)) {
+	              return this.findTestabilityInTree(registry, getDOM().getHost(elem), true);
+	          }
+	          return this.findTestabilityInTree(registry, getDOM().parentElement(elem), true);
+	      };
+	      return BrowserGetTestability;
+	  }());
+
+	  /**
+	   *  A service that can be used to get and set the title of a current HTML document.
+	    * *
+	    * Since an Angular 2 application can't be bootstrapped on the entire HTML document (`<html>` tag)
+	    * it is not possible to bind to the `text` property of the `HTMLTitleElement` elements
+	    * (representing the `<title>` tag). Instead, this service can be used to set and get the current
+	    * title value.
+	    * *
+	   */
+	  var Title = (function () {
+	      function Title() {
+	      }
+	      /**
+	       *  Get the title of the current HTML document.
+	       * @return {?}
+	       */
+	      Title.prototype.getTitle = function () { return getDOM().getTitle(); };
+	      /**
+	       *  Set the title of the current HTML document.
+	       * @param {?} newTitle
+	       * @return {?}
+	       */
+	      Title.prototype.setTitle = function (newTitle) { getDOM().setTitle(newTitle); };
+	      return Title;
+	  }());
+
+	  /**
+	   *  Wraps Javascript Objects
+	   */
+	  var StringMapWrapper = (function () {
+	      function StringMapWrapper() {
+	      }
+	      /**
+	       * @param {?} m1
+	       * @param {?} m2
+	       * @return {?}
+	       */
+	      StringMapWrapper.merge = function (m1, m2) {
+	          var /** @type {?} */ m = {};
+	          for (var _i = 0, _a = Object.keys(m1); _i < _a.length; _i++) {
+	              var k = _a[_i];
+	              m[k] = m1[k];
+	          }
+	          for (var _b = 0, _c = Object.keys(m2); _b < _c.length; _b++) {
+	              var k = _c[_b];
+	              m[k] = m2[k];
+	          }
+	          return m;
+	      };
+	      /**
+	       * @param {?} m1
+	       * @param {?} m2
+	       * @return {?}
+	       */
+	      StringMapWrapper.equals = function (m1, m2) {
+	          var /** @type {?} */ k1 = Object.keys(m1);
+	          var /** @type {?} */ k2 = Object.keys(m2);
+	          if (k1.length != k2.length) {
+	              return false;
+	          }
+	          for (var /** @type {?} */ i = 0; i < k1.length; i++) {
+	              var /** @type {?} */ key = k1[i];
+	              if (m1[key] !== m2[key]) {
+	                  return false;
+	              }
+	          }
+	          return true;
+	      };
+	      return StringMapWrapper;
+	  }());
+
+	  /**
+	   * A DI Token representing the main rendering context. In a browser this is the DOM Document.
+	   *
+	   * Note: Document might not be available in the Application Context when Application and Rendering
+	   * Contexts are not the same (e.g. when running the application into a Web Worker).
+	   *
+	   * @stable
+	   */
+	  var /** @type {?} */ DOCUMENT = new core.OpaqueToken('DocumentToken');
+
+	  /**
+	   * @stable
+	   */
+	  var /** @type {?} */ EVENT_MANAGER_PLUGINS = new core.OpaqueToken('EventManagerPlugins');
+	  /**
+	   * @stable
+	   */
+	  var EventManager = (function () {
+	      /**
+	       * @param {?} plugins
+	       * @param {?} _zone
+	       */
+	      function EventManager(plugins, _zone) {
+	          var _this = this;
+	          this._zone = _zone;
+	          this._eventNameToPlugin = new Map();
+	          plugins.forEach(function (p) { return p.manager = _this; });
+	          this._plugins = plugins.slice().reverse();
+	      }
+	      /**
+	       * @param {?} element
+	       * @param {?} eventName
+	       * @param {?} handler
+	       * @return {?}
+	       */
+	      EventManager.prototype.addEventListener = function (element, eventName, handler) {
+	          var /** @type {?} */ plugin = this._findPluginFor(eventName);
+	          return plugin.addEventListener(element, eventName, handler);
+	      };
+	      /**
+	       * @param {?} target
+	       * @param {?} eventName
+	       * @param {?} handler
+	       * @return {?}
+	       */
+	      EventManager.prototype.addGlobalEventListener = function (target, eventName, handler) {
+	          var /** @type {?} */ plugin = this._findPluginFor(eventName);
+	          return plugin.addGlobalEventListener(target, eventName, handler);
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      EventManager.prototype.getZone = function () { return this._zone; };
+	      /**
+	       * @param {?} eventName
+	       * @return {?}
+	       */
+	      EventManager.prototype._findPluginFor = function (eventName) {
+	          var /** @type {?} */ plugin = this._eventNameToPlugin.get(eventName);
+	          if (plugin) {
+	              return plugin;
+	          }
+	          var /** @type {?} */ plugins = this._plugins;
+	          for (var /** @type {?} */ i = 0; i < plugins.length; i++) {
+	              var /** @type {?} */ plugin_1 = plugins[i];
+	              if (plugin_1.supports(eventName)) {
+	                  this._eventNameToPlugin.set(eventName, plugin_1);
+	                  return plugin_1;
+	              }
+	          }
+	          throw new Error("No event manager plugin found for event " + eventName);
+	      };
+	      EventManager.decorators = [
+	          { type: core.Injectable },
+	      ];
+	      /** @nocollapse */
+	      EventManager.ctorParameters = function () { return [
+	          { type: Array, decorators: [{ type: core.Inject, args: [EVENT_MANAGER_PLUGINS,] },] },
+	          { type: core.NgZone, },
+	      ]; };
+	      return EventManager;
+	  }());
+	  /**
+	   * @abstract
+	   */
+	  var EventManagerPlugin = (function () {
+	      function EventManagerPlugin() {
+	      }
+	      /**
+	       * @abstract
+	       * @param {?} eventName
+	       * @return {?}
+	       */
+	      EventManagerPlugin.prototype.supports = function (eventName) { };
+	      /**
+	       * @abstract
+	       * @param {?} element
+	       * @param {?} eventName
+	       * @param {?} handler
+	       * @return {?}
+	       */
+	      EventManagerPlugin.prototype.addEventListener = function (element, eventName, handler) { };
+	      /**
+	       * @param {?} element
+	       * @param {?} eventName
+	       * @param {?} handler
+	       * @return {?}
+	       */
+	      EventManagerPlugin.prototype.addGlobalEventListener = function (element, eventName, handler) {
+	          var /** @type {?} */ target = getDOM().getGlobalEventTarget(element);
+	          if (!target) {
+	              throw new Error("Unsupported event target " + target + " for event " + eventName);
+	          }
+	          return this.addEventListener(target, eventName, handler);
+	      };
+	      ;
+	      return EventManagerPlugin;
+	  }());
+
+	  /**
+	   * @license
+	   * Copyright Google Inc. All Rights Reserved.
+	   *
+	   * Use of this source code is governed by an MIT-style license that can be
+	   * found in the LICENSE file at https://angular.io/license
+	   */
+	  var __extends$4 = (this && this.__extends) || function (d, b) {
+	      for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	      function __() { this.constructor = d; }
+	      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	  };
+	  var SharedStylesHost = (function () {
+	      function SharedStylesHost() {
+	          /** @internal */
+	          this._styles = [];
+	          /** @internal */
+	          this._stylesSet = new Set();
+	      }
+	      /**
+	       * @param {?} styles
+	       * @return {?}
+	       */
+	      SharedStylesHost.prototype.addStyles = function (styles) {
+	          var _this = this;
+	          var /** @type {?} */ additions = [];
+	          styles.forEach(function (style) {
+	              if (!_this._stylesSet.has(style)) {
+	                  _this._stylesSet.add(style);
+	                  _this._styles.push(style);
+	                  additions.push(style);
+	              }
+	          });
+	          this.onStylesAdded(additions);
+	      };
+	      /**
+	       * @param {?} additions
+	       * @return {?}
+	       */
+	      SharedStylesHost.prototype.onStylesAdded = function (additions) { };
+	      /**
+	       * @return {?}
+	       */
+	      SharedStylesHost.prototype.getAllStyles = function () { return this._styles; };
+	      SharedStylesHost.decorators = [
+	          { type: core.Injectable },
+	      ];
+	      /** @nocollapse */
+	      SharedStylesHost.ctorParameters = function () { return []; };
+	      return SharedStylesHost;
+	  }());
+	  var DomSharedStylesHost = (function (_super) {
+	      __extends$4(DomSharedStylesHost, _super);
+	      /**
+	       * @param {?} doc
+	       */
+	      function DomSharedStylesHost(doc) {
+	          _super.call(this);
+	          this._hostNodes = new Set();
+	          this._hostNodes.add(doc.head);
+	      }
+	      /**
+	       * @param {?} styles
+	       * @param {?} host
+	       * @return {?}
+	       */
+	      DomSharedStylesHost.prototype._addStylesToHost = function (styles, host) {
+	          for (var /** @type {?} */ i = 0; i < styles.length; i++) {
+	              var /** @type {?} */ styleEl = document.createElement('style');
+	              styleEl.textContent = styles[i];
+	              host.appendChild(styleEl);
+	          }
+	      };
+	      /**
+	       * @param {?} hostNode
+	       * @return {?}
+	       */
+	      DomSharedStylesHost.prototype.addHost = function (hostNode) {
+	          this._addStylesToHost(this._styles, hostNode);
+	          this._hostNodes.add(hostNode);
+	      };
+	      /**
+	       * @param {?} hostNode
+	       * @return {?}
+	       */
+	      DomSharedStylesHost.prototype.removeHost = function (hostNode) { this._hostNodes.delete(hostNode); };
+	      /**
+	       * @param {?} additions
+	       * @return {?}
+	       */
+	      DomSharedStylesHost.prototype.onStylesAdded = function (additions) {
+	          var _this = this;
+	          this._hostNodes.forEach(function (hostNode) { _this._addStylesToHost(additions, hostNode); });
+	      };
+	      DomSharedStylesHost.decorators = [
+	          { type: core.Injectable },
+	      ];
+	      /** @nocollapse */
+	      DomSharedStylesHost.ctorParameters = function () { return [
+	          { type: undefined, decorators: [{ type: core.Inject, args: [DOCUMENT,] },] },
+	      ]; };
+	      return DomSharedStylesHost;
+	  }(SharedStylesHost));
+
+	  /**
+	   * @license
+	   * Copyright Google Inc. All Rights Reserved.
+	   *
+	   * Use of this source code is governed by an MIT-style license that can be
+	   * found in the LICENSE file at https://angular.io/license
+	   */
+	  var __extends$3 = (this && this.__extends) || function (d, b) {
+	      for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	      function __() { this.constructor = d; }
+	      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	  };
+	  var /** @type {?} */ NAMESPACE_URIS = {
+	      'xlink': 'http://www.w3.org/1999/xlink',
+	      'svg': 'http://www.w3.org/2000/svg',
+	      'xhtml': 'http://www.w3.org/1999/xhtml'
+	  };
+	  var /** @type {?} */ TEMPLATE_COMMENT_TEXT = 'template bindings={}';
+	  var /** @type {?} */ TEMPLATE_BINDINGS_EXP = /^template bindings=(.*)$/;
+	  /**
+	   * @abstract
+	   */
+	  var DomRootRenderer = (function () {
+	      /**
+	       * @param {?} document
+	       * @param {?} eventManager
+	       * @param {?} sharedStylesHost
+	       * @param {?} animationDriver
+	       * @param {?} appId
+	       */
+	      function DomRootRenderer(document, eventManager, sharedStylesHost, animationDriver, appId) {
+	          this.document = document;
+	          this.eventManager = eventManager;
+	          this.sharedStylesHost = sharedStylesHost;
+	          this.animationDriver = animationDriver;
+	          this.appId = appId;
+	          this.registeredComponents = new Map();
+	      }
+	      /**
+	       * @param {?} componentProto
+	       * @return {?}
+	       */
+	      DomRootRenderer.prototype.renderComponent = function (componentProto) {
+	          var /** @type {?} */ renderer = this.registeredComponents.get(componentProto.id);
+	          if (!renderer) {
+	              renderer = new DomRenderer(this, componentProto, this.animationDriver, this.appId + "-" + componentProto.id);
+	              this.registeredComponents.set(componentProto.id, renderer);
+	          }
+	          return renderer;
+	      };
+	      return DomRootRenderer;
+	  }());
+	  var DomRootRenderer_ = (function (_super) {
+	      __extends$3(DomRootRenderer_, _super);
+	      /**
+	       * @param {?} _document
+	       * @param {?} _eventManager
+	       * @param {?} sharedStylesHost
+	       * @param {?} animationDriver
+	       * @param {?} appId
+	       */
+	      function DomRootRenderer_(_document, _eventManager, sharedStylesHost, animationDriver, appId) {
+	          _super.call(this, _document, _eventManager, sharedStylesHost, animationDriver, appId);
+	      }
+	      DomRootRenderer_.decorators = [
+	          { type: core.Injectable },
+	      ];
+	      /** @nocollapse */
+	      DomRootRenderer_.ctorParameters = function () { return [
+	          { type: undefined, decorators: [{ type: core.Inject, args: [DOCUMENT,] },] },
+	          { type: EventManager, },
+	          { type: DomSharedStylesHost, },
+	          { type: AnimationDriver, },
+	          { type: undefined, decorators: [{ type: core.Inject, args: [core.APP_ID,] },] },
+	      ]; };
+	      return DomRootRenderer_;
+	  }(DomRootRenderer));
+	  var /** @type {?} */ DIRECT_DOM_RENDERER = {
+	      /**
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      remove: function (node) {
+	          if (node.parentNode) {
+	              node.parentNode.removeChild(node);
+	          }
+	      },
+	      /**
+	       * @param {?} node
+	       * @param {?} parent
+	       * @return {?}
+	       */
+	      appendChild: function (node, parent) { parent.appendChild(node); },
+	      /**
+	       * @param {?} node
+	       * @param {?} refNode
+	       * @return {?}
+	       */
+	      insertBefore: function (node, refNode) { refNode.parentNode.insertBefore(node, refNode); },
+	      /**
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      nextSibling: function (node) { return node.nextSibling; },
+	      /**
+	       * @param {?} node
+	       * @return {?}
+	       */
+	      parentElement: function (node) { return (node.parentNode); }
+	  };
+	  var DomRenderer = (function () {
+	      /**
+	       * @param {?} _rootRenderer
+	       * @param {?} componentProto
+	       * @param {?} _animationDriver
+	       * @param {?} styleShimId
+	       */
+	      function DomRenderer(_rootRenderer, componentProto, _animationDriver, styleShimId) {
+	          this._rootRenderer = _rootRenderer;
+	          this.componentProto = componentProto;
+	          this._animationDriver = _animationDriver;
+	          this.directRenderer = DIRECT_DOM_RENDERER;
+	          this._styles = flattenStyles(styleShimId, componentProto.styles, []);
+	          if (componentProto.encapsulation !== core.ViewEncapsulation.Native) {
+	              this._rootRenderer.sharedStylesHost.addStyles(this._styles);
+	          }
+	          if (this.componentProto.encapsulation === core.ViewEncapsulation.Emulated) {
+	              this._contentAttr = shimContentAttribute(styleShimId);
+	              this._hostAttr = shimHostAttribute(styleShimId);
+	          }
+	          else {
+	              this._contentAttr = null;
+	              this._hostAttr = null;
+	          }
+	      }
+	      /**
+	       * @param {?} selectorOrNode
+	       * @param {?} debugInfo
+	       * @return {?}
+	       */
+	      DomRenderer.prototype.selectRootElement = function (selectorOrNode, debugInfo) {
+	          var /** @type {?} */ el;
+	          if (typeof selectorOrNode === 'string') {
+	              el = this._rootRenderer.document.querySelector(selectorOrNode);
+	              if (!el) {
+	                  throw new Error("The selector \"" + selectorOrNode + "\" did not match any elements");
+	              }
+	          }
+	          else {
+	              el = selectorOrNode;
+	          }
+	          while (el.firstChild) {
+	              el.removeChild(el.firstChild);
+	          }
+	          return el;
+	      };
+	      /**
+	       * @param {?} parent
+	       * @param {?} name
+	       * @param {?} debugInfo
+	       * @return {?}
+	       */
+	      DomRenderer.prototype.createElement = function (parent, name, debugInfo) {
+	          var /** @type {?} */ el;
+	          if (isNamespaced(name)) {
+	              var /** @type {?} */ nsAndName = splitNamespace(name);
+	              el = document.createElementNS((NAMESPACE_URIS)[nsAndName[0]], nsAndName[1]);
+	          }
+	          else {
+	              el = document.createElement(name);
+	          }
+	          if (this._contentAttr) {
+	              el.setAttribute(this._contentAttr, '');
+	          }
+	          if (parent) {
+	              parent.appendChild(el);
+	          }
+	          return el;
+	      };
+	      /**
+	       * @param {?} hostElement
+	       * @return {?}
+	       */
+	      DomRenderer.prototype.createViewRoot = function (hostElement) {
+	          var /** @type {?} */ nodesParent;
+	          if (this.componentProto.encapsulation === core.ViewEncapsulation.Native) {
+	              nodesParent = ((hostElement)).createShadowRoot();
+	              this._rootRenderer.sharedStylesHost.addHost(nodesParent);
+	              for (var /** @type {?} */ i = 0; i < this._styles.length; i++) {
+	                  var /** @type {?} */ styleEl = document.createElement('style');
+	                  styleEl.textContent = this._styles[i];
+	                  nodesParent.appendChild(styleEl);
+	              }
+	          }
+	          else {
+	              if (this._hostAttr) {
+	                  hostElement.setAttribute(this._hostAttr, '');
+	              }
+	              nodesParent = hostElement;
+	          }
+	          return nodesParent;
+	      };
+	      /**
+	       * @param {?} parentElement
+	       * @param {?} debugInfo
+	       * @return {?}
+	       */
+	      DomRenderer.prototype.createTemplateAnchor = function (parentElement, debugInfo) {
+	          var /** @type {?} */ comment = document.createComment(TEMPLATE_COMMENT_TEXT);
+	          if (parentElement) {
+	              parentElement.appendChild(comment);
+	          }
+	          return comment;
+	      };
+	      /**
+	       * @param {?} parentElement
+	       * @param {?} value
+	       * @param {?} debugInfo
+	       * @return {?}
+	       */
+	      DomRenderer.prototype.createText = function (parentElement, value, debugInfo) {
+	          var /** @type {?} */ node = document.createTextNode(value);
+	          if (parentElement) {
+	              parentElement.appendChild(node);
+	          }
+	          return node;
+	      };
+	      /**
+	       * @param {?} parentElement
+	       * @param {?} nodes
+	       * @return {?}
+	       */
+	      DomRenderer.prototype.projectNodes = function (parentElement, nodes) {
+	          if (!parentElement)
+	              return;
+	          appendNodes(parentElement, nodes);
+	      };
+	      /**
+	       * @param {?} node
+	       * @param {?} viewRootNodes
+	       * @return {?}
+	       */
+	      DomRenderer.prototype.attachViewAfter = function (node, viewRootNodes) { moveNodesAfterSibling(node, viewRootNodes); };
+	      /**
+	       * @param {?} viewRootNodes
+	       * @return {?}
+	       */
+	      DomRenderer.prototype.detachView = function (viewRootNodes) {
+	          for (var /** @type {?} */ i = 0; i < viewRootNodes.length; i++) {
+	              var /** @type {?} */ node = viewRootNodes[i];
+	              if (node.parentNode) {
+	                  node.parentNode.removeChild(node);
+	              }
+	          }
+	      };
+	      /**
+	       * @param {?} hostElement
+	       * @param {?} viewAllNodes
+	       * @return {?}
+	       */
+	      DomRenderer.prototype.destroyView = function (hostElement, viewAllNodes) {
+	          if (this.componentProto.encapsulation === core.ViewEncapsulation.Native && hostElement) {
+	              this._rootRenderer.sharedStylesHost.removeHost(((hostElement)).shadowRoot);
+	          }
+	      };
+	      /**
+	       * @param {?} renderElement
+	       * @param {?} name
+	       * @param {?} callback
+	       * @return {?}
+	       */
+	      DomRenderer.prototype.listen = function (renderElement, name, callback) {
+	          return this._rootRenderer.eventManager.addEventListener(renderElement, name, decoratePreventDefault(callback));
+	      };
+	      /**
+	       * @param {?} target
+	       * @param {?} name
+	       * @param {?} callback
+	       * @return {?}
+	       */
+	      DomRenderer.prototype.listenGlobal = function (target, name, callback) {
+	          return this._rootRenderer.eventManager.addGlobalEventListener(target, name, decoratePreventDefault(callback));
+	      };
+	      /**
+	       * @param {?} renderElement
+	       * @param {?} propertyName
+	       * @param {?} propertyValue
+	       * @return {?}
+	       */
+	      DomRenderer.prototype.setElementProperty = function (renderElement, propertyName, propertyValue) {
+	          ((renderElement))[propertyName] = propertyValue;
+	      };
+	      /**
+	       * @param {?} renderElement
+	       * @param {?} attributeName
+	       * @param {?} attributeValue
+	       * @return {?}
+	       */
+	      DomRenderer.prototype.setElementAttribute = function (renderElement, attributeName, attributeValue) {
+	          var /** @type {?} */ attrNs;
+	          var /** @type {?} */ attrNameWithoutNs = attributeName;
+	          if (isNamespaced(attributeName)) {
+	              var /** @type {?} */ nsAndName = splitNamespace(attributeName);
+	              attrNameWithoutNs = nsAndName[1];
+	              attributeName = nsAndName[0] + ':' + nsAndName[1];
+	              attrNs = NAMESPACE_URIS[nsAndName[0]];
+	          }
+	          if (isPresent(attributeValue)) {
+	              if (attrNs) {
+	                  renderElement.setAttributeNS(attrNs, attributeName, attributeValue);
+	              }
+	              else {
+	                  renderElement.setAttribute(attributeName, attributeValue);
+	              }
+	          }
+	          else {
+	              if (isPresent(attrNs)) {
+	                  renderElement.removeAttributeNS(attrNs, attrNameWithoutNs);
+	              }
+	              else {
+	                  renderElement.removeAttribute(attributeName);
+	              }
+	          }
+	      };
+	      /**
+	       * @param {?} renderElement
+	       * @param {?} propertyName
+	       * @param {?} propertyValue
+	       * @return {?}
+	       */
+	      DomRenderer.prototype.setBindingDebugInfo = function (renderElement, propertyName, propertyValue) {
+	          if (renderElement.nodeType === Node.COMMENT_NODE) {
+	              var /** @type {?} */ existingBindings = renderElement.nodeValue.replace(/\n/g, '').match(TEMPLATE_BINDINGS_EXP);
+	              var /** @type {?} */ parsedBindings = JSON.parse(existingBindings[1]);
+	              parsedBindings[propertyName] = propertyValue;
+	              renderElement.nodeValue =
+	                  TEMPLATE_COMMENT_TEXT.replace('{}', JSON.stringify(parsedBindings, null, 2));
+	          }
+	          else {
+	              this.setElementAttribute(renderElement, propertyName, propertyValue);
+	          }
+	      };
+	      /**
+	       * @param {?} renderElement
+	       * @param {?} className
+	       * @param {?} isAdd
+	       * @return {?}
+	       */
+	      DomRenderer.prototype.setElementClass = function (renderElement, className, isAdd) {
+	          if (isAdd) {
+	              renderElement.classList.add(className);
+	          }
+	          else {
+	              renderElement.classList.remove(className);
+	          }
+	      };
+	      /**
+	       * @param {?} renderElement
+	       * @param {?} styleName
+	       * @param {?} styleValue
+	       * @return {?}
+	       */
+	      DomRenderer.prototype.setElementStyle = function (renderElement, styleName, styleValue) {
+	          if (isPresent(styleValue)) {
+	              ((renderElement.style))[styleName] = stringify(styleValue);
+	          }
+	          else {
+	              // IE requires '' instead of null
+	              // see https://github.com/angular/angular/issues/7916
+	              ((renderElement.style))[styleName] = '';
+	          }
+	      };
+	      /**
+	       * @param {?} renderElement
+	       * @param {?} methodName
+	       * @param {?} args
+	       * @return {?}
+	       */
+	      DomRenderer.prototype.invokeElementMethod = function (renderElement, methodName, args) {
+	          ((renderElement))[methodName].apply(renderElement, args);
+	      };
+	      /**
+	       * @param {?} renderNode
+	       * @param {?} text
+	       * @return {?}
+	       */
+	      DomRenderer.prototype.setText = function (renderNode, text) { renderNode.nodeValue = text; };
+	      /**
+	       * @param {?} element
+	       * @param {?} startingStyles
+	       * @param {?} keyframes
+	       * @param {?} duration
+	       * @param {?} delay
+	       * @param {?} easing
+	       * @param {?=} previousPlayers
+	       * @return {?}
+	       */
+	      DomRenderer.prototype.animate = function (element, startingStyles, keyframes, duration, delay, easing, previousPlayers) {
+	          if (previousPlayers === void 0) { previousPlayers = []; }
+	          try {
+	              return this._animationDriver.animate(element, startingStyles, keyframes, duration, delay, easing, previousPlayers);
+	          }
+	          catch (e) {
+	              return new NoOpAnimationPlayer();
+	          }
+	      };
+	      return DomRenderer;
+	  }());
+	  /**
+	   * @param {?} sibling
+	   * @param {?} nodes
+	   * @return {?}
+	   */
+	  function moveNodesAfterSibling(sibling, nodes) {
+	      var /** @type {?} */ parent = sibling.parentNode;
+	      if (nodes.length > 0 && parent) {
+	          var /** @type {?} */ nextSibling = sibling.nextSibling;
+	          if (nextSibling) {
+	              for (var /** @type {?} */ i = 0; i < nodes.length; i++) {
+	                  parent.insertBefore(nodes[i], nextSibling);
+	              }
+	          }
+	          else {
+	              for (var /** @type {?} */ i = 0; i < nodes.length; i++) {
+	                  parent.appendChild(nodes[i]);
+	              }
+	          }
+	      }
+	  }
+	  /**
+	   * @param {?} parent
+	   * @param {?} nodes
+	   * @return {?}
+	   */
+	  function appendNodes(parent, nodes) {
+	      for (var /** @type {?} */ i = 0; i < nodes.length; i++) {
+	          parent.appendChild(nodes[i]);
+	      }
+	  }
+	  /**
+	   * @param {?} eventHandler
+	   * @return {?}
+	   */
+	  function decoratePreventDefault(eventHandler) {
+	      return function (event) {
+	          var /** @type {?} */ allowDefaultBehavior = eventHandler(event);
+	          if (allowDefaultBehavior === false) {
+	              // TODO(tbosch): move preventDefault into event plugins...
+	              event.preventDefault();
+	              event.returnValue = false;
+	          }
+	      };
+	  }
+	  var /** @type {?} */ COMPONENT_REGEX = /%COMP%/g;
+	  var /** @type {?} */ COMPONENT_VARIABLE = '%COMP%';
+	  var /** @type {?} */ HOST_ATTR = "_nghost-" + COMPONENT_VARIABLE;
+	  var /** @type {?} */ CONTENT_ATTR = "_ngcontent-" + COMPONENT_VARIABLE;
+	  /**
+	   * @param {?} componentShortId
+	   * @return {?}
+	   */
+	  function shimContentAttribute(componentShortId) {
+	      return CONTENT_ATTR.replace(COMPONENT_REGEX, componentShortId);
+	  }
+	  /**
+	   * @param {?} componentShortId
+	   * @return {?}
+	   */
+	  function shimHostAttribute(componentShortId) {
+	      return HOST_ATTR.replace(COMPONENT_REGEX, componentShortId);
+	  }
+	  /**
+	   * @param {?} compId
+	   * @param {?} styles
+	   * @param {?} target
+	   * @return {?}
+	   */
+	  function flattenStyles(compId, styles, target) {
+	      for (var /** @type {?} */ i = 0; i < styles.length; i++) {
+	          var /** @type {?} */ style = styles[i];
+	          if (Array.isArray(style)) {
+	              flattenStyles(compId, style, target);
+	          }
+	          else {
+	              style = style.replace(COMPONENT_REGEX, compId);
+	              target.push(style);
+	          }
+	      }
+	      return target;
+	  }
+	  var /** @type {?} */ NS_PREFIX_RE = /^:([^:]+):(.+)$/;
+	  /**
+	   * @param {?} name
+	   * @return {?}
+	   */
+	  function isNamespaced(name) {
+	      return name[0] === ':';
+	  }
+	  /**
+	   * @param {?} name
+	   * @return {?}
+	   */
+	  function splitNamespace(name) {
+	      var /** @type {?} */ match = name.match(NS_PREFIX_RE);
+	      return [match[1], match[2]];
+	  }
+
+	  var /** @type {?} */ CORE_TOKENS = {
+	      'ApplicationRef': core.ApplicationRef,
+	      'NgZone': core.NgZone,
+	  };
+	  var /** @type {?} */ INSPECT_GLOBAL_NAME = 'ng.probe';
+	  var /** @type {?} */ CORE_TOKENS_GLOBAL_NAME = 'ng.coreTokens';
+	  /**
+	   *  Returns a {@link DebugElement} for the given native DOM element, or
+	    * null if the given native element does not have an Angular view associated
+	    * with it.
+	   * @param {?} element
+	   * @return {?}
+	   */
+	  function inspectNativeElement(element) {
+	      return core.getDebugNode(element);
+	  }
+	  /**
+	   *  Deprecated. Use the one from '@angular/core'.
+	   * @deprecated
+	   */
+	  var NgProbeToken = (function () {
+	      /**
+	       * @param {?} name
+	       * @param {?} token
+	       */
+	      function NgProbeToken(name, token) {
+	          this.name = name;
+	          this.token = token;
+	      }
+	      return NgProbeToken;
+	  }());
+	  /**
+	   * @param {?} rootRenderer
+	   * @param {?} extraTokens
+	   * @param {?} coreTokens
+	   * @return {?}
+	   */
+	  function _createConditionalRootRenderer(rootRenderer, extraTokens, coreTokens) {
+	      return core.isDevMode() ?
+	          _createRootRenderer(rootRenderer, (extraTokens || []).concat(coreTokens || [])) :
+	          rootRenderer;
+	  }
+	  /**
+	   * @param {?} rootRenderer
+	   * @param {?} extraTokens
+	   * @return {?}
+	   */
+	  function _createRootRenderer(rootRenderer, extraTokens) {
+	      getDOM().setGlobalVar(INSPECT_GLOBAL_NAME, inspectNativeElement);
+	      getDOM().setGlobalVar(CORE_TOKENS_GLOBAL_NAME, StringMapWrapper.merge(CORE_TOKENS, _ngProbeTokensToMap(extraTokens || [])));
+	      return new DebugDomRootRenderer(rootRenderer);
+	  }
+	  /**
+	   * @param {?} tokens
+	   * @return {?}
+	   */
+	  function _ngProbeTokensToMap(tokens) {
+	      return tokens.reduce(function (prev, t) { return (prev[t.name] = t.token, prev); }, {});
+	  }
+	  /**
+	   * Providers which support debugging Angular applications (e.g. via `ng.probe`).
+	   */
+	  var /** @type {?} */ ELEMENT_PROBE_PROVIDERS = [{
+	          provide: core.RootRenderer,
+	          useFactory: _createConditionalRootRenderer,
+	          deps: [
+	              DomRootRenderer, [NgProbeToken, new core.Optional()],
+	              [core.NgProbeToken, new core.Optional()]
+	          ]
+	      }];
+
+	  /**
+	   * @license
+	   * Copyright Google Inc. All Rights Reserved.
+	   *
+	   * Use of this source code is governed by an MIT-style license that can be
+	   * found in the LICENSE file at https://angular.io/license
+	   */
+	  var __extends$5 = (this && this.__extends) || function (d, b) {
+	      for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	      function __() { this.constructor = d; }
+	      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	  };
+	  var DomEventsPlugin = (function (_super) {
+	      __extends$5(DomEventsPlugin, _super);
+	      function DomEventsPlugin() {
+	          _super.apply(this, arguments);
+	      }
+	      /**
+	       * @param {?} eventName
+	       * @return {?}
+	       */
+	      DomEventsPlugin.prototype.supports = function (eventName) { return true; };
+	      /**
+	       * @param {?} element
+	       * @param {?} eventName
+	       * @param {?} handler
+	       * @return {?}
+	       */
+	      DomEventsPlugin.prototype.addEventListener = function (element, eventName, handler) {
+	          element.addEventListener(eventName, /** @type {?} */ (handler), false);
+	          return function () { return element.removeEventListener(eventName, /** @type {?} */ (handler), false); };
+	      };
+	      DomEventsPlugin.decorators = [
+	          { type: core.Injectable },
+	      ];
+	      /** @nocollapse */
+	      DomEventsPlugin.ctorParameters = function () { return []; };
+	      return DomEventsPlugin;
+	  }(EventManagerPlugin));
+
+	  /**
+	   * @license
+	   * Copyright Google Inc. All Rights Reserved.
+	   *
+	   * Use of this source code is governed by an MIT-style license that can be
+	   * found in the LICENSE file at https://angular.io/license
+	   */
+	  var __extends$6 = (this && this.__extends) || function (d, b) {
+	      for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	      function __() { this.constructor = d; }
+	      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	  };
+	  var /** @type {?} */ EVENT_NAMES = {
+	      // pan
+	      'pan': true,
+	      'panstart': true,
+	      'panmove': true,
+	      'panend': true,
+	      'pancancel': true,
+	      'panleft': true,
+	      'panright': true,
+	      'panup': true,
+	      'pandown': true,
+	      // pinch
+	      'pinch': true,
+	      'pinchstart': true,
+	      'pinchmove': true,
+	      'pinchend': true,
+	      'pinchcancel': true,
+	      'pinchin': true,
+	      'pinchout': true,
+	      // press
+	      'press': true,
+	      'pressup': true,
+	      // rotate
+	      'rotate': true,
+	      'rotatestart': true,
+	      'rotatemove': true,
+	      'rotateend': true,
+	      'rotatecancel': true,
+	      // swipe
+	      'swipe': true,
+	      'swipeleft': true,
+	      'swiperight': true,
+	      'swipeup': true,
+	      'swipedown': true,
+	      // tap
+	      'tap': true,
+	  };
+	  /**
+	   * A DI token that you can use to provide{@link HammerGestureConfig} to Angular. Use it to configure
+	   * Hammer gestures.
+	   *
+	   * @experimental
+	   */
+	  var /** @type {?} */ HAMMER_GESTURE_CONFIG = new core.OpaqueToken('HammerGestureConfig');
+	  /**
+	   * @experimental
+	   */
+	  var HammerGestureConfig = (function () {
+	      function HammerGestureConfig() {
+	          this.events = [];
+	          this.overrides = {};
+	      }
+	      /**
+	       * @param {?} element
+	       * @return {?}
+	       */
+	      HammerGestureConfig.prototype.buildHammer = function (element) {
+	          var /** @type {?} */ mc = new Hammer(element);
+	          mc.get('pinch').set({ enable: true });
+	          mc.get('rotate').set({ enable: true });
+	          for (var eventName in this.overrides) {
+	              mc.get(eventName).set(this.overrides[eventName]);
+	          }
+	          return mc;
+	      };
+	      HammerGestureConfig.decorators = [
+	          { type: core.Injectable },
+	      ];
+	      /** @nocollapse */
+	      HammerGestureConfig.ctorParameters = function () { return []; };
+	      return HammerGestureConfig;
+	  }());
+	  var HammerGesturesPlugin = (function (_super) {
+	      __extends$6(HammerGesturesPlugin, _super);
+	      /**
+	       * @param {?} _config
+	       */
+	      function HammerGesturesPlugin(_config) {
+	          _super.call(this);
+	          this._config = _config;
+	      }
+	      /**
+	       * @param {?} eventName
+	       * @return {?}
+	       */
+	      HammerGesturesPlugin.prototype.supports = function (eventName) {
+	          if (!EVENT_NAMES.hasOwnProperty(eventName.toLowerCase()) && !this.isCustomEvent(eventName)) {
+	              return false;
+	          }
+	          if (!((window)).Hammer) {
+	              throw new Error("Hammer.js is not loaded, can not bind " + eventName + " event");
+	          }
+	          return true;
+	      };
+	      /**
+	       * @param {?} element
+	       * @param {?} eventName
+	       * @param {?} handler
+	       * @return {?}
+	       */
+	      HammerGesturesPlugin.prototype.addEventListener = function (element, eventName, handler) {
+	          var _this = this;
+	          var /** @type {?} */ zone = this.manager.getZone();
+	          eventName = eventName.toLowerCase();
+	          return zone.runOutsideAngular(function () {
+	              // Creating the manager bind events, must be done outside of angular
+	              var /** @type {?} */ mc = _this._config.buildHammer(element);
+	              var /** @type {?} */ callback = function (eventObj) {
+	                  zone.runGuarded(function () { handler(eventObj); });
+	              };
+	              mc.on(eventName, callback);
+	              return function () { return mc.off(eventName, callback); };
+	          });
+	      };
+	      /**
+	       * @param {?} eventName
+	       * @return {?}
+	       */
+	      HammerGesturesPlugin.prototype.isCustomEvent = function (eventName) { return this._config.events.indexOf(eventName) > -1; };
+	      HammerGesturesPlugin.decorators = [
+	          { type: core.Injectable },
+	      ];
+	      /** @nocollapse */
+	      HammerGesturesPlugin.ctorParameters = function () { return [
+	          { type: HammerGestureConfig, decorators: [{ type: core.Inject, args: [HAMMER_GESTURE_CONFIG,] },] },
+	      ]; };
+	      return HammerGesturesPlugin;
+	  }(EventManagerPlugin));
+
+	  /**
+	   * @license
+	   * Copyright Google Inc. All Rights Reserved.
+	   *
+	   * Use of this source code is governed by an MIT-style license that can be
+	   * found in the LICENSE file at https://angular.io/license
+	   */
+	  var __extends$7 = (this && this.__extends) || function (d, b) {
+	      for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	      function __() { this.constructor = d; }
+	      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	  };
+	  var /** @type {?} */ MODIFIER_KEYS = ['alt', 'control', 'meta', 'shift'];
+	  var /** @type {?} */ MODIFIER_KEY_GETTERS = {
+	      'alt': function (event) { return event.altKey; },
+	      'control': function (event) { return event.ctrlKey; },
+	      'meta': function (event) { return event.metaKey; },
+	      'shift': function (event) { return event.shiftKey; }
+	  };
+	  /**
+	   * @experimental
+	   */
+	  var KeyEventsPlugin = (function (_super) {
+	      __extends$7(KeyEventsPlugin, _super);
+	      function KeyEventsPlugin() {
+	          _super.call(this);
+	      }
+	      /**
+	       * @param {?} eventName
+	       * @return {?}
+	       */
+	      KeyEventsPlugin.prototype.supports = function (eventName) { return KeyEventsPlugin.parseEventName(eventName) != null; };
+	      /**
+	       * @param {?} element
+	       * @param {?} eventName
+	       * @param {?} handler
+	       * @return {?}
+	       */
+	      KeyEventsPlugin.prototype.addEventListener = function (element, eventName, handler) {
+	          var /** @type {?} */ parsedEvent = KeyEventsPlugin.parseEventName(eventName);
+	          var /** @type {?} */ outsideHandler = KeyEventsPlugin.eventCallback(parsedEvent['fullKey'], handler, this.manager.getZone());
+	          return this.manager.getZone().runOutsideAngular(function () {
+	              return getDOM().onAndCancel(element, parsedEvent['domEventName'], outsideHandler);
+	          });
+	      };
+	      /**
+	       * @param {?} eventName
+	       * @return {?}
+	       */
+	      KeyEventsPlugin.parseEventName = function (eventName) {
+	          var /** @type {?} */ parts = eventName.toLowerCase().split('.');
+	          var /** @type {?} */ domEventName = parts.shift();
+	          if ((parts.length === 0) || !(domEventName === 'keydown' || domEventName === 'keyup')) {
+	              return null;
+	          }
+	          var /** @type {?} */ key = KeyEventsPlugin._normalizeKey(parts.pop());
+	          var /** @type {?} */ fullKey = '';
+	          MODIFIER_KEYS.forEach(function (modifierName) {
+	              var /** @type {?} */ index = parts.indexOf(modifierName);
+	              if (index > -1) {
+	                  parts.splice(index, 1);
+	                  fullKey += modifierName + '.';
+	              }
+	          });
+	          fullKey += key;
+	          if (parts.length != 0 || key.length === 0) {
+	              // returning null instead of throwing to let another plugin process the event
+	              return null;
+	          }
+	          var /** @type {?} */ result = {};
+	          result['domEventName'] = domEventName;
+	          result['fullKey'] = fullKey;
+	          return result;
+	      };
+	      /**
+	       * @param {?} event
+	       * @return {?}
+	       */
+	      KeyEventsPlugin.getEventFullKey = function (event) {
+	          var /** @type {?} */ fullKey = '';
+	          var /** @type {?} */ key = getDOM().getEventKey(event);
+	          key = key.toLowerCase();
+	          if (key === ' ') {
+	              key = 'space'; // for readability
+	          }
+	          else if (key === '.') {
+	              key = 'dot'; // because '.' is used as a separator in event names
+	          }
+	          MODIFIER_KEYS.forEach(function (modifierName) {
+	              if (modifierName != key) {
+	                  var /** @type {?} */ modifierGetter = MODIFIER_KEY_GETTERS[modifierName];
+	                  if (modifierGetter(event)) {
+	                      fullKey += modifierName + '.';
+	                  }
+	              }
+	          });
+	          fullKey += key;
+	          return fullKey;
+	      };
+	      /**
+	       * @param {?} fullKey
+	       * @param {?} handler
+	       * @param {?} zone
+	       * @return {?}
+	       */
+	      KeyEventsPlugin.eventCallback = function (fullKey, handler, zone) {
+	          return function (event /** TODO #9100 */) {
+	              if (KeyEventsPlugin.getEventFullKey(event) === fullKey) {
+	                  zone.runGuarded(function () { return handler(event); });
+	              }
+	          };
+	      };
+	      /**
+	       * @param {?} keyName
+	       * @return {?}
+	       */
+	      KeyEventsPlugin._normalizeKey = function (keyName) {
+	          // TODO: switch to a Map if the mapping grows too much
+	          switch (keyName) {
+	              case 'esc':
+	                  return 'escape';
+	              default:
+	                  return keyName;
+	          }
+	      };
+	      KeyEventsPlugin.decorators = [
+	          { type: core.Injectable },
+	      ];
+	      /** @nocollapse */
+	      KeyEventsPlugin.ctorParameters = function () { return []; };
+	      return KeyEventsPlugin;
+	  }(EventManagerPlugin));
+
+	  /**
+	   * A pattern that recognizes a commonly useful subset of URLs that are safe.
+	   *
+	   * This regular expression matches a subset of URLs that will not cause script
+	   * execution if used in URL context within a HTML document. Specifically, this
+	   * regular expression matches if (comment from here on and regex copied from
+	   * Soy's EscapingConventions):
+	   * (1) Either a protocol in a whitelist (http, https, mailto or ftp).
+	   * (2) or no protocol.  A protocol must be followed by a colon. The below
+	   *     allows that by allowing colons only after one of the characters [/?#].
+	   *     A colon after a hash (#) must be in the fragment.
+	   *     Otherwise, a colon after a (?) must be in a query.
+	   *     Otherwise, a colon after a single solidus (/) must be in a path.
+	   *     Otherwise, a colon after a double solidus (//) must be in the authority
+	   *     (before port).
+	   *
+	   * The pattern disallows &, used in HTML entity declarations before
+	   * one of the characters in [/?#]. This disallows HTML entities used in the
+	   * protocol name, which should never happen, e.g. "h&#116;tp" for "http".
+	   * It also disallows HTML entities in the first path part of a relative path,
+	   * e.g. "foo&lt;bar/baz".  Our existing escaping functions should not produce
+	   * that. More importantly, it disallows masking of a colon,
+	   * e.g. "javascript&#58;...".
+	   *
+	   * This regular expression was taken from the Closure sanitization library.
+	   */
+	  var /** @type {?} */ SAFE_URL_PATTERN = /^(?:(?:https?|mailto|ftp|tel|file):|[^&:/?#]*(?:[/?#]|$))/gi;
+	  /** A pattern that matches safe data URLs. Only matches image, video and audio types. */
+	  var /** @type {?} */ DATA_URL_PATTERN = /^data:(?:image\/(?:bmp|gif|jpeg|jpg|png|tiff|webp)|video\/(?:mpeg|mp4|ogg|webm)|audio\/(?:mp3|oga|ogg|opus));base64,[a-z0-9+\/]+=*$/i;
+	  /**
+	   * @param {?} url
+	   * @return {?}
+	   */
+	  function sanitizeUrl(url) {
+	      url = String(url);
+	      if (url.match(SAFE_URL_PATTERN) || url.match(DATA_URL_PATTERN))
+	          return url;
+	      if (core.isDevMode()) {
+	          getDOM().log("WARNING: sanitizing unsafe URL value " + url + " (see http://g.co/ng/security#xss)");
+	      }
+	      return 'unsafe:' + url;
+	  }
+	  /**
+	   * @param {?} srcset
+	   * @return {?}
+	   */
+	  function sanitizeSrcset(srcset) {
+	      srcset = String(srcset);
+	      return srcset.split(',').map(function (srcset) { return sanitizeUrl(srcset.trim()); }).join(', ');
+	  }
+
+	  /** A <body> element that can be safely used to parse untrusted HTML. Lazily initialized below. */
+	  var /** @type {?} */ inertElement = null;
+	  /** Lazily initialized to make sure the DOM adapter gets set before use. */
+	  var /** @type {?} */ DOM = null;
+	  /**
+	   *  Returns an HTML element that is guaranteed to not execute code when creating elements in it.
+	   * @return {?}
+	   */
+	  function getInertElement() {
+	      if (inertElement)
+	          return inertElement;
+	      DOM = getDOM();
+	      // Prefer using <template> element if supported.
+	      var /** @type {?} */ templateEl = DOM.createElement('template');
+	      if ('content' in templateEl)
+	          return templateEl;
+	      var /** @type {?} */ doc = DOM.createHtmlDocument();
+	      inertElement = DOM.querySelector(doc, 'body');
+	      if (inertElement == null) {
+	          // usually there should be only one body element in the document, but IE doesn't have any, so we
+	          // need to create one.
+	          var /** @type {?} */ html = DOM.createElement('html', doc);
+	          inertElement = DOM.createElement('body', doc);
+	          DOM.appendChild(html, inertElement);
+	          DOM.appendChild(doc, html);
+	      }
+	      return inertElement;
+	  }
+	  /**
+	   * @param {?} tags
+	   * @return {?}
+	   */
+	  function tagSet(tags) {
+	      var /** @type {?} */ res = {};
+	      for (var _i = 0, _a = tags.split(','); _i < _a.length; _i++) {
+	          var t = _a[_i];
+	          res[t] = true;
+	      }
+	      return res;
+	  }
+	  /**
+	   * @param {...?} sets
+	   * @return {?}
+	   */
+	  function merge() {
+	      var sets = [];
+	      for (var _i = 0; _i < arguments.length; _i++) {
+	          sets[_i - 0] = arguments[_i];
+	      }
+	      var /** @type {?} */ res = {};
+	      for (var _a = 0, sets_1 = sets; _a < sets_1.length; _a++) {
+	          var s = sets_1[_a];
+	          for (var v in s) {
+	              if (s.hasOwnProperty(v))
+	                  res[v] = true;
+	          }
+	      }
+	      return res;
+	  }
+	  // Good source of info about elements and attributes
+	  // http://dev.w3.org/html5/spec/Overview.html#semantics
+	  // http://simon.html5.org/html-elements
+	  // Safe Void Elements - HTML5
+	  // http://dev.w3.org/html5/spec/Overview.html#void-elements
+	  var /** @type {?} */ VOID_ELEMENTS = tagSet('area,br,col,hr,img,wbr');
+	  // Elements that you can, intentionally, leave open (and which close themselves)
+	  // http://dev.w3.org/html5/spec/Overview.html#optional-tags
+	  var /** @type {?} */ OPTIONAL_END_TAG_BLOCK_ELEMENTS = tagSet('colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr');
+	  var /** @type {?} */ OPTIONAL_END_TAG_INLINE_ELEMENTS = tagSet('rp,rt');
+	  var /** @type {?} */ OPTIONAL_END_TAG_ELEMENTS = merge(OPTIONAL_END_TAG_INLINE_ELEMENTS, OPTIONAL_END_TAG_BLOCK_ELEMENTS);
+	  // Safe Block Elements - HTML5
+	  var /** @type {?} */ BLOCK_ELEMENTS = merge(OPTIONAL_END_TAG_BLOCK_ELEMENTS, tagSet('address,article,' +
+	      'aside,blockquote,caption,center,del,details,dialog,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5,' +
+	      'h6,header,hgroup,hr,ins,main,map,menu,nav,ol,pre,section,summary,table,ul'));
+	  // Inline Elements - HTML5
+	  var /** @type {?} */ INLINE_ELEMENTS = merge(OPTIONAL_END_TAG_INLINE_ELEMENTS, tagSet('a,abbr,acronym,audio,b,' +
+	      'bdi,bdo,big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,picture,q,ruby,rp,rt,s,' +
+	      'samp,small,source,span,strike,strong,sub,sup,time,track,tt,u,var,video'));
+	  var /** @type {?} */ VALID_ELEMENTS = merge(VOID_ELEMENTS, BLOCK_ELEMENTS, INLINE_ELEMENTS, OPTIONAL_END_TAG_ELEMENTS);
+	  // Attributes that have href and hence need to be sanitized
+	  var /** @type {?} */ URI_ATTRS = tagSet('background,cite,href,itemtype,longdesc,poster,src,xlink:href');
+	  // Attributes that have special href set hence need to be sanitized
+	  var /** @type {?} */ SRCSET_ATTRS = tagSet('srcset');
+	  var /** @type {?} */ HTML_ATTRS = tagSet('abbr,accesskey,align,alt,autoplay,axis,bgcolor,border,cellpadding,cellspacing,class,clear,color,cols,colspan,' +
+	      'compact,controls,coords,datetime,default,dir,download,face,headers,height,hidden,hreflang,hspace,' +
+	      'ismap,itemscope,itemprop,kind,label,lang,language,loop,media,muted,nohref,nowrap,open,preload,rel,rev,role,rows,rowspan,rules,' +
+	      'scope,scrolling,shape,size,sizes,span,srclang,start,summary,tabindex,target,title,translate,type,usemap,' +
+	      'valign,value,vspace,width');
+	  // NB: This currently conciously doesn't support SVG. SVG sanitization has had several security
+	  // issues in the past, so it seems safer to leave it out if possible. If support for binding SVG via
+	  // innerHTML is required, SVG attributes should be added here.
+	  // NB: Sanitization does not allow <form> elements or other active elements (<button> etc). Those
+	  // can be sanitized, but they increase security surface area without a legitimate use case, so they
+	  // are left out here.
+	  var /** @type {?} */ VALID_ATTRS = merge(URI_ATTRS, SRCSET_ATTRS, HTML_ATTRS);
+	  /**
+	   *  SanitizingHtmlSerializer serializes a DOM fragment, stripping out any unsafe elements and unsafe
+	    * attributes.
+	   */
+	  var SanitizingHtmlSerializer = (function () {
+	      function SanitizingHtmlSerializer() {
+	          this.sanitizedSomething = false;
+	          this.buf = [];
+	      }
+	      /**
+	       * @param {?} el
+	       * @return {?}
+	       */
+	      SanitizingHtmlSerializer.prototype.sanitizeChildren = function (el) {
+	          // This cannot use a TreeWalker, as it has to run on Angular's various DOM adapters.
+	          // However this code never accesses properties off of `document` before deleting its contents
+	          // again, so it shouldn't be vulnerable to DOM clobbering.
+	          var /** @type {?} */ current = el.firstChild;
+	          while (current) {
+	              if (DOM.isElementNode(current)) {
+	                  this.startElement(/** @type {?} */ (current));
+	              }
+	              else if (DOM.isTextNode(current)) {
+	                  this.chars(DOM.nodeValue(current));
+	              }
+	              else {
+	                  // Strip non-element, non-text nodes.
+	                  this.sanitizedSomething = true;
+	              }
+	              if (DOM.firstChild(current)) {
+	                  current = DOM.firstChild(current);
+	                  continue;
+	              }
+	              while (current) {
+	                  // Leaving the element. Walk up and to the right, closing tags as we go.
+	                  if (DOM.isElementNode(current)) {
+	                      this.endElement(/** @type {?} */ (current));
+	                  }
+	                  if (DOM.nextSibling(current)) {
+	                      current = DOM.nextSibling(current);
+	                      break;
+	                  }
+	                  current = DOM.parentElement(current);
+	              }
+	          }
+	          return this.buf.join('');
+	      };
+	      /**
+	       * @param {?} element
+	       * @return {?}
+	       */
+	      SanitizingHtmlSerializer.prototype.startElement = function (element) {
+	          var _this = this;
+	          var /** @type {?} */ tagName = DOM.nodeName(element).toLowerCase();
+	          if (!VALID_ELEMENTS.hasOwnProperty(tagName)) {
+	              this.sanitizedSomething = true;
+	              return;
+	          }
+	          this.buf.push('<');
+	          this.buf.push(tagName);
+	          DOM.attributeMap(element).forEach(function (value, attrName) {
+	              var /** @type {?} */ lower = attrName.toLowerCase();
+	              if (!VALID_ATTRS.hasOwnProperty(lower)) {
+	                  _this.sanitizedSomething = true;
+	                  return;
+	              }
+	              // TODO(martinprobst): Special case image URIs for data:image/...
+	              if (URI_ATTRS[lower])
+	                  value = sanitizeUrl(value);
+	              if (SRCSET_ATTRS[lower])
+	                  value = sanitizeSrcset(value);
+	              _this.buf.push(' ');
+	              _this.buf.push(attrName);
+	              _this.buf.push('="');
+	              _this.buf.push(encodeEntities(value));
+	              _this.buf.push('"');
+	          });
+	          this.buf.push('>');
+	      };
+	      /**
+	       * @param {?} current
+	       * @return {?}
+	       */
+	      SanitizingHtmlSerializer.prototype.endElement = function (current) {
+	          var /** @type {?} */ tagName = DOM.nodeName(current).toLowerCase();
+	          if (VALID_ELEMENTS.hasOwnProperty(tagName) && !VOID_ELEMENTS.hasOwnProperty(tagName)) {
+	              this.buf.push('</');
+	              this.buf.push(tagName);
+	              this.buf.push('>');
+	          }
+	      };
+	      /**
+	       * @param {?} chars
+	       * @return {?}
+	       */
+	      SanitizingHtmlSerializer.prototype.chars = function (chars /** TODO #9100 */) { this.buf.push(encodeEntities(chars)); };
+	      return SanitizingHtmlSerializer;
+	  }());
+	  // Regular Expressions for parsing tags and attributes
+	  var /** @type {?} */ SURROGATE_PAIR_REGEXP = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+	  // ! to ~ is the ASCII range.
+	  var /** @type {?} */ NON_ALPHANUMERIC_REGEXP = /([^\#-~ |!])/g;
+	  /**
+	   *  Escapes all potentially dangerous characters, so that the
+	    * resulting string can be safely inserted into attribute or
+	    * element text.
+	   * @param {?} value
+	   * @return {?}
+	   */
+	  function encodeEntities(value) {
+	      return value.replace(/&/g, '&amp;')
+	          .replace(SURROGATE_PAIR_REGEXP, function (match) {
+	          var /** @type {?} */ hi = match.charCodeAt(0);
+	          var /** @type {?} */ low = match.charCodeAt(1);
+	          return '&#' + (((hi - 0xD800) * 0x400) + (low - 0xDC00) + 0x10000) + ';';
+	      })
+	          .replace(NON_ALPHANUMERIC_REGEXP, function (match) { return '&#' + match.charCodeAt(0) + ';'; })
+	          .replace(/</g, '&lt;')
+	          .replace(/>/g, '&gt;');
+	  }
+	  /**
+	   *  When IE9-11 comes across an unknown namespaced attribute e.g. 'xlink:foo' it adds 'xmlns:ns1'
+	    * attribute to declare ns1 namespace and prefixes the attribute with 'ns1' (e.g. 'ns1:xlink:foo').
+	    * *
+	    * This is undesirable since we don't want to allow any of these custom attributes. This method
+	    * strips them all.
+	   * @param {?} el
+	   * @return {?}
+	   */
+	  function stripCustomNsAttrs(el) {
+	      DOM.attributeMap(el).forEach(function (_, attrName) {
+	          if (attrName === 'xmlns:ns1' || attrName.indexOf('ns1:') === 0) {
+	              DOM.removeAttribute(el, attrName);
+	          }
+	      });
+	      for (var _i = 0, _a = DOM.childNodesAsList(el); _i < _a.length; _i++) {
+	          var n = _a[_i];
+	          if (DOM.isElementNode(n))
+	              stripCustomNsAttrs(/** @type {?} */ (n));
+	      }
+	  }
+	  /**
+	   *  Sanitizes the given unsafe, untrusted HTML fragment, and returns HTML text that is safe to add to
+	    * the DOM in a browser environment.
+	   * @param {?} unsafeHtmlInput
+	   * @return {?}
+	   */
+	  function sanitizeHtml(unsafeHtmlInput) {
+	      try {
+	          var /** @type {?} */ containerEl = getInertElement();
+	          // Make sure unsafeHtml is actually a string (TypeScript types are not enforced at runtime).
+	          var /** @type {?} */ unsafeHtml = unsafeHtmlInput ? String(unsafeHtmlInput) : '';
+	          // mXSS protection. Repeatedly parse the document to make sure it stabilizes, so that a browser
+	          // trying to auto-correct incorrect HTML cannot cause formerly inert HTML to become dangerous.
+	          var /** @type {?} */ mXSSAttempts = 5;
+	          var /** @type {?} */ parsedHtml = unsafeHtml;
+	          do {
+	              if (mXSSAttempts === 0) {
+	                  throw new Error('Failed to sanitize html because the input is unstable');
+	              }
+	              mXSSAttempts--;
+	              unsafeHtml = parsedHtml;
+	              DOM.setInnerHTML(containerEl, unsafeHtml);
+	              if (((DOM.defaultDoc())).documentMode) {
+	                  // strip custom-namespaced attributes on IE<=11
+	                  stripCustomNsAttrs(containerEl);
+	              }
+	              parsedHtml = DOM.getInnerHTML(containerEl);
+	          } while (unsafeHtml !== parsedHtml);
+	          var /** @type {?} */ sanitizer = new SanitizingHtmlSerializer();
+	          var /** @type {?} */ safeHtml = sanitizer.sanitizeChildren(DOM.getTemplateContent(containerEl) || containerEl);
+	          // Clear out the body element.
+	          var /** @type {?} */ parent_1 = DOM.getTemplateContent(containerEl) || containerEl;
+	          for (var _i = 0, _a = DOM.childNodesAsList(parent_1); _i < _a.length; _i++) {
+	              var child = _a[_i];
+	              DOM.removeChild(parent_1, child);
+	          }
+	          if (core.isDevMode() && sanitizer.sanitizedSomething) {
+	              DOM.log('WARNING: sanitizing HTML stripped some content (see http://g.co/ng/security#xss).');
+	          }
+	          return safeHtml;
+	      }
+	      catch (e) {
+	          // In case anything goes wrong, clear out inertElement to reset the entire DOM structure.
+	          inertElement = null;
+	          throw e;
+	      }
+	  }
+
+	  /**
+	   * Regular expression for safe style values.
+	   *
+	   * Quotes (" and ') are allowed, but a check must be done elsewhere to ensure they're balanced.
+	   *
+	   * ',' allows multiple values to be assigned to the same property (e.g. background-attachment or
+	   * font-family) and hence could allow multiple values to get injected, but that should pose no risk
+	   * of XSS.
+	   *
+	   * The function expression checks only for XSS safety, not for CSS validity.
+	   *
+	   * This regular expression was taken from the Closure sanitization library, and augmented for
+	   * transformation values.
+	   */
+	  var /** @type {?} */ VALUES = '[-,."\'%_!# a-zA-Z0-9]+';
+	  var /** @type {?} */ TRANSFORMATION_FNS = '(?:matrix|translate|scale|rotate|skew|perspective)(?:X|Y|3d)?';
+	  var /** @type {?} */ COLOR_FNS = '(?:rgb|hsl)a?';
+	  var /** @type {?} */ FN_ARGS = '\\([-0-9.%, a-zA-Z]+\\)';
+	  var /** @type {?} */ SAFE_STYLE_VALUE = new RegExp("^(" + VALUES + "|(?:" + TRANSFORMATION_FNS + "|" + COLOR_FNS + ")" + FN_ARGS + ")$", 'g');
+	  /**
+	   * Matches a `url(...)` value with an arbitrary argument as long as it does
+	   * not contain parentheses.
+	   *
+	   * The URL value still needs to be sanitized separately.
+	   *
+	   * `url(...)` values are a very common use case, e.g. for `background-image`. With carefully crafted
+	   * CSS style rules, it is possible to construct an information leak with `url` values in CSS, e.g.
+	   * by observing whether scroll bars are displayed, or character ranges used by a font face
+	   * definition.
+	   *
+	   * Angular only allows binding CSS values (as opposed to entire CSS rules), so it is unlikely that
+	   * binding a URL value without further cooperation from the page will cause an information leak, and
+	   * if so, it is just a leak, not a full blown XSS vulnerability.
+	   *
+	   * Given the common use case, low likelihood of attack vector, and low impact of an attack, this
+	   * code is permissive and allows URLs that sanitize otherwise.
+	   */
+	  var /** @type {?} */ URL_RE = /^url\(([^)]+)\)$/;
+	  /**
+	   *  Checks that quotes (" and ') are properly balanced inside a string. Assumes
+	    * that neither escape (\) nor any other character that could result in
+	    * breaking out of a string parsing context are allowed;
+	    * see http://www.w3.org/TR/css3-syntax/#string-token-diagram.
+	    * *
+	    * This code was taken from the Closure sanitization library.
+	   * @param {?} value
+	   * @return {?}
+	   */
+	  function hasBalancedQuotes(value) {
+	      var /** @type {?} */ outsideSingle = true;
+	      var /** @type {?} */ outsideDouble = true;
+	      for (var /** @type {?} */ i = 0; i < value.length; i++) {
+	          var /** @type {?} */ c = value.charAt(i);
+	          if (c === '\'' && outsideDouble) {
+	              outsideSingle = !outsideSingle;
+	          }
+	          else if (c === '"' && outsideSingle) {
+	              outsideDouble = !outsideDouble;
+	          }
+	      }
+	      return outsideSingle && outsideDouble;
+	  }
+	  /**
+	   *  Sanitizes the given untrusted CSS style property value (i.e. not an entire object, just a single
+	    * value) and returns a value that is safe to use in a browser environment.
+	   * @param {?} value
+	   * @return {?}
+	   */
+	  function sanitizeStyle(value) {
+	      value = String(value).trim(); // Make sure it's actually a string.
+	      if (!value)
+	          return '';
+	      // Single url(...) values are supported, but only for URLs that sanitize cleanly. See above for
+	      // reasoning behind this.
+	      var /** @type {?} */ urlMatch = value.match(URL_RE);
+	      if ((urlMatch && sanitizeUrl(urlMatch[1]) === urlMatch[1]) ||
+	          value.match(SAFE_STYLE_VALUE) && hasBalancedQuotes(value)) {
+	          return value; // Safe style values.
+	      }
+	      if (core.isDevMode()) {
+	          getDOM().log("WARNING: sanitizing unsafe style value " + value + " (see http://g.co/ng/security#xss).");
+	      }
+	      return 'unsafe';
+	  }
+
+	  /**
+	   * @license
+	   * Copyright Google Inc. All Rights Reserved.
+	   *
+	   * Use of this source code is governed by an MIT-style license that can be
+	   * found in the LICENSE file at https://angular.io/license
+	   */
+	  var __extends$8 = (this && this.__extends) || function (d, b) {
+	      for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	      function __() { this.constructor = d; }
+	      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	  };
+	  /**
+	   *  DomSanitizer helps preventing Cross Site Scripting Security bugs (XSS) by sanitizing
+	    * values to be safe to use in the different DOM contexts.
+	    * *
+	    * For example, when binding a URL in an `<a [href]="someValue">` hyperlink, `someValue` will be
+	    * sanitized so that an attacker cannot inject e.g. a `javascript:` URL that would execute code on
+	    * the website.
+	    * *
+	    * In specific situations, it might be necessary to disable sanitization, for example if the
+	    * application genuinely needs to produce a `javascript:` style link with a dynamic value in it.
+	    * Users can bypass security by constructing a value with one of the `bypassSecurityTrust...`
+	    * methods, and then binding to that value from the template.
+	    * *
+	    * These situations should be very rare, and extraordinary care must be taken to avoid creating a
+	    * Cross Site Scripting (XSS) security bug!
+	    * *
+	    * When using `bypassSecurityTrust...`, make sure to call the method as early as possible and as
+	    * close as possible to the source of the value, to make it easy to verify no security bug is
+	    * created by its use.
+	    * *
+	    * It is not required (and not recommended) to bypass security if the value is safe, e.g. a URL that
+	    * does not start with a suspicious protocol, or an HTML snippet that does not contain dangerous
+	    * code. The sanitizer leaves safe values intact.
+	    * *
+	    * sanitization for the value passed in. Carefully check and audit all values and code paths going
+	    * into this call. Make sure any user data is appropriately escaped for this security context.
+	    * For more detail, see the [Security Guide](http://g.co/ng/security).
+	    * *
+	   * @abstract
+	   */
+	  var DomSanitizer = (function () {
+	      function DomSanitizer() {
+	      }
+	      /**
+	       *  Sanitizes a value for use in the given SecurityContext.
+	        * *
+	        * If value is trusted for the context, this method will unwrap the contained safe value and use
+	        * it directly. Otherwise, value will be sanitized to be safe in the given context, for example
+	        * by replacing URLs that have an unsafe protocol part (such as `javascript:`). The implementation
+	        * is responsible to make sure that the value can definitely be safely used in the given context.
+	       * @abstract
+	       * @param {?} context
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomSanitizer.prototype.sanitize = function (context, value) { };
+	      /**
+	       *  Bypass security and trust the given value to be safe HTML. Only use this when the bound HTML
+	        * is unsafe (e.g. contains `<script>` tags) and the code should be executed. The sanitizer will
+	        * leave safe HTML intact, so in most situations this method should not be used.
+	        * *
+	        * **WARNING:** calling this method with untrusted user data exposes your application to XSS
+	        * security risks!
+	       * @abstract
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomSanitizer.prototype.bypassSecurityTrustHtml = function (value) { };
+	      /**
+	       *  Bypass security and trust the given value to be safe style value (CSS).
+	        * *
+	        * **WARNING:** calling this method with untrusted user data exposes your application to XSS
+	        * security risks!
+	       * @abstract
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomSanitizer.prototype.bypassSecurityTrustStyle = function (value) { };
+	      /**
+	       *  Bypass security and trust the given value to be safe JavaScript.
+	        * *
+	        * **WARNING:** calling this method with untrusted user data exposes your application to XSS
+	        * security risks!
+	       * @abstract
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomSanitizer.prototype.bypassSecurityTrustScript = function (value) { };
+	      /**
+	       *  Bypass security and trust the given value to be a safe style URL, i.e. a value that can be used
+	        * in hyperlinks or `<img src>`.
+	        * *
+	        * **WARNING:** calling this method with untrusted user data exposes your application to XSS
+	        * security risks!
+	       * @abstract
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomSanitizer.prototype.bypassSecurityTrustUrl = function (value) { };
+	      /**
+	       *  Bypass security and trust the given value to be a safe resource URL, i.e. a location that may
+	        * be used to load executable code from, like `<script src>`, or `<iframe src>`.
+	        * *
+	        * **WARNING:** calling this method with untrusted user data exposes your application to XSS
+	        * security risks!
+	       * @abstract
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomSanitizer.prototype.bypassSecurityTrustResourceUrl = function (value) { };
+	      return DomSanitizer;
+	  }());
+	  var DomSanitizerImpl = (function (_super) {
+	      __extends$8(DomSanitizerImpl, _super);
+	      function DomSanitizerImpl() {
+	          _super.apply(this, arguments);
+	      }
+	      /**
+	       * @param {?} ctx
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomSanitizerImpl.prototype.sanitize = function (ctx, value) {
+	          if (value == null)
+	              return null;
+	          switch (ctx) {
+	              case core.SecurityContext.NONE:
+	                  return value;
+	              case core.SecurityContext.HTML:
+	                  if (value instanceof SafeHtmlImpl)
+	                      return value.changingThisBreaksApplicationSecurity;
+	                  this.checkNotSafeValue(value, 'HTML');
+	                  return sanitizeHtml(String(value));
+	              case core.SecurityContext.STYLE:
+	                  if (value instanceof SafeStyleImpl)
+	                      return value.changingThisBreaksApplicationSecurity;
+	                  this.checkNotSafeValue(value, 'Style');
+	                  return sanitizeStyle(value);
+	              case core.SecurityContext.SCRIPT:
+	                  if (value instanceof SafeScriptImpl)
+	                      return value.changingThisBreaksApplicationSecurity;
+	                  this.checkNotSafeValue(value, 'Script');
+	                  throw new Error('unsafe value used in a script context');
+	              case core.SecurityContext.URL:
+	                  if (value instanceof SafeResourceUrlImpl || value instanceof SafeUrlImpl) {
+	                      // Allow resource URLs in URL contexts, they are strictly more trusted.
+	                      return value.changingThisBreaksApplicationSecurity;
+	                  }
+	                  this.checkNotSafeValue(value, 'URL');
+	                  return sanitizeUrl(String(value));
+	              case core.SecurityContext.RESOURCE_URL:
+	                  if (value instanceof SafeResourceUrlImpl) {
+	                      return value.changingThisBreaksApplicationSecurity;
+	                  }
+	                  this.checkNotSafeValue(value, 'ResourceURL');
+	                  throw new Error('unsafe value used in a resource URL context (see http://g.co/ng/security#xss)');
+	              default:
+	                  throw new Error("Unexpected SecurityContext " + ctx + " (see http://g.co/ng/security#xss)");
+	          }
+	      };
+	      /**
+	       * @param {?} value
+	       * @param {?} expectedType
+	       * @return {?}
+	       */
+	      DomSanitizerImpl.prototype.checkNotSafeValue = function (value, expectedType) {
+	          if (value instanceof SafeValueImpl) {
+	              throw new Error(("Required a safe " + expectedType + ", got a " + value.getTypeName() + " ") +
+	                  "(see http://g.co/ng/security#xss)");
+	          }
+	      };
+	      /**
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomSanitizerImpl.prototype.bypassSecurityTrustHtml = function (value) { return new SafeHtmlImpl(value); };
+	      /**
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomSanitizerImpl.prototype.bypassSecurityTrustStyle = function (value) { return new SafeStyleImpl(value); };
+	      /**
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomSanitizerImpl.prototype.bypassSecurityTrustScript = function (value) { return new SafeScriptImpl(value); };
+	      /**
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomSanitizerImpl.prototype.bypassSecurityTrustUrl = function (value) { return new SafeUrlImpl(value); };
+	      /**
+	       * @param {?} value
+	       * @return {?}
+	       */
+	      DomSanitizerImpl.prototype.bypassSecurityTrustResourceUrl = function (value) {
+	          return new SafeResourceUrlImpl(value);
+	      };
+	      DomSanitizerImpl.decorators = [
+	          { type: core.Injectable },
+	      ];
+	      /** @nocollapse */
+	      DomSanitizerImpl.ctorParameters = function () { return []; };
+	      return DomSanitizerImpl;
+	  }(DomSanitizer));
+	  /**
+	   * @abstract
+	   */
+	  var SafeValueImpl = (function () {
+	      /**
+	       * @param {?} changingThisBreaksApplicationSecurity
+	       */
+	      function SafeValueImpl(changingThisBreaksApplicationSecurity) {
+	          this.changingThisBreaksApplicationSecurity = changingThisBreaksApplicationSecurity;
+	          // empty
+	      }
+	      /**
+	       * @abstract
+	       * @return {?}
+	       */
+	      SafeValueImpl.prototype.getTypeName = function () { };
+	      /**
+	       * @return {?}
+	       */
+	      SafeValueImpl.prototype.toString = function () {
+	          return ("SafeValue must use [property]=binding: " + this.changingThisBreaksApplicationSecurity) +
+	              " (see http://g.co/ng/security#xss)";
+	      };
+	      return SafeValueImpl;
+	  }());
+	  var SafeHtmlImpl = (function (_super) {
+	      __extends$8(SafeHtmlImpl, _super);
+	      function SafeHtmlImpl() {
+	          _super.apply(this, arguments);
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      SafeHtmlImpl.prototype.getTypeName = function () { return 'HTML'; };
+	      return SafeHtmlImpl;
+	  }(SafeValueImpl));
+	  var SafeStyleImpl = (function (_super) {
+	      __extends$8(SafeStyleImpl, _super);
+	      function SafeStyleImpl() {
+	          _super.apply(this, arguments);
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      SafeStyleImpl.prototype.getTypeName = function () { return 'Style'; };
+	      return SafeStyleImpl;
+	  }(SafeValueImpl));
+	  var SafeScriptImpl = (function (_super) {
+	      __extends$8(SafeScriptImpl, _super);
+	      function SafeScriptImpl() {
+	          _super.apply(this, arguments);
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      SafeScriptImpl.prototype.getTypeName = function () { return 'Script'; };
+	      return SafeScriptImpl;
+	  }(SafeValueImpl));
+	  var SafeUrlImpl = (function (_super) {
+	      __extends$8(SafeUrlImpl, _super);
+	      function SafeUrlImpl() {
+	          _super.apply(this, arguments);
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      SafeUrlImpl.prototype.getTypeName = function () { return 'URL'; };
+	      return SafeUrlImpl;
+	  }(SafeValueImpl));
+	  var SafeResourceUrlImpl = (function (_super) {
+	      __extends$8(SafeResourceUrlImpl, _super);
+	      function SafeResourceUrlImpl() {
+	          _super.apply(this, arguments);
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      SafeResourceUrlImpl.prototype.getTypeName = function () { return 'ResourceURL'; };
+	      return SafeResourceUrlImpl;
+	  }(SafeValueImpl));
+
+	  var /** @type {?} */ INTERNAL_BROWSER_PLATFORM_PROVIDERS = [
+	      { provide: core.PLATFORM_INITIALIZER, useValue: initDomAdapter, multi: true },
+	      { provide: _angular_common.PlatformLocation, useClass: BrowserPlatformLocation }
+	  ];
+	  /**
+	   * @security Replacing built-in sanitization providers exposes the application to XSS risks.
+	   * Attacker-controlled data introduced by an unsanitized provider could expose your
+	   * application to XSS risks. For more detail, see the [Security Guide](http://g.co/ng/security).
+	   * @experimental
+	   */
+	  var /** @type {?} */ BROWSER_SANITIZATION_PROVIDERS = [
+	      { provide: core.Sanitizer, useExisting: DomSanitizer },
+	      { provide: DomSanitizer, useClass: DomSanitizerImpl },
+	  ];
+	  /**
+	   * @stable
+	   */
+	  var /** @type {?} */ platformBrowser = core.createPlatformFactory(core.platformCore, 'browser', INTERNAL_BROWSER_PLATFORM_PROVIDERS);
+	  /**
+	   * @return {?}
+	   */
+	  function initDomAdapter() {
+	      BrowserDomAdapter.makeCurrent();
+	      BrowserGetTestability.init();
+	  }
+	  /**
+	   * @return {?}
+	   */
+	  function errorHandler() {
+	      return new core.ErrorHandler();
+	  }
+	  /**
+	   * @return {?}
+	   */
+	  function _document() {
+	      return getDOM().defaultDoc();
+	  }
+	  /**
+	   * @return {?}
+	   */
+	  function _resolveDefaultAnimationDriver() {
+	      if (getDOM().supportsWebAnimation()) {
+	          return new WebAnimationsDriver();
+	      }
+	      return AnimationDriver.NOOP;
+	  }
+	  /**
+	   *  The ng module for the browser.
+	    * *
+	   */
+	  var BrowserModule = (function () {
+	      /**
+	       * @param {?} parentModule
+	       */
+	      function BrowserModule(parentModule) {
+	          if (parentModule) {
+	              throw new Error("BrowserModule has already been loaded. If you need access to common directives such as NgIf and NgFor from a lazy loaded module, import CommonModule instead.");
+	          }
+	      }
+	      BrowserModule.decorators = [
+	          { type: core.NgModule, args: [{
+	                      providers: [
+	                          BROWSER_SANITIZATION_PROVIDERS, { provide: core.ErrorHandler, useFactory: errorHandler, deps: [] },
+	                          { provide: DOCUMENT, useFactory: _document, deps: [] },
+	                          { provide: EVENT_MANAGER_PLUGINS, useClass: DomEventsPlugin, multi: true },
+	                          { provide: EVENT_MANAGER_PLUGINS, useClass: KeyEventsPlugin, multi: true },
+	                          { provide: EVENT_MANAGER_PLUGINS, useClass: HammerGesturesPlugin, multi: true },
+	                          { provide: HAMMER_GESTURE_CONFIG, useClass: HammerGestureConfig },
+	                          { provide: DomRootRenderer, useClass: DomRootRenderer_ },
+	                          { provide: core.RootRenderer, useExisting: DomRootRenderer },
+	                          { provide: SharedStylesHost, useExisting: DomSharedStylesHost },
+	                          { provide: AnimationDriver, useFactory: _resolveDefaultAnimationDriver }, DomSharedStylesHost,
+	                          core.Testability, EventManager, ELEMENT_PROBE_PROVIDERS, Title
+	                      ],
+	                      exports: [_angular_common.CommonModule, core.ApplicationModule]
+	                  },] },
+	      ];
+	      /** @nocollapse */
+	      BrowserModule.ctorParameters = function () { return [
+	          { type: BrowserModule, decorators: [{ type: core.Optional }, { type: core.SkipSelf },] },
+	      ]; };
+	      return BrowserModule;
+	  }());
+
+	  /**
+	   * @license
+	   * Copyright Google Inc. All Rights Reserved.
+	   *
+	   * Use of this source code is governed by an MIT-style license that can be
+	   * found in the LICENSE file at https://angular.io/license
+	   */
+	  /**
+	   * JS version of browser APIs. This library can only run in the browser.
+	   */
+	  var /** @type {?} */ win = typeof window !== 'undefined' && window || ({});
+
+	  var ChangeDetectionPerfRecord = (function () {
+	      /**
+	       * @param {?} msPerTick
+	       * @param {?} numTicks
+	       */
+	      function ChangeDetectionPerfRecord(msPerTick, numTicks) {
+	          this.msPerTick = msPerTick;
+	          this.numTicks = numTicks;
+	      }
+	      return ChangeDetectionPerfRecord;
+	  }());
+	  /**
+	   *  Entry point for all Angular debug tools. This object corresponds to the `ng`
+	    * global variable accessible in the dev console.
+	   */
+	  var AngularTools = (function () {
+	      /**
+	       * @param {?} ref
+	       */
+	      function AngularTools(ref) {
+	          this.profiler = new AngularProfiler(ref);
+	      }
+	      return AngularTools;
+	  }());
+	  /**
+	   *  Entry point for all Angular profiling-related debug tools. This object
+	    * corresponds to the `ng.profiler` in the dev console.
+	   */
+	  var AngularProfiler = (function () {
+	      /**
+	       * @param {?} ref
+	       */
+	      function AngularProfiler(ref) {
+	          this.appRef = ref.injector.get(core.ApplicationRef);
+	      }
+	      /**
+	       *  Exercises change detection in a loop and then prints the average amount of
+	        * time in milliseconds how long a single round of change detection takes for
+	        * the current state of the UI. It runs a minimum of 5 rounds for a minimum
+	        * of 500 milliseconds.
+	        * *
+	        * Optionally, a user may pass a `config` parameter containing a map of
+	        * options. Supported options are:
+	        * *
+	        * `record` (boolean) - causes the profiler to record a CPU profile while
+	        * it exercises the change detector. Example:
+	        * *
+	        * ```
+	        * ng.profiler.timeChangeDetection({record: true})
+	        * ```
+	       * @param {?} config
+	       * @return {?}
+	       */
+	      AngularProfiler.prototype.timeChangeDetection = function (config) {
+	          var /** @type {?} */ record = config && config['record'];
+	          var /** @type {?} */ profileName = 'Change Detection';
+	          // Profiler is not available in Android browsers, nor in IE 9 without dev tools opened
+	          var /** @type {?} */ isProfilerAvailable = isPresent(win.console.profile);
+	          if (record && isProfilerAvailable) {
+	              win.console.profile(profileName);
+	          }
+	          var /** @type {?} */ start = getDOM().performanceNow();
+	          var /** @type {?} */ numTicks = 0;
+	          while (numTicks < 5 || (getDOM().performanceNow() - start) < 500) {
+	              this.appRef.tick();
+	              numTicks++;
+	          }
+	          var /** @type {?} */ end = getDOM().performanceNow();
+	          if (record && isProfilerAvailable) {
+	              // need to cast to <any> because type checker thinks there's no argument
+	              // while in fact there is:
+	              //
+	              // https://developer.mozilla.org/en-US/docs/Web/API/Console/profileEnd
+	              ((win.console.profileEnd))(profileName);
+	          }
+	          var /** @type {?} */ msPerTick = (end - start) / numTicks;
+	          win.console.log("ran " + numTicks + " change detection cycles");
+	          win.console.log(msPerTick.toFixed(2) + " ms per check");
+	          return new ChangeDetectionPerfRecord(msPerTick, numTicks);
+	      };
+	      return AngularProfiler;
+	  }());
+
+	  var /** @type {?} */ context = (global$1);
+	  /**
+	   *  Enabled Angular 2 debug tools that are accessible via your browser's
+	    * developer console.
+	    * *
+	    * Usage:
+	    * *
+	    * 1. Open developer console (e.g. in Chrome Ctrl + Shift + j)
+	    * 1. Type `ng.` (usually the console will show auto-complete suggestion)
+	    * 1. Try the change detection profiler `ng.profiler.timeChangeDetection()`
+	    * then hit Enter.
+	    * *
+	   * @param {?} ref
+	   * @return {?}
+	   */
+	  function enableDebugTools(ref) {
+	      ((Object)).assign(context.ng, new AngularTools(ref));
+	      return ref;
+	  }
+	  /**
+	   *  Disables Angular 2 tools.
+	    * *
+	   * @return {?}
+	   */
+	  function disableDebugTools() {
+	      if (context.ng) {
+	          delete context.ng.profiler;
+	      }
+	  }
+
+	  /**
+	   *  Predicates for use with {@link DebugElement}'s query functions.
+	    * *
+	   */
+	  var By = (function () {
+	      function By() {
+	      }
+	      /**
+	       *  Match all elements.
+	        * *
+	        * ## Example
+	        * *
+	        * {@example platform-browser/dom/debug/ts/by/by.ts region='by_all'}
+	       * @return {?}
+	       */
+	      By.all = function () { return function (debugElement) { return true; }; };
+	      /**
+	       *  Match elements by the given CSS selector.
+	        * *
+	        * ## Example
+	        * *
+	        * {@example platform-browser/dom/debug/ts/by/by.ts region='by_css'}
+	       * @param {?} selector
+	       * @return {?}
+	       */
+	      By.css = function (selector) {
+	          return function (debugElement) {
+	              return isPresent(debugElement.nativeElement) ?
+	                  getDOM().elementMatches(debugElement.nativeElement, selector) :
+	                  false;
+	          };
+	      };
+	      /**
+	       *  Match elements that have the given directive present.
+	        * *
+	        * ## Example
+	        * *
+	        * {@example platform-browser/dom/debug/ts/by/by.ts region='by_directive'}
+	       * @param {?} type
+	       * @return {?}
+	       */
+	      By.directive = function (type) {
+	          return function (debugElement) { return debugElement.providerTokens.indexOf(type) !== -1; };
+	      };
+	      return By;
+	  }());
+
+	  var /** @type {?} */ __platform_browser_private__ = {
+	      BrowserPlatformLocation: BrowserPlatformLocation,
+	      DomAdapter: DomAdapter,
+	      BrowserDomAdapter: BrowserDomAdapter,
+	      BrowserGetTestability: BrowserGetTestability,
+	      getDOM: getDOM,
+	      setRootDomAdapter: setRootDomAdapter,
+	      DomRootRenderer_: DomRootRenderer_,
+	      DomRootRenderer: DomRootRenderer,
+	      NAMESPACE_URIS: NAMESPACE_URIS,
+	      shimContentAttribute: shimContentAttribute,
+	      shimHostAttribute: shimHostAttribute,
+	      flattenStyles: flattenStyles,
+	      splitNamespace: splitNamespace,
+	      isNamespaced: isNamespaced,
+	      DomSharedStylesHost: DomSharedStylesHost,
+	      SharedStylesHost: SharedStylesHost,
+	      ELEMENT_PROBE_PROVIDERS: ELEMENT_PROBE_PROVIDERS,
+	      DomEventsPlugin: DomEventsPlugin,
+	      KeyEventsPlugin: KeyEventsPlugin,
+	      HammerGesturesPlugin: HammerGesturesPlugin,
+	      initDomAdapter: initDomAdapter,
+	      INTERNAL_BROWSER_PLATFORM_PROVIDERS: INTERNAL_BROWSER_PLATFORM_PROVIDERS,
+	      BROWSER_SANITIZATION_PROVIDERS: BROWSER_SANITIZATION_PROVIDERS,
+	      WebAnimationsDriver: WebAnimationsDriver
+	  };
+
+	  /**
+	   * @stable
+	   */
+	  var /** @type {?} */ VERSION = new core.Version('2.4.1');
+
+	  exports.BrowserModule = BrowserModule;
+	  exports.platformBrowser = platformBrowser;
+	  exports.Title = Title;
+	  exports.disableDebugTools = disableDebugTools;
+	  exports.enableDebugTools = enableDebugTools;
+	  exports.AnimationDriver = AnimationDriver;
+	  exports.By = By;
+	  exports.NgProbeToken = NgProbeToken;
+	  exports.DOCUMENT = DOCUMENT;
+	  exports.EVENT_MANAGER_PLUGINS = EVENT_MANAGER_PLUGINS;
+	  exports.EventManager = EventManager;
+	  exports.HAMMER_GESTURE_CONFIG = HAMMER_GESTURE_CONFIG;
+	  exports.HammerGestureConfig = HammerGestureConfig;
+	  exports.DomSanitizer = DomSanitizer;
+	  exports.VERSION = VERSION;
+	  exports.__platform_browser_private__ = __platform_browser_private__;
+
+	}));
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {/**
+	 * @license Angular v2.4.1
+	 * (c) 2010-2016 Google, Inc. https://angular.io/
+	 * License: MIT
+	 */
+	(function (global, factory) {
+	     true ? factory(exports, __webpack_require__(3)) :
+	    typeof define === 'function' && define.amd ? define(['exports', '@angular/core'], factory) :
+	    (factory((global.ng = global.ng || {}, global.ng.common = global.ng.common || {}),global.ng.core));
+	}(this, function (exports,_angular_core) { 'use strict';
+
+	    /**
+	     *  This class should not be used directly by an application developer. Instead, use
+	      * {@link Location}.
+	      * *
+	      * `PlatformLocation` encapsulates all calls to DOM apis, which allows the Router to be platform
+	      * agnostic.
+	      * This means that we can have different implementation of `PlatformLocation` for the different
+	      * platforms
+	      * that angular supports. For example, the default `PlatformLocation` is {@link
+	      * BrowserPlatformLocation},
+	      * however when you run your app in a WebWorker you use {@link WebWorkerPlatformLocation}.
+	      * *
+	      * The `PlatformLocation` class is used directly by all implementations of {@link LocationStrategy}
+	      * when
+	      * they need to interact with the DOM apis like pushState, popState, etc...
+	      * *
+	      * {@link LocationStrategy} in turn is used by the {@link Location} service which is used directly
+	      * by
+	      * the {@link Router} in order to navigate between routes. Since all interactions between {@link
+	      * Router} /
+	      * {@link Location} / {@link LocationStrategy} and DOM apis flow through the `PlatformLocation`
+	      * class
+	      * they are all platform independent.
+	      * *
+	     * @abstract
+	     */
+	    var PlatformLocation = (function () {
+	        function PlatformLocation() {
+	        }
+	        /**
+	         * @abstract
+	         * @return {?}
+	         */
+	        PlatformLocation.prototype.getBaseHrefFromDOM = function () { };
+	        /**
+	         * @abstract
+	         * @param {?} fn
+	         * @return {?}
+	         */
+	        PlatformLocation.prototype.onPopState = function (fn) { };
+	        /**
+	         * @abstract
+	         * @param {?} fn
+	         * @return {?}
+	         */
+	        PlatformLocation.prototype.onHashChange = function (fn) { };
+	        Object.defineProperty(PlatformLocation.prototype, "pathname", {
+	            /**
+	             * @return {?}
+	             */
+	            get: function () { return null; },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        Object.defineProperty(PlatformLocation.prototype, "search", {
+	            /**
+	             * @return {?}
+	             */
+	            get: function () { return null; },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        Object.defineProperty(PlatformLocation.prototype, "hash", {
+	            /**
+	             * @return {?}
+	             */
+	            get: function () { return null; },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        /**
+	         * @abstract
+	         * @param {?} state
+	         * @param {?} title
+	         * @param {?} url
+	         * @return {?}
+	         */
+	        PlatformLocation.prototype.replaceState = function (state, title, url) { };
+	        /**
+	         * @abstract
+	         * @param {?} state
+	         * @param {?} title
+	         * @param {?} url
+	         * @return {?}
+	         */
+	        PlatformLocation.prototype.pushState = function (state, title, url) { };
+	        /**
+	         * @abstract
+	         * @return {?}
+	         */
+	        PlatformLocation.prototype.forward = function () { };
+	        /**
+	         * @abstract
+	         * @return {?}
+	         */
+	        PlatformLocation.prototype.back = function () { };
+	        return PlatformLocation;
+	    }());
+
+	    /**
+	     *  `LocationStrategy` is responsible for representing and reading route state
+	      * from the browser's URL. Angular provides two strategies:
+	      * {@link HashLocationStrategy} and {@link PathLocationStrategy}.
+	      * *
+	      * This is used under the hood of the {@link Location} service.
+	      * *
+	      * Applications should use the {@link Router} or {@link Location} services to
+	      * interact with application route state.
+	      * *
+	      * For instance, {@link HashLocationStrategy} produces URLs like
+	      * `http://example.com#/foo`, and {@link PathLocationStrategy} produces
+	      * `http://example.com/foo` as an equivalent URL.
+	      * *
+	      * See these two classes for more.
+	      * *
+	     * @abstract
+	     */
+	    var LocationStrategy = (function () {
+	        function LocationStrategy() {
+	        }
+	        /**
+	         * @abstract
+	         * @param {?=} includeHash
+	         * @return {?}
+	         */
+	        LocationStrategy.prototype.path = function (includeHash) { };
+	        /**
+	         * @abstract
+	         * @param {?} internal
+	         * @return {?}
+	         */
+	        LocationStrategy.prototype.prepareExternalUrl = function (internal) { };
+	        /**
+	         * @abstract
+	         * @param {?} state
+	         * @param {?} title
+	         * @param {?} url
+	         * @param {?} queryParams
+	         * @return {?}
+	         */
+	        LocationStrategy.prototype.pushState = function (state, title, url, queryParams) { };
+	        /**
+	         * @abstract
+	         * @param {?} state
+	         * @param {?} title
+	         * @param {?} url
+	         * @param {?} queryParams
+	         * @return {?}
+	         */
+	        LocationStrategy.prototype.replaceState = function (state, title, url, queryParams) { };
+	        /**
+	         * @abstract
+	         * @return {?}
+	         */
+	        LocationStrategy.prototype.forward = function () { };
+	        /**
+	         * @abstract
+	         * @return {?}
+	         */
+	        LocationStrategy.prototype.back = function () { };
+	        /**
+	         * @abstract
+	         * @param {?} fn
+	         * @return {?}
+	         */
+	        LocationStrategy.prototype.onPopState = function (fn) { };
+	        /**
+	         * @abstract
+	         * @return {?}
+	         */
+	        LocationStrategy.prototype.getBaseHref = function () { };
+	        return LocationStrategy;
+	    }());
+	    /**
+	     * The `APP_BASE_HREF` token represents the base href to be used with the
+	     * {@link PathLocationStrategy}.
+	     *
+	     * If you're using {@link PathLocationStrategy}, you must provide a provider to a string
+	     * representing the URL prefix that should be preserved when generating and recognizing
+	     * URLs.
+	     *
+	     * ### Example
+	     *
+	     * ```typescript
+	     * import {Component, NgModule} from '@angular/core';
+	     * import {APP_BASE_HREF} from '@angular/common';
+	     *
+	     * @NgModule({
+	     *   providers: [{provide: APP_BASE_HREF, useValue: '/my/app'}]
+	     * })
+	     * class AppModule {}
+	     * ```
+	     *
+	     * @stable
+	     */
+	    var /** @type {?} */ APP_BASE_HREF = new _angular_core.OpaqueToken('appBaseHref');
+
+	    /**
+	     * @license
+	     * Copyright Google Inc. All Rights Reserved.
+	     *
+	     * Use of this source code is governed by an MIT-style license that can be
+	     * found in the LICENSE file at https://angular.io/license
+	     */
+	    var /** @type {?} */ globalScope;
+	    if (typeof window === 'undefined') {
+	        if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) {
+	            // TODO: Replace any with WorkerGlobalScope from lib.webworker.d.ts #3492
+	            globalScope = (self);
+	        }
+	        else {
+	            globalScope = (global);
+	        }
+	    }
+	    else {
+	        globalScope = (window);
+	    }
+	    // Need to declare a new variable for global here since TypeScript
+	    // exports the original value of the symbol.
+	    var /** @type {?} */ _global = globalScope;
+	    /**
+	     * @param {?} type
+	     * @return {?}
+	     */
+	    function getTypeNameForDebugging(type) {
+	        return type['name'] || typeof type;
+	    }
+	    // TODO: remove calls to assert in production environment
+	    // Note: Can't just export this and import in in other files
+	    // as `assert` is a reserved keyword in Dart
+	    _global.assert = function assert(condition) {
+	        // TODO: to be fixed properly via #2830, noop for now
+	    };
+	    /**
+	     * @param {?} obj
+	     * @return {?}
+	     */
+	    function isPresent(obj) {
+	        return obj != null;
+	    }
+	    /**
+	     * @param {?} obj
+	     * @return {?}
+	     */
+	    function isBlank(obj) {
+	        return obj == null;
+	    }
+	    /**
+	     * @param {?} obj
+	     * @return {?}
+	     */
+	    function isDate(obj) {
+	        return obj instanceof Date && !isNaN(obj.valueOf());
+	    }
+	    /**
+	     * @param {?} token
+	     * @return {?}
+	     */
+	    function stringify(token) {
+	        if (typeof token === 'string') {
+	            return token;
+	        }
+	        if (token == null) {
+	            return '' + token;
+	        }
+	        if (token.overriddenName) {
+	            return "" + token.overriddenName;
+	        }
+	        if (token.name) {
+	            return "" + token.name;
+	        }
+	        var /** @type {?} */ res = token.toString();
+	        var /** @type {?} */ newLineIndex = res.indexOf('\n');
+	        return newLineIndex === -1 ? res : res.substring(0, newLineIndex);
+	    }
+	    var NumberWrapper = (function () {
+	        function NumberWrapper() {
+	        }
+	        /**
+	         * @param {?} text
+	         * @return {?}
+	         */
+	        NumberWrapper.parseIntAutoRadix = function (text) {
+	            var /** @type {?} */ result = parseInt(text);
+	            if (isNaN(result)) {
+	                throw new Error('Invalid integer literal when parsing ' + text);
+	            }
+	            return result;
+	        };
+	        /**
+	         * @param {?} value
+	         * @return {?}
+	         */
+	        NumberWrapper.isNumeric = function (value) { return !isNaN(value - parseFloat(value)); };
+	        return NumberWrapper;
+	    }());
+	    /**
+	     * @param {?} o
+	     * @return {?}
+	     */
+	    function isJsObject(o) {
+	        return o !== null && (typeof o === 'function' || typeof o === 'object');
+	    }
+	    var /** @type {?} */ _symbolIterator = null;
+	    /**
+	     * @return {?}
+	     */
+	    function getSymbolIterator() {
+	        if (!_symbolIterator) {
+	            if (((globalScope)).Symbol && Symbol.iterator) {
+	                _symbolIterator = Symbol.iterator;
+	            }
+	            else {
+	                // es6-shim specific logic
+	                var /** @type {?} */ keys = Object.getOwnPropertyNames(Map.prototype);
+	                for (var /** @type {?} */ i = 0; i < keys.length; ++i) {
+	                    var /** @type {?} */ key = keys[i];
+	                    if (key !== 'entries' && key !== 'size' &&
+	                        ((Map)).prototype[key] === Map.prototype['entries']) {
+	                        _symbolIterator = key;
+	                    }
+	                }
+	            }
+	        }
+	        return _symbolIterator;
+	    }
+
+	    /**
+	     *  Depending on which {@link LocationStrategy} is used, `Location` will either persist
+	      * to the URL's path or the URL's hash segment.
+	      * *
+	      * Note: it's better to use {@link Router#navigate} service to trigger route changes. Use
+	      * `Location` only if you need to interact with or create normalized URLs outside of
+	      * routing.
+	      * *
+	      * `Location` is responsible for normalizing the URL against the application's base href.
+	      * A normalized URL is absolute from the URL host, includes the application's base href, and has no
+	      * trailing slash:
+	      * - `/my/app/user/123` is normalized
+	      * - `my/app/user/123` **is not** normalized
+	      * - `/my/app/user/123/` **is not** normalized
+	      * *
+	      * ### Example
+	      * {@example common/location/ts/path_location_component.ts region='LocationComponent'}
+	     */
+	    var Location = (function () {
+	        /**
+	         * @param {?} platformStrategy
+	         */
+	        function Location(platformStrategy) {
+	            var _this = this;
+	            /** @internal */
+	            this._subject = new _angular_core.EventEmitter();
+	            this._platformStrategy = platformStrategy;
+	            var browserBaseHref = this._platformStrategy.getBaseHref();
+	            this._baseHref = Location.stripTrailingSlash(_stripIndexHtml(browserBaseHref));
+	            this._platformStrategy.onPopState(function (ev) {
+	                _this._subject.emit({
+	                    'url': _this.path(true),
+	                    'pop': true,
+	                    'type': ev.type,
+	                });
+	            });
+	        }
+	        /**
+	         * @param {?=} includeHash
+	         * @return {?}
+	         */
+	        Location.prototype.path = function (includeHash) {
+	            if (includeHash === void 0) { includeHash = false; }
+	            return this.normalize(this._platformStrategy.path(includeHash));
+	        };
+	        /**
+	         *  Normalizes the given path and compares to the current normalized path.
+	         * @param {?} path
+	         * @param {?=} query
+	         * @return {?}
+	         */
+	        Location.prototype.isCurrentPathEqualTo = function (path, query) {
+	            if (query === void 0) { query = ''; }
+	            return this.path() == this.normalize(path + Location.normalizeQueryParams(query));
+	        };
+	        /**
+	         *  Given a string representing a URL, returns the normalized URL path without leading or
+	          * trailing slashes.
+	         * @param {?} url
+	         * @return {?}
+	         */
+	        Location.prototype.normalize = function (url) {
+	            return Location.stripTrailingSlash(_stripBaseHref(this._baseHref, _stripIndexHtml(url)));
+	        };
+	        /**
+	         *  Given a string representing a URL, returns the platform-specific external URL path.
+	          * If the given URL doesn't begin with a leading slash (`'/'`), this method adds one
+	          * before normalizing. This method will also add a hash if `HashLocationStrategy` is
+	          * used, or the `APP_BASE_HREF` if the `PathLocationStrategy` is in use.
+	         * @param {?} url
+	         * @return {?}
+	         */
+	        Location.prototype.prepareExternalUrl = function (url) {
+	            if (url && url[0] !== '/') {
+	                url = '/' + url;
+	            }
+	            return this._platformStrategy.prepareExternalUrl(url);
+	        };
+	        /**
+	         *  Changes the browsers URL to the normalized version of the given URL, and pushes a
+	          * new item onto the platform's history.
+	         * @param {?} path
+	         * @param {?=} query
+	         * @return {?}
+	         */
+	        Location.prototype.go = function (path, query) {
+	            if (query === void 0) { query = ''; }
+	            this._platformStrategy.pushState(null, '', path, query);
+	        };
+	        /**
+	         *  Changes the browsers URL to the normalized version of the given URL, and replaces
+	          * the top item on the platform's history stack.
+	         * @param {?} path
+	         * @param {?=} query
+	         * @return {?}
+	         */
+	        Location.prototype.replaceState = function (path, query) {
+	            if (query === void 0) { query = ''; }
+	            this._platformStrategy.replaceState(null, '', path, query);
+	        };
+	        /**
+	         *  Navigates forward in the platform's history.
+	         * @return {?}
+	         */
+	        Location.prototype.forward = function () { this._platformStrategy.forward(); };
+	        /**
+	         *  Navigates back in the platform's history.
+	         * @return {?}
+	         */
+	        Location.prototype.back = function () { this._platformStrategy.back(); };
+	        /**
+	         *  Subscribe to the platform's `popState` events.
+	         * @param {?} onNext
+	         * @param {?=} onThrow
+	         * @param {?=} onReturn
+	         * @return {?}
+	         */
+	        Location.prototype.subscribe = function (onNext, onThrow, onReturn) {
+	            if (onThrow === void 0) { onThrow = null; }
+	            if (onReturn === void 0) { onReturn = null; }
+	            return this._subject.subscribe({ next: onNext, error: onThrow, complete: onReturn });
+	        };
+	        /**
+	         *  Given a string of url parameters, prepend with '?' if needed, otherwise return parameters as
+	          * is.
+	         * @param {?} params
+	         * @return {?}
+	         */
+	        Location.normalizeQueryParams = function (params) {
+	            return params && params[0] !== '?' ? '?' + params : params;
+	        };
+	        /**
+	         *  Given 2 parts of a url, join them with a slash if needed.
+	         * @param {?} start
+	         * @param {?} end
+	         * @return {?}
+	         */
+	        Location.joinWithSlash = function (start, end) {
+	            if (start.length == 0) {
+	                return end;
+	            }
+	            if (end.length == 0) {
+	                return start;
+	            }
+	            var /** @type {?} */ slashes = 0;
+	            if (start.endsWith('/')) {
+	                slashes++;
+	            }
+	            if (end.startsWith('/')) {
+	                slashes++;
+	            }
+	            if (slashes == 2) {
+	                return start + end.substring(1);
+	            }
+	            if (slashes == 1) {
+	                return start + end;
+	            }
+	            return start + '/' + end;
+	        };
+	        /**
+	         *  If url has a trailing slash, remove it, otherwise return url as is.
+	         * @param {?} url
+	         * @return {?}
+	         */
+	        Location.stripTrailingSlash = function (url) { return url.replace(/\/$/, ''); };
+	        Location.decorators = [
+	            { type: _angular_core.Injectable },
+	        ];
+	        /** @nocollapse */
+	        Location.ctorParameters = function () { return [
+	            { type: LocationStrategy, },
+	        ]; };
+	        return Location;
+	    }());
+	    /**
+	     * @param {?} baseHref
+	     * @param {?} url
+	     * @return {?}
+	     */
+	    function _stripBaseHref(baseHref, url) {
+	        return baseHref && url.startsWith(baseHref) ? url.substring(baseHref.length) : url;
+	    }
+	    /**
+	     * @param {?} url
+	     * @return {?}
+	     */
+	    function _stripIndexHtml(url) {
+	        return url.replace(/\/index.html$/, '');
+	    }
+
+	    /**
+	     * @license
+	     * Copyright Google Inc. All Rights Reserved.
+	     *
+	     * Use of this source code is governed by an MIT-style license that can be
+	     * found in the LICENSE file at https://angular.io/license
+	     */
+	    var __extends = (this && this.__extends) || function (d, b) {
+	        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	        function __() { this.constructor = d; }
+	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	    };
+	    /**
+	     *  `HashLocationStrategy` is a {@link LocationStrategy} used to configure the
+	      * {@link Location} service to represent its state in the
+	      * [hash fragment](https://en.wikipedia.org/wiki/Uniform_Resource_Locator#Syntax)
+	      * of the browser's URL.
+	      * *
+	      * For instance, if you call `location.go('/foo')`, the browser's URL will become
+	      * `example.com#/foo`.
+	      * *
+	      * ### Example
+	      * *
+	      * {@example common/location/ts/hash_location_component.ts region='LocationComponent'}
+	      * *
+	     */
+	    var HashLocationStrategy = (function (_super) {
+	        __extends(HashLocationStrategy, _super);
+	        /**
+	         * @param {?} _platformLocation
+	         * @param {?=} _baseHref
+	         */
+	        function HashLocationStrategy(_platformLocation, _baseHref) {
+	            _super.call(this);
+	            this._platformLocation = _platformLocation;
+	            this._baseHref = '';
+	            if (isPresent(_baseHref)) {
+	                this._baseHref = _baseHref;
+	            }
+	        }
+	        /**
+	         * @param {?} fn
+	         * @return {?}
+	         */
+	        HashLocationStrategy.prototype.onPopState = function (fn) {
+	            this._platformLocation.onPopState(fn);
+	            this._platformLocation.onHashChange(fn);
+	        };
+	        /**
+	         * @return {?}
+	         */
+	        HashLocationStrategy.prototype.getBaseHref = function () { return this._baseHref; };
+	        /**
+	         * @param {?=} includeHash
+	         * @return {?}
+	         */
+	        HashLocationStrategy.prototype.path = function (includeHash) {
+	            if (includeHash === void 0) { includeHash = false; }
+	            // the hash value is always prefixed with a `#`
+	            // and if it is empty then it will stay empty
+	            var /** @type {?} */ path = this._platformLocation.hash;
+	            if (!isPresent(path))
+	                path = '#';
+	            return path.length > 0 ? path.substring(1) : path;
+	        };
+	        /**
+	         * @param {?} internal
+	         * @return {?}
+	         */
+	        HashLocationStrategy.prototype.prepareExternalUrl = function (internal) {
+	            var /** @type {?} */ url = Location.joinWithSlash(this._baseHref, internal);
+	            return url.length > 0 ? ('#' + url) : url;
+	        };
+	        /**
+	         * @param {?} state
+	         * @param {?} title
+	         * @param {?} path
+	         * @param {?} queryParams
+	         * @return {?}
+	         */
+	        HashLocationStrategy.prototype.pushState = function (state, title, path, queryParams) {
+	            var /** @type {?} */ url = this.prepareExternalUrl(path + Location.normalizeQueryParams(queryParams));
+	            if (url.length == 0) {
+	                url = this._platformLocation.pathname;
+	            }
+	            this._platformLocation.pushState(state, title, url);
+	        };
+	        /**
+	         * @param {?} state
+	         * @param {?} title
+	         * @param {?} path
+	         * @param {?} queryParams
+	         * @return {?}
+	         */
+	        HashLocationStrategy.prototype.replaceState = function (state, title, path, queryParams) {
+	            var /** @type {?} */ url = this.prepareExternalUrl(path + Location.normalizeQueryParams(queryParams));
+	            if (url.length == 0) {
+	                url = this._platformLocation.pathname;
+	            }
+	            this._platformLocation.replaceState(state, title, url);
+	        };
+	        /**
+	         * @return {?}
+	         */
+	        HashLocationStrategy.prototype.forward = function () { this._platformLocation.forward(); };
+	        /**
+	         * @return {?}
+	         */
+	        HashLocationStrategy.prototype.back = function () { this._platformLocation.back(); };
+	        HashLocationStrategy.decorators = [
+	            { type: _angular_core.Injectable },
+	        ];
+	        /** @nocollapse */
+	        HashLocationStrategy.ctorParameters = function () { return [
+	            { type: PlatformLocation, },
+	            { type: undefined, decorators: [{ type: _angular_core.Optional }, { type: _angular_core.Inject, args: [APP_BASE_HREF,] },] },
+	        ]; };
+	        return HashLocationStrategy;
+	    }(LocationStrategy));
+
+	    /**
+	     * @license
+	     * Copyright Google Inc. All Rights Reserved.
+	     *
+	     * Use of this source code is governed by an MIT-style license that can be
+	     * found in the LICENSE file at https://angular.io/license
+	     */
+	    var __extends$1 = (this && this.__extends) || function (d, b) {
+	        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	        function __() { this.constructor = d; }
+	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	    };
+	    /**
+	     *  `PathLocationStrategy` is a {@link LocationStrategy} used to configure the
+	      * {@link Location} service to represent its state in the
+	      * [path](https://en.wikipedia.org/wiki/Uniform_Resource_Locator#Syntax) of the
+	      * browser's URL.
+	      * *
+	      * If you're using `PathLocationStrategy`, you must provide a {@link APP_BASE_HREF}
+	      * or add a base element to the document. This URL prefix that will be preserved
+	      * when generating and recognizing URLs.
+	      * *
+	      * For instance, if you provide an `APP_BASE_HREF` of `'/my/app'` and call
+	      * `location.go('/foo')`, the browser's URL will become
+	      * `example.com/my/app/foo`.
+	      * *
+	      * Similarly, if you add `<base href='/my/app'/>` to the document and call
+	      * `location.go('/foo')`, the browser's URL will become
+	      * `example.com/my/app/foo`.
+	      * *
+	      * ### Example
+	      * *
+	      * {@example common/location/ts/path_location_component.ts region='LocationComponent'}
+	      * *
+	     */
+	    var PathLocationStrategy = (function (_super) {
+	        __extends$1(PathLocationStrategy, _super);
+	        /**
+	         * @param {?} _platformLocation
+	         * @param {?=} href
+	         */
+	        function PathLocationStrategy(_platformLocation, href) {
+	            _super.call(this);
+	            this._platformLocation = _platformLocation;
+	            if (isBlank(href)) {
+	                href = this._platformLocation.getBaseHrefFromDOM();
+	            }
+	            if (isBlank(href)) {
+	                throw new Error("No base href set. Please provide a value for the APP_BASE_HREF token or add a base element to the document.");
+	            }
+	            this._baseHref = href;
+	        }
+	        /**
+	         * @param {?} fn
+	         * @return {?}
+	         */
+	        PathLocationStrategy.prototype.onPopState = function (fn) {
+	            this._platformLocation.onPopState(fn);
+	            this._platformLocation.onHashChange(fn);
+	        };
+	        /**
+	         * @return {?}
+	         */
+	        PathLocationStrategy.prototype.getBaseHref = function () { return this._baseHref; };
+	        /**
+	         * @param {?} internal
+	         * @return {?}
+	         */
+	        PathLocationStrategy.prototype.prepareExternalUrl = function (internal) {
+	            return Location.joinWithSlash(this._baseHref, internal);
+	        };
+	        /**
+	         * @param {?=} includeHash
+	         * @return {?}
+	         */
+	        PathLocationStrategy.prototype.path = function (includeHash) {
+	            if (includeHash === void 0) { includeHash = false; }
+	            var /** @type {?} */ pathname = this._platformLocation.pathname +
+	                Location.normalizeQueryParams(this._platformLocation.search);
+	            var /** @type {?} */ hash = this._platformLocation.hash;
+	            return hash && includeHash ? "" + pathname + hash : pathname;
+	        };
+	        /**
+	         * @param {?} state
+	         * @param {?} title
+	         * @param {?} url
+	         * @param {?} queryParams
+	         * @return {?}
+	         */
+	        PathLocationStrategy.prototype.pushState = function (state, title, url, queryParams) {
+	            var /** @type {?} */ externalUrl = this.prepareExternalUrl(url + Location.normalizeQueryParams(queryParams));
+	            this._platformLocation.pushState(state, title, externalUrl);
+	        };
+	        /**
+	         * @param {?} state
+	         * @param {?} title
+	         * @param {?} url
+	         * @param {?} queryParams
+	         * @return {?}
+	         */
+	        PathLocationStrategy.prototype.replaceState = function (state, title, url, queryParams) {
+	            var /** @type {?} */ externalUrl = this.prepareExternalUrl(url + Location.normalizeQueryParams(queryParams));
+	            this._platformLocation.replaceState(state, title, externalUrl);
+	        };
+	        /**
+	         * @return {?}
+	         */
+	        PathLocationStrategy.prototype.forward = function () { this._platformLocation.forward(); };
+	        /**
+	         * @return {?}
+	         */
+	        PathLocationStrategy.prototype.back = function () { this._platformLocation.back(); };
+	        PathLocationStrategy.decorators = [
+	            { type: _angular_core.Injectable },
+	        ];
+	        /** @nocollapse */
+	        PathLocationStrategy.ctorParameters = function () { return [
+	            { type: PlatformLocation, },
+	            { type: undefined, decorators: [{ type: _angular_core.Optional }, { type: _angular_core.Inject, args: [APP_BASE_HREF,] },] },
+	        ]; };
+	        return PathLocationStrategy;
+	    }(LocationStrategy));
+
+	    /**
+	     * @license
+	     * Copyright Google Inc. All Rights Reserved.
+	     *
+	     * Use of this source code is governed by an MIT-style license that can be
+	     * found in the LICENSE file at https://angular.io/license
+	     */
+	    var __extends$2 = (this && this.__extends) || function (d, b) {
+	        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	        function __() { this.constructor = d; }
+	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	    };
+	    /**
+	     * @abstract
+	     */
+	    var NgLocalization = (function () {
+	        function NgLocalization() {
+	        }
+	        /**
+	         * @abstract
+	         * @param {?} value
+	         * @return {?}
+	         */
+	        NgLocalization.prototype.getPluralCategory = function (value) { };
+	        return NgLocalization;
+	    }());
+	    /**
+	     *  Returns the plural category for a given value.
+	      * - "=value" when the case exists,
+	      * - the plural category otherwise
+	      * *
+	     * @param {?} value
+	     * @param {?} cases
+	     * @param {?} ngLocalization
+	     * @return {?}
+	     */
+	    function getPluralCategory(value, cases, ngLocalization) {
+	        var /** @type {?} */ key = "=" + value;
+	        if (cases.indexOf(key) > -1) {
+	            return key;
+	        }
+	        key = ngLocalization.getPluralCategory(value);
+	        if (cases.indexOf(key) > -1) {
+	            return key;
+	        }
+	        if (cases.indexOf('other') > -1) {
+	            return 'other';
+	        }
+	        throw new Error("No plural message found for value \"" + value + "\"");
+	    }
+	    /**
+	     *  Returns the plural case based on the locale
+	      * *
+	     */
+	    var NgLocaleLocalization = (function (_super) {
+	        __extends$2(NgLocaleLocalization, _super);
+	        /**
+	         * @param {?} _locale
+	         */
+	        function NgLocaleLocalization(_locale) {
+	            _super.call(this);
+	            this._locale = _locale;
+	        }
+	        /**
+	         * @param {?} value
+	         * @return {?}
+	         */
+	        NgLocaleLocalization.prototype.getPluralCategory = function (value) {
+	            var /** @type {?} */ plural = getPluralCase(this._locale, value);
+	            switch (plural) {
+	                case Plural.Zero:
+	                    return 'zero';
+	                case Plural.One:
+	                    return 'one';
+	                case Plural.Two:
+	                    return 'two';
+	                case Plural.Few:
+	                    return 'few';
+	                case Plural.Many:
+	                    return 'many';
+	                default:
+	                    return 'other';
+	            }
+	        };
+	        NgLocaleLocalization.decorators = [
+	            { type: _angular_core.Injectable },
+	        ];
+	        /** @nocollapse */
+	        NgLocaleLocalization.ctorParameters = function () { return [
+	            { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_core.LOCALE_ID,] },] },
+	        ]; };
+	        return NgLocaleLocalization;
+	    }(NgLocalization));
+	    var Plural = {};
+	    Plural.Zero = 0;
+	    Plural.One = 1;
+	    Plural.Two = 2;
+	    Plural.Few = 3;
+	    Plural.Many = 4;
+	    Plural.Other = 5;
+	    Plural[Plural.Zero] = "Zero";
+	    Plural[Plural.One] = "One";
+	    Plural[Plural.Two] = "Two";
+	    Plural[Plural.Few] = "Few";
+	    Plural[Plural.Many] = "Many";
+	    Plural[Plural.Other] = "Other";
+	    /**
+	     *  Returns the plural case based on the locale
+	      * *
+	     * @param {?} locale
+	     * @param {?} nLike
+	     * @return {?}
+	     */
+	    function getPluralCase(locale, nLike) {
+	        // TODO(vicb): lazy compute
+	        if (typeof nLike === 'string') {
+	            nLike = parseInt(/** @type {?} */ (nLike), 10);
+	        }
+	        var /** @type {?} */ n = (nLike);
+	        var /** @type {?} */ nDecimal = n.toString().replace(/^[^.]*\.?/, '');
+	        var /** @type {?} */ i = Math.floor(Math.abs(n));
+	        var /** @type {?} */ v = nDecimal.length;
+	        var /** @type {?} */ f = parseInt(nDecimal, 10);
+	        var /** @type {?} */ t = parseInt(n.toString().replace(/^[^.]*\.?|0+$/g, ''), 10) || 0;
+	        var /** @type {?} */ lang = locale.split('-')[0].toLowerCase();
+	        switch (lang) {
+	            case 'af':
+	            case 'asa':
+	            case 'az':
+	            case 'bem':
+	            case 'bez':
+	            case 'bg':
+	            case 'brx':
+	            case 'ce':
+	            case 'cgg':
+	            case 'chr':
+	            case 'ckb':
+	            case 'ee':
+	            case 'el':
+	            case 'eo':
+	            case 'es':
+	            case 'eu':
+	            case 'fo':
+	            case 'fur':
+	            case 'gsw':
+	            case 'ha':
+	            case 'haw':
+	            case 'hu':
+	            case 'jgo':
+	            case 'jmc':
+	            case 'ka':
+	            case 'kk':
+	            case 'kkj':
+	            case 'kl':
+	            case 'ks':
+	            case 'ksb':
+	            case 'ky':
+	            case 'lb':
+	            case 'lg':
+	            case 'mas':
+	            case 'mgo':
+	            case 'ml':
+	            case 'mn':
+	            case 'nb':
+	            case 'nd':
+	            case 'ne':
+	            case 'nn':
+	            case 'nnh':
+	            case 'nyn':
+	            case 'om':
+	            case 'or':
+	            case 'os':
+	            case 'ps':
+	            case 'rm':
+	            case 'rof':
+	            case 'rwk':
+	            case 'saq':
+	            case 'seh':
+	            case 'sn':
+	            case 'so':
+	            case 'sq':
+	            case 'ta':
+	            case 'te':
+	            case 'teo':
+	            case 'tk':
+	            case 'tr':
+	            case 'ug':
+	            case 'uz':
+	            case 'vo':
+	            case 'vun':
+	            case 'wae':
+	            case 'xog':
+	                if (n === 1)
+	                    return Plural.One;
+	                return Plural.Other;
+	            case 'agq':
+	            case 'bas':
+	            case 'cu':
+	            case 'dav':
+	            case 'dje':
+	            case 'dua':
+	            case 'dyo':
+	            case 'ebu':
+	            case 'ewo':
+	            case 'guz':
+	            case 'kam':
+	            case 'khq':
+	            case 'ki':
+	            case 'kln':
+	            case 'kok':
+	            case 'ksf':
+	            case 'lrc':
+	            case 'lu':
+	            case 'luo':
+	            case 'luy':
+	            case 'mer':
+	            case 'mfe':
+	            case 'mgh':
+	            case 'mua':
+	            case 'mzn':
+	            case 'nmg':
+	            case 'nus':
+	            case 'qu':
+	            case 'rn':
+	            case 'rw':
+	            case 'sbp':
+	            case 'twq':
+	            case 'vai':
+	            case 'yav':
+	            case 'yue':
+	            case 'zgh':
+	            case 'ak':
+	            case 'ln':
+	            case 'mg':
+	            case 'pa':
+	            case 'ti':
+	                if (n === Math.floor(n) && n >= 0 && n <= 1)
+	                    return Plural.One;
+	                return Plural.Other;
+	            case 'am':
+	            case 'as':
+	            case 'bn':
+	            case 'fa':
+	            case 'gu':
+	            case 'hi':
+	            case 'kn':
+	            case 'mr':
+	            case 'zu':
+	                if (i === 0 || n === 1)
+	                    return Plural.One;
+	                return Plural.Other;
+	            case 'ar':
+	                if (n === 0)
+	                    return Plural.Zero;
+	                if (n === 1)
+	                    return Plural.One;
+	                if (n === 2)
+	                    return Plural.Two;
+	                if (n % 100 === Math.floor(n % 100) && n % 100 >= 3 && n % 100 <= 10)
+	                    return Plural.Few;
+	                if (n % 100 === Math.floor(n % 100) && n % 100 >= 11 && n % 100 <= 99)
+	                    return Plural.Many;
+	                return Plural.Other;
+	            case 'ast':
+	            case 'ca':
+	            case 'de':
+	            case 'en':
+	            case 'et':
+	            case 'fi':
+	            case 'fy':
+	            case 'gl':
+	            case 'it':
+	            case 'nl':
+	            case 'sv':
+	            case 'sw':
+	            case 'ur':
+	            case 'yi':
+	                if (i === 1 && v === 0)
+	                    return Plural.One;
+	                return Plural.Other;
+	            case 'be':
+	                if (n % 10 === 1 && !(n % 100 === 11))
+	                    return Plural.One;
+	                if (n % 10 === Math.floor(n % 10) && n % 10 >= 2 && n % 10 <= 4 &&
+	                    !(n % 100 >= 12 && n % 100 <= 14))
+	                    return Plural.Few;
+	                if (n % 10 === 0 || n % 10 === Math.floor(n % 10) && n % 10 >= 5 && n % 10 <= 9 ||
+	                    n % 100 === Math.floor(n % 100) && n % 100 >= 11 && n % 100 <= 14)
+	                    return Plural.Many;
+	                return Plural.Other;
+	            case 'br':
+	                if (n % 10 === 1 && !(n % 100 === 11 || n % 100 === 71 || n % 100 === 91))
+	                    return Plural.One;
+	                if (n % 10 === 2 && !(n % 100 === 12 || n % 100 === 72 || n % 100 === 92))
+	                    return Plural.Two;
+	                if (n % 10 === Math.floor(n % 10) && (n % 10 >= 3 && n % 10 <= 4 || n % 10 === 9) &&
+	                    !(n % 100 >= 10 && n % 100 <= 19 || n % 100 >= 70 && n % 100 <= 79 ||
+	                        n % 100 >= 90 && n % 100 <= 99))
+	                    return Plural.Few;
+	                if (!(n === 0) && n % 1e6 === 0)
+	                    return Plural.Many;
+	                return Plural.Other;
+	            case 'bs':
+	            case 'hr':
+	            case 'sr':
+	                if (v === 0 && i % 10 === 1 && !(i % 100 === 11) || f % 10 === 1 && !(f % 100 === 11))
+	                    return Plural.One;
+	                if (v === 0 && i % 10 === Math.floor(i % 10) && i % 10 >= 2 && i % 10 <= 4 &&
+	                    !(i % 100 >= 12 && i % 100 <= 14) ||
+	                    f % 10 === Math.floor(f % 10) && f % 10 >= 2 && f % 10 <= 4 &&
+	                        !(f % 100 >= 12 && f % 100 <= 14))
+	                    return Plural.Few;
+	                return Plural.Other;
+	            case 'cs':
+	            case 'sk':
+	                if (i === 1 && v === 0)
+	                    return Plural.One;
+	                if (i === Math.floor(i) && i >= 2 && i <= 4 && v === 0)
+	                    return Plural.Few;
+	                if (!(v === 0))
+	                    return Plural.Many;
+	                return Plural.Other;
+	            case 'cy':
+	                if (n === 0)
+	                    return Plural.Zero;
+	                if (n === 1)
+	                    return Plural.One;
+	                if (n === 2)
+	                    return Plural.Two;
+	                if (n === 3)
+	                    return Plural.Few;
+	                if (n === 6)
+	                    return Plural.Many;
+	                return Plural.Other;
+	            case 'da':
+	                if (n === 1 || !(t === 0) && (i === 0 || i === 1))
+	                    return Plural.One;
+	                return Plural.Other;
+	            case 'dsb':
+	            case 'hsb':
+	                if (v === 0 && i % 100 === 1 || f % 100 === 1)
+	                    return Plural.One;
+	                if (v === 0 && i % 100 === 2 || f % 100 === 2)
+	                    return Plural.Two;
+	                if (v === 0 && i % 100 === Math.floor(i % 100) && i % 100 >= 3 && i % 100 <= 4 ||
+	                    f % 100 === Math.floor(f % 100) && f % 100 >= 3 && f % 100 <= 4)
+	                    return Plural.Few;
+	                return Plural.Other;
+	            case 'ff':
+	            case 'fr':
+	            case 'hy':
+	            case 'kab':
+	                if (i === 0 || i === 1)
+	                    return Plural.One;
+	                return Plural.Other;
+	            case 'fil':
+	                if (v === 0 && (i === 1 || i === 2 || i === 3) ||
+	                    v === 0 && !(i % 10 === 4 || i % 10 === 6 || i % 10 === 9) ||
+	                    !(v === 0) && !(f % 10 === 4 || f % 10 === 6 || f % 10 === 9))
+	                    return Plural.One;
+	                return Plural.Other;
+	            case 'ga':
+	                if (n === 1)
+	                    return Plural.One;
+	                if (n === 2)
+	                    return Plural.Two;
+	                if (n === Math.floor(n) && n >= 3 && n <= 6)
+	                    return Plural.Few;
+	                if (n === Math.floor(n) && n >= 7 && n <= 10)
+	                    return Plural.Many;
+	                return Plural.Other;
+	            case 'gd':
+	                if (n === 1 || n === 11)
+	                    return Plural.One;
+	                if (n === 2 || n === 12)
+	                    return Plural.Two;
+	                if (n === Math.floor(n) && (n >= 3 && n <= 10 || n >= 13 && n <= 19))
+	                    return Plural.Few;
+	                return Plural.Other;
+	            case 'gv':
+	                if (v === 0 && i % 10 === 1)
+	                    return Plural.One;
+	                if (v === 0 && i % 10 === 2)
+	                    return Plural.Two;
+	                if (v === 0 &&
+	                    (i % 100 === 0 || i % 100 === 20 || i % 100 === 40 || i % 100 === 60 || i % 100 === 80))
+	                    return Plural.Few;
+	                if (!(v === 0))
+	                    return Plural.Many;
+	                return Plural.Other;
+	            case 'he':
+	                if (i === 1 && v === 0)
+	                    return Plural.One;
+	                if (i === 2 && v === 0)
+	                    return Plural.Two;
+	                if (v === 0 && !(n >= 0 && n <= 10) && n % 10 === 0)
+	                    return Plural.Many;
+	                return Plural.Other;
+	            case 'is':
+	                if (t === 0 && i % 10 === 1 && !(i % 100 === 11) || !(t === 0))
+	                    return Plural.One;
+	                return Plural.Other;
+	            case 'ksh':
+	                if (n === 0)
+	                    return Plural.Zero;
+	                if (n === 1)
+	                    return Plural.One;
+	                return Plural.Other;
+	            case 'kw':
+	            case 'naq':
+	            case 'se':
+	            case 'smn':
+	                if (n === 1)
+	                    return Plural.One;
+	                if (n === 2)
+	                    return Plural.Two;
+	                return Plural.Other;
+	            case 'lag':
+	                if (n === 0)
+	                    return Plural.Zero;
+	                if ((i === 0 || i === 1) && !(n === 0))
+	                    return Plural.One;
+	                return Plural.Other;
+	            case 'lt':
+	                if (n % 10 === 1 && !(n % 100 >= 11 && n % 100 <= 19))
+	                    return Plural.One;
+	                if (n % 10 === Math.floor(n % 10) && n % 10 >= 2 && n % 10 <= 9 &&
+	                    !(n % 100 >= 11 && n % 100 <= 19))
+	                    return Plural.Few;
+	                if (!(f === 0))
+	                    return Plural.Many;
+	                return Plural.Other;
+	            case 'lv':
+	            case 'prg':
+	                if (n % 10 === 0 || n % 100 === Math.floor(n % 100) && n % 100 >= 11 && n % 100 <= 19 ||
+	                    v === 2 && f % 100 === Math.floor(f % 100) && f % 100 >= 11 && f % 100 <= 19)
+	                    return Plural.Zero;
+	                if (n % 10 === 1 && !(n % 100 === 11) || v === 2 && f % 10 === 1 && !(f % 100 === 11) ||
+	                    !(v === 2) && f % 10 === 1)
+	                    return Plural.One;
+	                return Plural.Other;
+	            case 'mk':
+	                if (v === 0 && i % 10 === 1 || f % 10 === 1)
+	                    return Plural.One;
+	                return Plural.Other;
+	            case 'mt':
+	                if (n === 1)
+	                    return Plural.One;
+	                if (n === 0 || n % 100 === Math.floor(n % 100) && n % 100 >= 2 && n % 100 <= 10)
+	                    return Plural.Few;
+	                if (n % 100 === Math.floor(n % 100) && n % 100 >= 11 && n % 100 <= 19)
+	                    return Plural.Many;
+	                return Plural.Other;
+	            case 'pl':
+	                if (i === 1 && v === 0)
+	                    return Plural.One;
+	                if (v === 0 && i % 10 === Math.floor(i % 10) && i % 10 >= 2 && i % 10 <= 4 &&
+	                    !(i % 100 >= 12 && i % 100 <= 14))
+	                    return Plural.Few;
+	                if (v === 0 && !(i === 1) && i % 10 === Math.floor(i % 10) && i % 10 >= 0 && i % 10 <= 1 ||
+	                    v === 0 && i % 10 === Math.floor(i % 10) && i % 10 >= 5 && i % 10 <= 9 ||
+	                    v === 0 && i % 100 === Math.floor(i % 100) && i % 100 >= 12 && i % 100 <= 14)
+	                    return Plural.Many;
+	                return Plural.Other;
+	            case 'pt':
+	                if (n === Math.floor(n) && n >= 0 && n <= 2 && !(n === 2))
+	                    return Plural.One;
+	                return Plural.Other;
+	            case 'ro':
+	                if (i === 1 && v === 0)
+	                    return Plural.One;
+	                if (!(v === 0) || n === 0 ||
+	                    !(n === 1) && n % 100 === Math.floor(n % 100) && n % 100 >= 1 && n % 100 <= 19)
+	                    return Plural.Few;
+	                return Plural.Other;
+	            case 'ru':
+	            case 'uk':
+	                if (v === 0 && i % 10 === 1 && !(i % 100 === 11))
+	                    return Plural.One;
+	                if (v === 0 && i % 10 === Math.floor(i % 10) && i % 10 >= 2 && i % 10 <= 4 &&
+	                    !(i % 100 >= 12 && i % 100 <= 14))
+	                    return Plural.Few;
+	                if (v === 0 && i % 10 === 0 ||
+	                    v === 0 && i % 10 === Math.floor(i % 10) && i % 10 >= 5 && i % 10 <= 9 ||
+	                    v === 0 && i % 100 === Math.floor(i % 100) && i % 100 >= 11 && i % 100 <= 14)
+	                    return Plural.Many;
+	                return Plural.Other;
+	            case 'shi':
+	                if (i === 0 || n === 1)
+	                    return Plural.One;
+	                if (n === Math.floor(n) && n >= 2 && n <= 10)
+	                    return Plural.Few;
+	                return Plural.Other;
+	            case 'si':
+	                if (n === 0 || n === 1 || i === 0 && f === 1)
+	                    return Plural.One;
+	                return Plural.Other;
+	            case 'sl':
+	                if (v === 0 && i % 100 === 1)
+	                    return Plural.One;
+	                if (v === 0 && i % 100 === 2)
+	                    return Plural.Two;
+	                if (v === 0 && i % 100 === Math.floor(i % 100) && i % 100 >= 3 && i % 100 <= 4 || !(v === 0))
+	                    return Plural.Few;
+	                return Plural.Other;
+	            case 'tzm':
+	                if (n === Math.floor(n) && n >= 0 && n <= 1 || n === Math.floor(n) && n >= 11 && n <= 99)
+	                    return Plural.One;
+	                return Plural.Other;
+	            default:
+	                return Plural.Other;
+	        }
+	    }
+
+	    /**
+	     * @param {?} obj
+	     * @return {?}
+	     */
+	    function isListLikeIterable(obj) {
+	        if (!isJsObject(obj))
+	            return false;
+	        return Array.isArray(obj) ||
+	            (!(obj instanceof Map) &&
+	                getSymbolIterator() in obj); // JS Iterable have a Symbol.iterator prop
+	    }
+
+	    /**
+	     *  *
+	      * *
+	      * ```
+	      * <some-element [ngClass]="'first second'">...</some-element>
+	      * *
+	      * <some-element [ngClass]="['first', 'second']">...</some-element>
+	      * *
+	      * <some-element [ngClass]="{'first': true, 'second': true, 'third': false}">...</some-element>
+	      * *
+	      * <some-element [ngClass]="stringExp|arrayExp|objExp">...</some-element>
+	      * ```
+	      * *
+	      * *
+	      * The CSS classes are updated as follows, depending on the type of the expression evaluation:
+	      * - `string` - the CSS classes listed in the string (space delimited) are added,
+	      * - `Array` - the CSS classes declared as Array elements are added,
+	      * - `Object` - keys are CSS classes that get added when the expression given in the value
+	      * evaluates to a truthy value, otherwise they are removed.
+	      * *
+	     */
+	    var NgClass = (function () {
+	        /**
+	         * @param {?} _iterableDiffers
+	         * @param {?} _keyValueDiffers
+	         * @param {?} _ngEl
+	         * @param {?} _renderer
+	         */
+	        function NgClass(_iterableDiffers, _keyValueDiffers, _ngEl, _renderer) {
+	            this._iterableDiffers = _iterableDiffers;
+	            this._keyValueDiffers = _keyValueDiffers;
+	            this._ngEl = _ngEl;
+	            this._renderer = _renderer;
+	            this._initialClasses = [];
+	        }
+	        Object.defineProperty(NgClass.prototype, "klass", {
+	            /**
+	             * @param {?} v
+	             * @return {?}
+	             */
+	            set: function (v) {
+	                this._applyInitialClasses(true);
+	                this._initialClasses = typeof v === 'string' ? v.split(/\s+/) : [];
+	                this._applyInitialClasses(false);
+	                this._applyClasses(this._rawClass, false);
+	            },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        Object.defineProperty(NgClass.prototype, "ngClass", {
+	            /**
+	             * @param {?} v
+	             * @return {?}
+	             */
+	            set: function (v) {
+	                this._cleanupClasses(this._rawClass);
+	                this._iterableDiffer = null;
+	                this._keyValueDiffer = null;
+	                this._rawClass = typeof v === 'string' ? v.split(/\s+/) : v;
+	                if (this._rawClass) {
+	                    if (isListLikeIterable(this._rawClass)) {
+	                        this._iterableDiffer = this._iterableDiffers.find(this._rawClass).create(null);
+	                    }
+	                    else {
+	                        this._keyValueDiffer = this._keyValueDiffers.find(this._rawClass).create(null);
+	                    }
+	                }
+	            },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        /**
+	         * @return {?}
+	         */
+	        NgClass.prototype.ngDoCheck = function () {
+	            if (this._iterableDiffer) {
+	                var /** @type {?} */ changes = this._iterableDiffer.diff(this._rawClass);
+	                if (changes) {
+	                    this._applyIterableChanges(changes);
+	                }
+	            }
+	            else if (this._keyValueDiffer) {
+	                var /** @type {?} */ changes = this._keyValueDiffer.diff(this._rawClass);
+	                if (changes) {
+	                    this._applyKeyValueChanges(changes);
+	                }
+	            }
+	        };
+	        /**
+	         * @param {?} rawClassVal
+	         * @return {?}
+	         */
+	        NgClass.prototype._cleanupClasses = function (rawClassVal) {
+	            this._applyClasses(rawClassVal, true);
+	            this._applyInitialClasses(false);
+	        };
+	        /**
+	         * @param {?} changes
+	         * @return {?}
+	         */
+	        NgClass.prototype._applyKeyValueChanges = function (changes) {
+	            var _this = this;
+	            changes.forEachAddedItem(function (record) { return _this._toggleClass(record.key, record.currentValue); });
+	            changes.forEachChangedItem(function (record) { return _this._toggleClass(record.key, record.currentValue); });
+	            changes.forEachRemovedItem(function (record) {
+	                if (record.previousValue) {
+	                    _this._toggleClass(record.key, false);
+	                }
+	            });
+	        };
+	        /**
+	         * @param {?} changes
+	         * @return {?}
+	         */
+	        NgClass.prototype._applyIterableChanges = function (changes) {
+	            var _this = this;
+	            changes.forEachAddedItem(function (record) {
+	                if (typeof record.item === 'string') {
+	                    _this._toggleClass(record.item, true);
+	                }
+	                else {
+	                    throw new Error("NgClass can only toggle CSS classes expressed as strings, got " + stringify(record.item));
+	                }
+	            });
+	            changes.forEachRemovedItem(function (record) { return _this._toggleClass(record.item, false); });
+	        };
+	        /**
+	         * @param {?} isCleanup
+	         * @return {?}
+	         */
+	        NgClass.prototype._applyInitialClasses = function (isCleanup) {
+	            var _this = this;
+	            this._initialClasses.forEach(function (klass) { return _this._toggleClass(klass, !isCleanup); });
+	        };
+	        /**
+	         * @param {?} rawClassVal
+	         * @param {?} isCleanup
+	         * @return {?}
+	         */
+	        NgClass.prototype._applyClasses = function (rawClassVal, isCleanup) {
+	            var _this = this;
+	            if (rawClassVal) {
+	                if (Array.isArray(rawClassVal) || rawClassVal instanceof Set) {
+	                    ((rawClassVal)).forEach(function (klass) { return _this._toggleClass(klass, !isCleanup); });
+	                }
+	                else {
+	                    Object.keys(rawClassVal).forEach(function (klass) {
+	                        if (isPresent(rawClassVal[klass]))
+	                            _this._toggleClass(klass, !isCleanup);
+	                    });
+	                }
+	            }
+	        };
+	        /**
+	         * @param {?} klass
+	         * @param {?} enabled
+	         * @return {?}
+	         */
+	        NgClass.prototype._toggleClass = function (klass, enabled) {
+	            var _this = this;
+	            klass = klass.trim();
+	            if (klass) {
+	                klass.split(/\s+/g).forEach(function (klass) { _this._renderer.setElementClass(_this._ngEl.nativeElement, klass, enabled); });
+	            }
+	        };
+	        NgClass.decorators = [
+	            { type: _angular_core.Directive, args: [{ selector: '[ngClass]' },] },
+	        ];
+	        /** @nocollapse */
+	        NgClass.ctorParameters = function () { return [
+	            { type: _angular_core.IterableDiffers, },
+	            { type: _angular_core.KeyValueDiffers, },
+	            { type: _angular_core.ElementRef, },
+	            { type: _angular_core.Renderer, },
+	        ]; };
+	        NgClass.propDecorators = {
+	            'klass': [{ type: _angular_core.Input, args: ['class',] },],
+	            'ngClass': [{ type: _angular_core.Input },],
+	        };
+	        return NgClass;
+	    }());
+
+	    var NgForRow = (function () {
+	        /**
+	         * @param {?} $implicit
+	         * @param {?} index
+	         * @param {?} count
+	         */
+	        function NgForRow($implicit, index, count) {
+	            this.$implicit = $implicit;
+	            this.index = index;
+	            this.count = count;
+	        }
+	        Object.defineProperty(NgForRow.prototype, "first", {
+	            /**
+	             * @return {?}
+	             */
+	            get: function () { return this.index === 0; },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        Object.defineProperty(NgForRow.prototype, "last", {
+	            /**
+	             * @return {?}
+	             */
+	            get: function () { return this.index === this.count - 1; },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        Object.defineProperty(NgForRow.prototype, "even", {
+	            /**
+	             * @return {?}
+	             */
+	            get: function () { return this.index % 2 === 0; },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        Object.defineProperty(NgForRow.prototype, "odd", {
+	            /**
+	             * @return {?}
+	             */
+	            get: function () { return !this.even; },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        return NgForRow;
+	    }());
+	    /**
+	     *  The `NgFor` directive instantiates a template once per item from an iterable. The context for
+	      * each instantiated template inherits from the outer context with the given loop variable set
+	      * to the current item from the iterable.
+	      * *
+	      * ### Local Variables
+	      * *
+	      * `NgFor` provides several exported values that can be aliased to local variables:
+	      * *
+	      * * `index` will be set to the current loop iteration for each template context.
+	      * * `first` will be set to a boolean value indicating whether the item is the first one in the
+	      * iteration.
+	      * * `last` will be set to a boolean value indicating whether the item is the last one in the
+	      * iteration.
+	      * * `even` will be set to a boolean value indicating whether this item has an even index.
+	      * * `odd` will be set to a boolean value indicating whether this item has an odd index.
+	      * *
+	      * ### Change Propagation
+	      * *
+	      * When the contents of the iterator changes, `NgFor` makes the corresponding changes to the DOM:
+	      * *
+	      * * When an item is added, a new instance of the template is added to the DOM.
+	      * * When an item is removed, its template instance is removed from the DOM.
+	      * * When items are reordered, their respective templates are reordered in the DOM.
+	      * * Otherwise, the DOM element for that item will remain the same.
+	      * *
+	      * Angular uses object identity to track insertions and deletions within the iterator and reproduce
+	      * those changes in the DOM. This has important implications for animations and any stateful
+	      * controls
+	      * (such as `<input>` elements which accept user input) that are present. Inserted rows can be
+	      * animated in, deleted rows can be animated out, and unchanged rows retain any unsaved state such
+	      * as user input.
+	      * *
+	      * It is possible for the identities of elements in the iterator to change while the data does not.
+	      * This can happen, for example, if the iterator produced from an RPC to the server, and that
+	      * RPC is re-run. Even if the data hasn't changed, the second response will produce objects with
+	      * different identities, and Angular will tear down the entire DOM and rebuild it (as if all old
+	      * elements were deleted and all new elements inserted). This is an expensive operation and should
+	      * be avoided if possible.
+	      * *
+	      * To customize the default tracking algorithm, `NgFor` supports `trackBy` option.
+	      * `trackBy` takes a function which has two arguments: `index` and `item`.
+	      * If `trackBy` is given, Angular tracks changes by the return value of the function.
+	      * *
+	      * ### Syntax
+	      * *
+	      * - `<li *ngFor="let item of items; let i = index; trackBy: trackByFn">...</li>`
+	      * - `<li template="ngFor let item of items; let i = index; trackBy: trackByFn">...</li>`
+	      * *
+	      * With `<template>` element:
+	      * *
+	      * ```
+	      * <template ngFor let-item [ngForOf]="items" let-i="index" [ngForTrackBy]="trackByFn">
+	      * <li>...</li>
+	      * </template>
+	      * ```
+	      * *
+	      * ### Example
+	      * *
+	      * See a [live demo](http://plnkr.co/edit/KVuXxDp0qinGDyo307QW?p=preview) for a more detailed
+	      * example.
+	      * *
+	     */
+	    var NgFor = (function () {
+	        /**
+	         * @param {?} _viewContainer
+	         * @param {?} _template
+	         * @param {?} _differs
+	         * @param {?} _cdr
+	         */
+	        function NgFor(_viewContainer, _template, _differs, _cdr) {
+	            this._viewContainer = _viewContainer;
+	            this._template = _template;
+	            this._differs = _differs;
+	            this._cdr = _cdr;
+	            this._differ = null;
+	        }
+	        Object.defineProperty(NgFor.prototype, "ngForTrackBy", {
+	            /**
+	             * @return {?}
+	             */
+	            get: function () { return this._trackByFn; },
+	            /**
+	             * @param {?} fn
+	             * @return {?}
+	             */
+	            set: function (fn) {
+	                if (typeof fn !== 'function') {
+	                    throw new Error("trackBy must be a function, but received " + JSON.stringify(fn));
+	                }
+	                this._trackByFn = fn;
+	            },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        Object.defineProperty(NgFor.prototype, "ngForTemplate", {
+	            /**
+	             * @param {?} value
+	             * @return {?}
+	             */
+	            set: function (value) {
+	                if (value) {
+	                    this._template = value;
+	                }
+	            },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        /**
+	         * @param {?} changes
+	         * @return {?}
+	         */
+	        NgFor.prototype.ngOnChanges = function (changes) {
+	            if ('ngForOf' in changes) {
+	                // React on ngForOf changes only once all inputs have been initialized
+	                var /** @type {?} */ value = changes['ngForOf'].currentValue;
+	                if (!this._differ && value) {
+	                    try {
+	                        this._differ = this._differs.find(value).create(this._cdr, this.ngForTrackBy);
+	                    }
+	                    catch (e) {
+	                        throw new Error("Cannot find a differ supporting object '" + value + "' of type '" + getTypeNameForDebugging(value) + "'. NgFor only supports binding to Iterables such as Arrays.");
+	                    }
+	                }
+	            }
+	        };
+	        /**
+	         * @return {?}
+	         */
+	        NgFor.prototype.ngDoCheck = function () {
+	            if (this._differ) {
+	                var /** @type {?} */ changes = this._differ.diff(this.ngForOf);
+	                if (changes)
+	                    this._applyChanges(changes);
+	            }
+	        };
+	        /**
+	         * @param {?} changes
+	         * @return {?}
+	         */
+	        NgFor.prototype._applyChanges = function (changes) {
+	            var _this = this;
+	            var /** @type {?} */ insertTuples = [];
+	            changes.forEachOperation(function (item, adjustedPreviousIndex, currentIndex) {
+	                if (item.previousIndex == null) {
+	                    var /** @type {?} */ view = _this._viewContainer.createEmbeddedView(_this._template, new NgForRow(null, null, null), currentIndex);
+	                    var /** @type {?} */ tuple = new RecordViewTuple(item, view);
+	                    insertTuples.push(tuple);
+	                }
+	                else if (currentIndex == null) {
+	                    _this._viewContainer.remove(adjustedPreviousIndex);
+	                }
+	                else {
+	                    var /** @type {?} */ view = _this._viewContainer.get(adjustedPreviousIndex);
+	                    _this._viewContainer.move(view, currentIndex);
+	                    var /** @type {?} */ tuple = new RecordViewTuple(item, /** @type {?} */ (view));
+	                    insertTuples.push(tuple);
+	                }
+	            });
+	            for (var /** @type {?} */ i = 0; i < insertTuples.length; i++) {
+	                this._perViewChange(insertTuples[i].view, insertTuples[i].record);
+	            }
+	            for (var /** @type {?} */ i = 0, /** @type {?} */ ilen = this._viewContainer.length; i < ilen; i++) {
+	                var /** @type {?} */ viewRef = (this._viewContainer.get(i));
+	                viewRef.context.index = i;
+	                viewRef.context.count = ilen;
+	            }
+	            changes.forEachIdentityChange(function (record) {
+	                var /** @type {?} */ viewRef = (_this._viewContainer.get(record.currentIndex));
+	                viewRef.context.$implicit = record.item;
+	            });
+	        };
+	        /**
+	         * @param {?} view
+	         * @param {?} record
+	         * @return {?}
+	         */
+	        NgFor.prototype._perViewChange = function (view, record) {
+	            view.context.$implicit = record.item;
+	        };
+	        NgFor.decorators = [
+	            { type: _angular_core.Directive, args: [{ selector: '[ngFor][ngForOf]' },] },
+	        ];
+	        /** @nocollapse */
+	        NgFor.ctorParameters = function () { return [
+	            { type: _angular_core.ViewContainerRef, },
+	            { type: _angular_core.TemplateRef, },
+	            { type: _angular_core.IterableDiffers, },
+	            { type: _angular_core.ChangeDetectorRef, },
+	        ]; };
+	        NgFor.propDecorators = {
+	            'ngForOf': [{ type: _angular_core.Input },],
+	            'ngForTrackBy': [{ type: _angular_core.Input },],
+	            'ngForTemplate': [{ type: _angular_core.Input },],
+	        };
+	        return NgFor;
+	    }());
+	    var RecordViewTuple = (function () {
+	        /**
+	         * @param {?} record
+	         * @param {?} view
+	         */
+	        function RecordViewTuple(record, view) {
+	            this.record = record;
+	            this.view = view;
+	        }
+	        return RecordViewTuple;
+	    }());
+
+	    /**
+	     *  Removes or recreates a portion of the DOM tree based on an {expression}.
+	      * *
+	      * If the expression assigned to `ngIf` evaluates to a falsy value then the element
+	      * is removed from the DOM, otherwise a clone of the element is reinserted into the DOM.
+	      * *
+	      * ### Example ([live demo](http://plnkr.co/edit/fe0kgemFBtmQOY31b4tw?p=preview)):
+	      * *
+	      * ```
+	      * <div *ngIf="errorCount > 0" class="error">
+	      * <!-- Error message displayed when the errorCount property in the current context is greater
+	      * than 0. -->
+	      * {{errorCount}} errors detected
+	      * </div>
+	      * ```
+	      * *
+	      * ### Syntax
+	      * *
+	      * - `<div *ngIf="condition">...</div>`
+	      * - `<div template="ngIf condition">...</div>`
+	      * - `<template [ngIf]="condition"><div>...</div></template>`
+	      * *
+	     */
+	    var NgIf = (function () {
+	        /**
+	         * @param {?} _viewContainer
+	         * @param {?} _template
+	         */
+	        function NgIf(_viewContainer, _template) {
+	            this._viewContainer = _viewContainer;
+	            this._template = _template;
+	            this._hasView = false;
+	        }
+	        Object.defineProperty(NgIf.prototype, "ngIf", {
+	            /**
+	             * @param {?} condition
+	             * @return {?}
+	             */
+	            set: function (condition) {
+	                if (condition && !this._hasView) {
+	                    this._hasView = true;
+	                    this._viewContainer.createEmbeddedView(this._template);
+	                }
+	                else if (!condition && this._hasView) {
+	                    this._hasView = false;
+	                    this._viewContainer.clear();
+	                }
+	            },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        NgIf.decorators = [
+	            { type: _angular_core.Directive, args: [{ selector: '[ngIf]' },] },
+	        ];
+	        /** @nocollapse */
+	        NgIf.ctorParameters = function () { return [
+	            { type: _angular_core.ViewContainerRef, },
+	            { type: _angular_core.TemplateRef, },
+	        ]; };
+	        NgIf.propDecorators = {
+	            'ngIf': [{ type: _angular_core.Input },],
+	        };
+	        return NgIf;
+	    }());
+
+	    var SwitchView = (function () {
+	        /**
+	         * @param {?} _viewContainerRef
+	         * @param {?} _templateRef
+	         */
+	        function SwitchView(_viewContainerRef, _templateRef) {
+	            this._viewContainerRef = _viewContainerRef;
+	            this._templateRef = _templateRef;
+	            this._created = false;
+	        }
+	        /**
+	         * @return {?}
+	         */
+	        SwitchView.prototype.create = function () {
+	            this._created = true;
+	            this._viewContainerRef.createEmbeddedView(this._templateRef);
+	        };
+	        /**
+	         * @return {?}
+	         */
+	        SwitchView.prototype.destroy = function () {
+	            this._created = false;
+	            this._viewContainerRef.clear();
+	        };
+	        /**
+	         * @param {?} created
+	         * @return {?}
+	         */
+	        SwitchView.prototype.enforceState = function (created) {
+	            if (created && !this._created) {
+	                this.create();
+	            }
+	            else if (!created && this._created) {
+	                this.destroy();
+	            }
+	        };
+	        return SwitchView;
+	    }());
+	    /**
+	     *  *
+	      * expression.
+	      * *
+	      * ```
+	      * <container-element [ngSwitch]="switch_expression">
+	      * <some-element *ngSwitchCase="match_expression_1">...</some-element>
+	      * <some-element *ngSwitchCase="match_expression_2">...</some-element>
+	      * <some-other-element *ngSwitchCase="match_expression_3">...</some-other-element>
+	      * <ng-container *ngSwitchCase="match_expression_3">
+	      * <!-- use a ng-container to group multiple root nodes -->
+	      * <inner-element></inner-element>
+	      * <inner-other-element></inner-other-element>
+	      * </ng-container>
+	      * <some-element *ngSwitchDefault>...</some-element>
+	      * </container-element>
+	      * ```
+	      * *
+	      * `NgSwitch` stamps out nested views when their match expression value matches the value of the
+	      * switch expression.
+	      * *
+	      * In other words:
+	      * - you define a container element (where you place the directive with a switch expression on the
+	      * `[ngSwitch]="..."` attribute)
+	      * - you define inner views inside the `NgSwitch` and place a `*ngSwitchCase` attribute on the view
+	      * root elements.
+	      * *
+	      * Elements within `NgSwitch` but outside of a `NgSwitchCase` or `NgSwitchDefault` directives will
+	      * be preserved at the location.
+	      * *
+	      * The `ngSwitchCase` directive informs the parent `NgSwitch` of which view to display when the
+	      * expression is evaluated.
+	      * When no matching expression is found on a `ngSwitchCase` view, the `ngSwitchDefault` view is
+	      * stamped out.
+	      * *
+	     */
+	    var NgSwitch = (function () {
+	        function NgSwitch() {
+	            this._defaultUsed = false;
+	            this._caseCount = 0;
+	            this._lastCaseCheckIndex = 0;
+	            this._lastCasesMatched = false;
+	        }
+	        Object.defineProperty(NgSwitch.prototype, "ngSwitch", {
+	            /**
+	             * @param {?} newValue
+	             * @return {?}
+	             */
+	            set: function (newValue) {
+	                this._ngSwitch = newValue;
+	                if (this._caseCount === 0) {
+	                    this._updateDefaultCases(true);
+	                }
+	            },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        /**
+	         * @return {?}
+	         */
+	        NgSwitch.prototype._addCase = function () { return this._caseCount++; };
+	        /**
+	         * @param {?} view
+	         * @return {?}
+	         */
+	        NgSwitch.prototype._addDefault = function (view) {
+	            if (!this._defaultViews) {
+	                this._defaultViews = [];
+	            }
+	            this._defaultViews.push(view);
+	        };
+	        /**
+	         * @param {?} value
+	         * @return {?}
+	         */
+	        NgSwitch.prototype._matchCase = function (value) {
+	            var /** @type {?} */ matched = value == this._ngSwitch;
+	            this._lastCasesMatched = this._lastCasesMatched || matched;
+	            this._lastCaseCheckIndex++;
+	            if (this._lastCaseCheckIndex === this._caseCount) {
+	                this._updateDefaultCases(!this._lastCasesMatched);
+	                this._lastCaseCheckIndex = 0;
+	                this._lastCasesMatched = false;
+	            }
+	            return matched;
+	        };
+	        /**
+	         * @param {?} useDefault
+	         * @return {?}
+	         */
+	        NgSwitch.prototype._updateDefaultCases = function (useDefault) {
+	            if (this._defaultViews && useDefault !== this._defaultUsed) {
+	                this._defaultUsed = useDefault;
+	                for (var /** @type {?} */ i = 0; i < this._defaultViews.length; i++) {
+	                    var /** @type {?} */ defaultView = this._defaultViews[i];
+	                    defaultView.enforceState(useDefault);
+	                }
+	            }
+	        };
+	        NgSwitch.decorators = [
+	            { type: _angular_core.Directive, args: [{ selector: '[ngSwitch]' },] },
+	        ];
+	        /** @nocollapse */
+	        NgSwitch.ctorParameters = function () { return []; };
+	        NgSwitch.propDecorators = {
+	            'ngSwitch': [{ type: _angular_core.Input },],
+	        };
+	        return NgSwitch;
+	    }());
+	    /**
+	     *  *
+	      * given expression evaluate to respectively the same/different value as the switch
+	      * expression.
+	      * *
+	      * ```
+	      * <container-element [ngSwitch]="switch_expression">
+	      * <some-element *ngSwitchCase="match_expression_1">...</some-element>
+	      * </container-element>
+	      * *```
+	      * *
+	      * Insert the sub-tree when the expression evaluates to the same value as the enclosing switch
+	      * expression.
+	      * *
+	      * If multiple match expressions match the switch expression value, all of them are displayed.
+	      * *
+	      * See {@link NgSwitch} for more details and example.
+	      * *
+	     */
+	    var NgSwitchCase = (function () {
+	        /**
+	         * @param {?} viewContainer
+	         * @param {?} templateRef
+	         * @param {?} ngSwitch
+	         */
+	        function NgSwitchCase(viewContainer, templateRef, ngSwitch) {
+	            this.ngSwitch = ngSwitch;
+	            ngSwitch._addCase();
+	            this._view = new SwitchView(viewContainer, templateRef);
+	        }
+	        /**
+	         * @return {?}
+	         */
+	        NgSwitchCase.prototype.ngDoCheck = function () { this._view.enforceState(this.ngSwitch._matchCase(this.ngSwitchCase)); };
+	        NgSwitchCase.decorators = [
+	            { type: _angular_core.Directive, args: [{ selector: '[ngSwitchCase]' },] },
+	        ];
+	        /** @nocollapse */
+	        NgSwitchCase.ctorParameters = function () { return [
+	            { type: _angular_core.ViewContainerRef, },
+	            { type: _angular_core.TemplateRef, },
+	            { type: NgSwitch, decorators: [{ type: _angular_core.Host },] },
+	        ]; };
+	        NgSwitchCase.propDecorators = {
+	            'ngSwitchCase': [{ type: _angular_core.Input },],
+	        };
+	        return NgSwitchCase;
+	    }());
+	    /**
+	     *  match the
+	      * switch expression.
+	      * *
+	      * ```
+	      * <container-element [ngSwitch]="switch_expression">
+	      * <some-element *ngSwitchCase="match_expression_1">...</some-element>
+	      * <some-other-element *ngSwitchDefault>...</some-other-element>
+	      * </container-element>
+	      * ```
+	      * *
+	      * *
+	      * Insert the sub-tree when no case expressions evaluate to the same value as the enclosing switch
+	      * expression.
+	      * *
+	      * See {@link NgSwitch} for more details and example.
+	      * *
+	     */
+	    var NgSwitchDefault = (function () {
+	        /**
+	         * @param {?} viewContainer
+	         * @param {?} templateRef
+	         * @param {?} ngSwitch
+	         */
+	        function NgSwitchDefault(viewContainer, templateRef, ngSwitch) {
+	            ngSwitch._addDefault(new SwitchView(viewContainer, templateRef));
+	        }
+	        NgSwitchDefault.decorators = [
+	            { type: _angular_core.Directive, args: [{ selector: '[ngSwitchDefault]' },] },
+	        ];
+	        /** @nocollapse */
+	        NgSwitchDefault.ctorParameters = function () { return [
+	            { type: _angular_core.ViewContainerRef, },
+	            { type: _angular_core.TemplateRef, },
+	            { type: NgSwitch, decorators: [{ type: _angular_core.Host },] },
+	        ]; };
+	        return NgSwitchDefault;
+	    }());
+
+	    /**
+	     *  *
+	      * *
+	      * ```
+	      * <some-element [ngPlural]="value">
+	      * <ng-container *ngPluralCase="'=0'">there is nothing</ng-container>
+	      * <ng-container *ngPluralCase="'=1'">there is one</ng-container>
+	      * <ng-container *ngPluralCase="'few'">there are a few</ng-container>
+	      * <ng-container *ngPluralCase="'other'">there are exactly #</ng-container>
+	      * </some-element>
+	      * ```
+	      * *
+	      * *
+	      * Displays DOM sub-trees that match the switch expression value, or failing that, DOM sub-trees
+	      * that match the switch expression's pluralization category.
+	      * *
+	      * To use this directive you must provide a container element that sets the `[ngPlural]` attribute
+	      * to a switch expression. Inner elements with a `[ngPluralCase]` will display based on their
+	      * expression:
+	      * - if `[ngPluralCase]` is set to a value starting with `=`, it will only display if the value
+	      * matches the switch expression exactly,
+	      * - otherwise, the view will be treated as a "category match", and will only display if exact
+	      * value matches aren't found and the value maps to its category for the defined locale.
+	      * *
+	      * See http://cldr.unicode.org/index/cldr-spec/plural-rules
+	      * *
+	     */
+	    var NgPlural = (function () {
+	        /**
+	         * @param {?} _localization
+	         */
+	        function NgPlural(_localization) {
+	            this._localization = _localization;
+	            this._caseViews = {};
+	        }
+	        Object.defineProperty(NgPlural.prototype, "ngPlural", {
+	            /**
+	             * @param {?} value
+	             * @return {?}
+	             */
+	            set: function (value) {
+	                this._switchValue = value;
+	                this._updateView();
+	            },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        /**
+	         * @param {?} value
+	         * @param {?} switchView
+	         * @return {?}
+	         */
+	        NgPlural.prototype.addCase = function (value, switchView) { this._caseViews[value] = switchView; };
+	        /**
+	         * @return {?}
+	         */
+	        NgPlural.prototype._updateView = function () {
+	            this._clearViews();
+	            var /** @type {?} */ cases = Object.keys(this._caseViews);
+	            var /** @type {?} */ key = getPluralCategory(this._switchValue, cases, this._localization);
+	            this._activateView(this._caseViews[key]);
+	        };
+	        /**
+	         * @return {?}
+	         */
+	        NgPlural.prototype._clearViews = function () {
+	            if (this._activeView)
+	                this._activeView.destroy();
+	        };
+	        /**
+	         * @param {?} view
+	         * @return {?}
+	         */
+	        NgPlural.prototype._activateView = function (view) {
+	            if (view) {
+	                this._activeView = view;
+	                this._activeView.create();
+	            }
+	        };
+	        NgPlural.decorators = [
+	            { type: _angular_core.Directive, args: [{ selector: '[ngPlural]' },] },
+	        ];
+	        /** @nocollapse */
+	        NgPlural.ctorParameters = function () { return [
+	            { type: NgLocalization, },
+	        ]; };
+	        NgPlural.propDecorators = {
+	            'ngPlural': [{ type: _angular_core.Input },],
+	        };
+	        return NgPlural;
+	    }());
+	    /**
+	     *  *
+	      * given expression matches the plural expression according to CLDR rules.
+	      * *
+	      * ```
+	      * <some-element [ngPlural]="value">
+	      * <ng-container *ngPluralCase="'=0'">...</ng-container>
+	      * <ng-container *ngPluralCase="'other'">...</ng-container>
+	      * </some-element>
+	      * *```
+	      * *
+	      * See {@link NgPlural} for more details and example.
+	      * *
+	     */
+	    var NgPluralCase = (function () {
+	        /**
+	         * @param {?} value
+	         * @param {?} template
+	         * @param {?} viewContainer
+	         * @param {?} ngPlural
+	         */
+	        function NgPluralCase(value, template, viewContainer, ngPlural) {
+	            this.value = value;
+	            ngPlural.addCase(value, new SwitchView(viewContainer, template));
+	        }
+	        NgPluralCase.decorators = [
+	            { type: _angular_core.Directive, args: [{ selector: '[ngPluralCase]' },] },
+	        ];
+	        /** @nocollapse */
+	        NgPluralCase.ctorParameters = function () { return [
+	            { type: undefined, decorators: [{ type: _angular_core.Attribute, args: ['ngPluralCase',] },] },
+	            { type: _angular_core.TemplateRef, },
+	            { type: _angular_core.ViewContainerRef, },
+	            { type: NgPlural, decorators: [{ type: _angular_core.Host },] },
+	        ]; };
+	        return NgPluralCase;
+	    }());
+
+	    /**
+	     *  *
+	      * *
+	      * ```
+	      * <some-element [ngStyle]="{'font-style': styleExp}">...</some-element>
+	      * *
+	      * <some-element [ngStyle]="{'max-width.px': widthExp}">...</some-element>
+	      * *
+	      * <some-element [ngStyle]="objExp">...</some-element>
+	      * ```
+	      * *
+	      * *
+	      * The styles are updated according to the value of the expression evaluation:
+	      * - keys are style names with an optional `.<unit>` suffix (ie 'top.px', 'font-style.em'),
+	      * - values are the values assigned to those properties (expressed in the given unit).
+	      * *
+	     */
+	    var NgStyle = (function () {
+	        /**
+	         * @param {?} _differs
+	         * @param {?} _ngEl
+	         * @param {?} _renderer
+	         */
+	        function NgStyle(_differs, _ngEl, _renderer) {
+	            this._differs = _differs;
+	            this._ngEl = _ngEl;
+	            this._renderer = _renderer;
+	        }
+	        Object.defineProperty(NgStyle.prototype, "ngStyle", {
+	            /**
+	             * @param {?} v
+	             * @return {?}
+	             */
+	            set: function (v) {
+	                this._ngStyle = v;
+	                if (!this._differ && v) {
+	                    this._differ = this._differs.find(v).create(null);
+	                }
+	            },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        /**
+	         * @return {?}
+	         */
+	        NgStyle.prototype.ngDoCheck = function () {
+	            if (this._differ) {
+	                var /** @type {?} */ changes = this._differ.diff(this._ngStyle);
+	                if (changes) {
+	                    this._applyChanges(changes);
+	                }
+	            }
+	        };
+	        /**
+	         * @param {?} changes
+	         * @return {?}
+	         */
+	        NgStyle.prototype._applyChanges = function (changes) {
+	            var _this = this;
+	            changes.forEachRemovedItem(function (record) { return _this._setStyle(record.key, null); });
+	            changes.forEachAddedItem(function (record) { return _this._setStyle(record.key, record.currentValue); });
+	            changes.forEachChangedItem(function (record) { return _this._setStyle(record.key, record.currentValue); });
+	        };
+	        /**
+	         * @param {?} nameAndUnit
+	         * @param {?} value
+	         * @return {?}
+	         */
+	        NgStyle.prototype._setStyle = function (nameAndUnit, value) {
+	            var _a = nameAndUnit.split('.'), name = _a[0], unit = _a[1];
+	            value = value && unit ? "" + value + unit : value;
+	            this._renderer.setElementStyle(this._ngEl.nativeElement, name, value);
+	        };
+	        NgStyle.decorators = [
+	            { type: _angular_core.Directive, args: [{ selector: '[ngStyle]' },] },
+	        ];
+	        /** @nocollapse */
+	        NgStyle.ctorParameters = function () { return [
+	            { type: _angular_core.KeyValueDiffers, },
+	            { type: _angular_core.ElementRef, },
+	            { type: _angular_core.Renderer, },
+	        ]; };
+	        NgStyle.propDecorators = {
+	            'ngStyle': [{ type: _angular_core.Input },],
+	        };
+	        return NgStyle;
+	    }());
+
+	    /**
+	     *  *
+	      * *
+	      * ```
+	      * <template [ngTemplateOutlet]="templateRefExpression"
+	      * [ngOutletContext]="objectExpression">
+	      * </template>
+	      * ```
+	      * *
+	      * *
+	      * You can attach a context object to the `EmbeddedViewRef` by setting `[ngOutletContext]`.
+	      * `[ngOutletContext]` should be an object, the object's keys will be the local template variables
+	      * available within the `TemplateRef`.
+	      * *
+	      * Note: using the key `$implicit` in the context object will set it's value as default.
+	      * *
+	     */
+	    var NgTemplateOutlet = (function () {
+	        /**
+	         * @param {?} _viewContainerRef
+	         */
+	        function NgTemplateOutlet(_viewContainerRef) {
+	            this._viewContainerRef = _viewContainerRef;
+	        }
+	        Object.defineProperty(NgTemplateOutlet.prototype, "ngOutletContext", {
+	            /**
+	             * @param {?} context
+	             * @return {?}
+	             */
+	            set: function (context) { this._context = context; },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        Object.defineProperty(NgTemplateOutlet.prototype, "ngTemplateOutlet", {
+	            /**
+	             * @param {?} templateRef
+	             * @return {?}
+	             */
+	            set: function (templateRef) { this._templateRef = templateRef; },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        /**
+	         * @param {?} changes
+	         * @return {?}
+	         */
+	        NgTemplateOutlet.prototype.ngOnChanges = function (changes) {
+	            if (this._viewRef) {
+	                this._viewContainerRef.remove(this._viewContainerRef.indexOf(this._viewRef));
+	            }
+	            if (this._templateRef) {
+	                this._viewRef = this._viewContainerRef.createEmbeddedView(this._templateRef, this._context);
+	            }
+	        };
+	        NgTemplateOutlet.decorators = [
+	            { type: _angular_core.Directive, args: [{ selector: '[ngTemplateOutlet]' },] },
+	        ];
+	        /** @nocollapse */
+	        NgTemplateOutlet.ctorParameters = function () { return [
+	            { type: _angular_core.ViewContainerRef, },
+	        ]; };
+	        NgTemplateOutlet.propDecorators = {
+	            'ngOutletContext': [{ type: _angular_core.Input },],
+	            'ngTemplateOutlet': [{ type: _angular_core.Input },],
+	        };
+	        return NgTemplateOutlet;
+	    }());
+
+	    /**
+	     * A collection of Angular directives that are likely to be used in each and every Angular
+	     * application.
+	     */
+	    var /** @type {?} */ COMMON_DIRECTIVES = [
+	        NgClass,
+	        NgFor,
+	        NgIf,
+	        NgTemplateOutlet,
+	        NgStyle,
+	        NgSwitch,
+	        NgSwitchCase,
+	        NgSwitchDefault,
+	        NgPlural,
+	        NgPluralCase,
+	    ];
+
+	    var /** @type {?} */ isPromise = _angular_core.__core_private__.isPromise;
+
+	    var __extends$4 = (this && this.__extends) || function (d, b) {
+	        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	        function __() { this.constructor = d; }
+	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	    };
+	    /**
+	     * @stable
+	     */
+	    var BaseError = (function (_super) {
+	        __extends$4(BaseError, _super);
+	        /**
+	         * @param {?} message
+	         */
+	        function BaseError(message) {
+	            _super.call(this, message);
+	            // Errors don't use current this, instead they create a new instance.
+	            // We have to do forward all of our api to the nativeInstance.
+	            // TODO(bradfordcsmith): Remove this hack when
+	            //     google/closure-compiler/issues/2102 is fixed.
+	            var nativeError = new Error(message);
+	            this._nativeError = nativeError;
+	        }
+	        Object.defineProperty(BaseError.prototype, "message", {
+	            /**
+	             * @return {?}
+	             */
+	            get: function () { return this._nativeError.message; },
+	            /**
+	             * @param {?} message
+	             * @return {?}
+	             */
+	            set: function (message) { this._nativeError.message = message; },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        Object.defineProperty(BaseError.prototype, "name", {
+	            /**
+	             * @return {?}
+	             */
+	            get: function () { return this._nativeError.name; },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        Object.defineProperty(BaseError.prototype, "stack", {
+	            /**
+	             * @return {?}
+	             */
+	            get: function () { return ((this._nativeError)).stack; },
+	            /**
+	             * @param {?} value
+	             * @return {?}
+	             */
+	            set: function (value) { ((this._nativeError)).stack = value; },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        /**
+	         * @return {?}
+	         */
+	        BaseError.prototype.toString = function () { return this._nativeError.toString(); };
+	        return BaseError;
+	    }(Error));
+	    /**
+	     * @stable
+	     */
+	    var WrappedError = (function (_super) {
+	        __extends$4(WrappedError, _super);
+	        /**
+	         * @param {?} message
+	         * @param {?} error
+	         */
+	        function WrappedError(message, error) {
+	            _super.call(this, message + " caused by: " + (error instanceof Error ? error.message : error));
+	            this.originalError = error;
+	        }
+	        Object.defineProperty(WrappedError.prototype, "stack", {
+	            /**
+	             * @return {?}
+	             */
+	            get: function () {
+	                return (((this.originalError instanceof Error ? this.originalError : this._nativeError)))
+	                    .stack;
+	            },
+	            enumerable: true,
+	            configurable: true
+	        });
+	        return WrappedError;
+	    }(BaseError));
+
+	    /**
+	     * @license
+	     * Copyright Google Inc. All Rights Reserved.
+	     *
+	     * Use of this source code is governed by an MIT-style license that can be
+	     * found in the LICENSE file at https://angular.io/license
+	     */
+	    var __extends$3 = (this && this.__extends) || function (d, b) {
+	        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	        function __() { this.constructor = d; }
+	        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	    };
+	    var InvalidPipeArgumentError = (function (_super) {
+	        __extends$3(InvalidPipeArgumentError, _super);
+	        /**
+	         * @param {?} type
+	         * @param {?} value
+	         */
+	        function InvalidPipeArgumentError(type, value) {
+	            _super.call(this, "Invalid argument '" + value + "' for pipe '" + stringify(type) + "'");
+	        }
+	        return InvalidPipeArgumentError;
+	    }(BaseError));
+
+	    var ObservableStrategy = (function () {
+	        function ObservableStrategy() {
+	        }
+	        /**
+	         * @param {?} async
+	         * @param {?} updateLatestValue
+	         * @return {?}
+	         */
+	        ObservableStrategy.prototype.createSubscription = function (async, updateLatestValue) {
+	            return async.subscribe({ next: updateLatestValue, error: function (e) { throw e; } });
+	        };
+	        /**
+	         * @param {?} subscription
+	         * @return {?}
+	         */
+	        ObservableStrategy.prototype.dispose = function (subscription) { subscription.unsubscribe(); };
+	        /**
+	         * @param {?} subscription
+	         * @return {?}
+	         */
+	        ObservableStrategy.prototype.onDestroy = function (subscription) { subscription.unsubscribe(); };
+	        return ObservableStrategy;
+	    }());
+	    var PromiseStrategy = (function () {
+	        function PromiseStrategy() {
+	        }
+	        /**
+	         * @param {?} async
+	         * @param {?} updateLatestValue
+	         * @return {?}
+	         */
+	        PromiseStrategy.prototype.createSubscription = function (async, updateLatestValue) {
+	            return async.then(updateLatestValue, function (e) { throw e; });
+	        };
+	        /**
+	         * @param {?} subscription
+	         * @return {?}
+	         */
+	        PromiseStrategy.prototype.dispose = function (subscription) { };
+	        /**
+	         * @param {?} subscription
+	         * @return {?}
+	         */
+	        PromiseStrategy.prototype.onDestroy = function (subscription) { };
+	        return PromiseStrategy;
+	    }());
+	    var /** @type {?} */ _promiseStrategy = new PromiseStrategy();
+	    var /** @type {?} */ _observableStrategy = new ObservableStrategy();
+	    /**
+	     *  The `async` pipe subscribes to an `Observable` or `Promise` and returns the latest value it has
+	      * emitted. When a new value is emitted, the `async` pipe marks the component to be checked for
+	      * changes. When the component gets destroyed, the `async` pipe unsubscribes automatically to avoid
+	      * potential memory leaks.
+	      * *
+	      * *
+	      * ## Examples
+	      * *
+	      * This example binds a `Promise` to the view. Clicking the `Resolve` button resolves the
+	      * promise.
+	      * *
+	      * {@example common/pipes/ts/async_pipe.ts region='AsyncPipePromise'}
+	      * *
+	      * It's also possible to use `async` with Observables. The example below binds the `time` Observable
+	      * to the view. The Observable continuously updates the view with the current time.
+	      * *
+	      * {@example common/pipes/ts/async_pipe.ts region='AsyncPipeObservable'}
+	      * *
+	     */
+	    var AsyncPipe = (function () {
+	        /**
+	         * @param {?} _ref
+	         */
+	        function AsyncPipe(_ref) {
+	            this._ref = _ref;
+	            this._latestValue = null;
+	            this._latestReturnedValue = null;
+	            this._subscription = null;
+	            this._obj = null;
+	            this._strategy = null;
+	        }
+	        /**
+	         * @return {?}
+	         */
+	        AsyncPipe.prototype.ngOnDestroy = function () {
+	            if (this._subscription) {
+	                this._dispose();
+	            }
+	        };
+	        /**
+	         * @param {?} obj
+	         * @return {?}
+	         */
+	        AsyncPipe.prototype.transform = function (obj) {
+	            if (!this._obj) {
+	                if (obj) {
+	                    this._subscribe(obj);
+	                }
+	                this._latestReturnedValue = this._latestValue;
+	                return this._latestValue;
+	            }
+	            if (obj !== this._obj) {
+	                this._dispose();
+	                return this.transform(obj);
+	            }
+	            if (this._latestValue === this._latestReturnedValue) {
+	                return this._latestReturnedValue;
+	            }
+	            this._latestReturnedValue = this._latestValue;
+	            return _angular_core.WrappedValue.wrap(this._latestValue);
+	        };
+	        /**
+	         * @param {?} obj
+	         * @return {?}
+	         */
+	        AsyncPipe.prototype._subscribe = function (obj) {
+	            var _this = this;
+	            this._obj = obj;
+	            this._strategy = this._selectStrategy(obj);
+	            this._subscription = this._strategy.createSubscription(obj, function (value) { return _this._updateLatestValue(obj, value); });
+	        };
+	        /**
+	         * @param {?} obj
+	         * @return {?}
+	         */
+	        AsyncPipe.prototype._selectStrategy = function (obj) {
+	            if (isPromise(obj)) {
+	                return _promiseStrategy;
+	            }
+	            if (((obj)).subscribe) {
+	                return _observableStrategy;
+	            }
+	            throw new InvalidPipeArgumentError(AsyncPipe, obj);
+	        };
+	        /**
+	         * @return {?}
+	         */
+	        AsyncPipe.prototype._dispose = function () {
+	            this._strategy.dispose(this._subscription);
+	            this._latestValue = null;
+	            this._latestReturnedValue = null;
+	            this._subscription = null;
+	            this._obj = null;
+	        };
+	        /**
+	         * @param {?} async
+	         * @param {?} value
+	         * @return {?}
+	         */
+	        AsyncPipe.prototype._updateLatestValue = function (async, value) {
+	            if (async === this._obj) {
+	                this._latestValue = value;
+	                this._ref.markForCheck();
+	            }
+	        };
+	        AsyncPipe.decorators = [
+	            { type: _angular_core.Pipe, args: [{ name: 'async', pure: false },] },
+	        ];
+	        /** @nocollapse */
+	        AsyncPipe.ctorParameters = function () { return [
+	            { type: _angular_core.ChangeDetectorRef, },
+	        ]; };
+	        return AsyncPipe;
+	    }());
+
+	    var NumberFormatStyle = {};
+	    NumberFormatStyle.Decimal = 0;
+	    NumberFormatStyle.Percent = 1;
+	    NumberFormatStyle.Currency = 2;
+	    NumberFormatStyle[NumberFormatStyle.Decimal] = "Decimal";
+	    NumberFormatStyle[NumberFormatStyle.Percent] = "Percent";
+	    NumberFormatStyle[NumberFormatStyle.Currency] = "Currency";
+	    var NumberFormatter = (function () {
+	        function NumberFormatter() {
+	        }
+	        /**
+	         * @param {?} num
+	         * @param {?} locale
+	         * @param {?} style
+	         * @param {?=} __3
+	         * @return {?}
+	         */
+	        NumberFormatter.format = function (num, locale, style, _a) {
+	            var _b = _a === void 0 ? {} : _a, minimumIntegerDigits = _b.minimumIntegerDigits, minimumFractionDigits = _b.minimumFractionDigits, maximumFractionDigits = _b.maximumFractionDigits, currency = _b.currency, _c = _b.currencyAsSymbol, currencyAsSymbol = _c === void 0 ? false : _c;
+	            var /** @type {?} */ options = {
+	                minimumIntegerDigits: minimumIntegerDigits,
+	                minimumFractionDigits: minimumFractionDigits,
+	                maximumFractionDigits: maximumFractionDigits,
+	                style: NumberFormatStyle[style].toLowerCase()
+	            };
+	            if (style == NumberFormatStyle.Currency) {
+	                options.currency = currency;
+	                options.currencyDisplay = currencyAsSymbol ? 'symbol' : 'code';
+	            }
+	            return new Intl.NumberFormat(locale, options).format(num);
+	        };
+	        return NumberFormatter;
+	    }());
+	    var /** @type {?} */ DATE_FORMATS_SPLIT = /((?:[^yMLdHhmsazZEwGjJ']+)|(?:'(?:[^']|'')*')|(?:E+|y+|M+|L+|d+|H+|h+|J+|j+|m+|s+|a|z|Z|G+|w+))(.*)/;
+	    var /** @type {?} */ PATTERN_ALIASES = {
+	        // Keys are quoted so they do not get renamed during closure compilation.
+	        'yMMMdjms': datePartGetterFactory(combine([
+	            digitCondition('year', 1),
+	            nameCondition('month', 3),
+	            digitCondition('day', 1),
+	            digitCondition('hour', 1),
+	            digitCondition('minute', 1),
+	            digitCondition('second', 1),
+	        ])),
+	        'yMdjm': datePartGetterFactory(combine([
+	            digitCondition('year', 1), digitCondition('month', 1), digitCondition('day', 1),
+	            digitCondition('hour', 1), digitCondition('minute', 1)
+	        ])),
+	        'yMMMMEEEEd': datePartGetterFactory(combine([
+	            digitCondition('year', 1), nameCondition('month', 4), nameCondition('weekday', 4),
+	            digitCondition('day', 1)
+	        ])),
+	        'yMMMMd': datePartGetterFactory(combine([digitCondition('year', 1), nameCondition('month', 4), digitCondition('day', 1)])),
+	        'yMMMd': datePartGetterFactory(combine([digitCondition('year', 1), nameCondition('month', 3), digitCondition('day', 1)])),
+	        'yMd': datePartGetterFactory(combine([digitCondition('year', 1), digitCondition('month', 1), digitCondition('day', 1)])),
+	        'jms': datePartGetterFactory(combine([digitCondition('hour', 1), digitCondition('second', 1), digitCondition('minute', 1)])),
+	        'jm': datePartGetterFactory(combine([digitCondition('hour', 1), digitCondition('minute', 1)]))
+	    };
+	    var /** @type {?} */ DATE_FORMATS = {
+	        // Keys are quoted so they do not get renamed.
+	        'yyyy': datePartGetterFactory(digitCondition('year', 4)),
+	        'yy': datePartGetterFactory(digitCondition('year', 2)),
+	        'y': datePartGetterFactory(digitCondition('year', 1)),
+	        'MMMM': datePartGetterFactory(nameCondition('month', 4)),
+	        'MMM': datePartGetterFactory(nameCondition('month', 3)),
+	        'MM': datePartGetterFactory(digitCondition('month', 2)),
+	        'M': datePartGetterFactory(digitCondition('month', 1)),
+	        'LLLL': datePartGetterFactory(nameCondition('month', 4)),
+	        'L': datePartGetterFactory(nameCondition('month', 1)),
+	        'dd': datePartGetterFactory(digitCondition('day', 2)),
+	        'd': datePartGetterFactory(digitCondition('day', 1)),
+	        'HH': digitModifier(hourExtractor(datePartGetterFactory(hour12Modify(digitCondition('hour', 2), false)))),
+	        'H': hourExtractor(datePartGetterFactory(hour12Modify(digitCondition('hour', 1), false))),
+	        'hh': digitModifier(hourExtractor(datePartGetterFactory(hour12Modify(digitCondition('hour', 2), true)))),
+	        'h': hourExtractor(datePartGetterFactory(hour12Modify(digitCondition('hour', 1), true))),
+	        'jj': datePartGetterFactory(digitCondition('hour', 2)),
+	        'j': datePartGetterFactory(digitCondition('hour', 1)),
+	        'mm': digitModifier(datePartGetterFactory(digitCondition('minute', 2))),
+	        'm': datePartGetterFactory(digitCondition('minute', 1)),
+	        'ss': digitModifier(datePartGetterFactory(digitCondition('second', 2))),
+	        's': datePartGetterFactory(digitCondition('second', 1)),
+	        // while ISO 8601 requires fractions to be prefixed with `.` or `,`
+	        // we can be just safely rely on using `sss` since we currently don't support single or two digit
+	        // fractions
+	        'sss': datePartGetterFactory(digitCondition('second', 3)),
+	        'EEEE': datePartGetterFactory(nameCondition('weekday', 4)),
+	        'EEE': datePartGetterFactory(nameCondition('weekday', 3)),
+	        'EE': datePartGetterFactory(nameCondition('weekday', 2)),
+	        'E': datePartGetterFactory(nameCondition('weekday', 1)),
+	        'a': hourClockExtractor(datePartGetterFactory(hour12Modify(digitCondition('hour', 1), true))),
+	        'Z': timeZoneGetter('short'),
+	        'z': timeZoneGetter('long'),
+	        'ww': datePartGetterFactory({}),
+	        // first Thursday of the year. not support ?
+	        'w': datePartGetterFactory({}),
+	        // of the year not support ?
+	        'G': datePartGetterFactory(nameCondition('era', 1)),
+	        'GG': datePartGetterFactory(nameCondition('era', 2)),
+	        'GGG': datePartGetterFactory(nameCondition('era', 3)),
+	        'GGGG': datePartGetterFactory(nameCondition('era', 4))
+	    };
+	    /**
+	     * @param {?} inner
+	     * @return {?}
+	     */
+	    function digitModifier(inner) {
+	        return function (date, locale) {
+	            var /** @type {?} */ result = inner(date, locale);
+	            return result.length == 1 ? '0' + result : result;
+	        };
+	    }
+	    /**
+	     * @param {?} inner
+	     * @return {?}
+	     */
+	    function hourClockExtractor(inner) {
+	        return function (date, locale) { return inner(date, locale).split(' ')[1]; };
+	    }
+	    /**
+	     * @param {?} inner
+	     * @return {?}
+	     */
+	    function hourExtractor(inner) {
+	        return function (date, locale) { return inner(date, locale).split(' ')[0]; };
+	    }
+	    /**
+	     * @param {?} date
+	     * @param {?} locale
+	     * @param {?} options
+	     * @return {?}
+	     */
+	    function intlDateFormat(date, locale, options) {
+	        return new Intl.DateTimeFormat(locale, options).format(date).replace(/[\u200e\u200f]/g, '');
+	    }
+	    /**
+	     * @param {?} timezone
+	     * @return {?}
+	     */
+	    function timeZoneGetter(timezone) {
+	        // To workaround `Intl` API restriction for single timezone let format with 24 hours
+	        var /** @type {?} */ options = { hour: '2-digit', hour12: false, timeZoneName: timezone };
+	        return function (date, locale) {
+	            var /** @type {?} */ result = intlDateFormat(date, locale, options);
+	            // Then extract first 3 letters that related to hours
+	            return result ? result.substring(3) : '';
+	        };
+	    }
+	    /**
+	     * @param {?} options
+	     * @param {?} value
+	     * @return {?}
+	     */
+	    function hour12Modify(options, value) {
+	        options.hour12 = value;
+	        return options;
+	    }
+	    /**
+	     * @param {?} prop
+	     * @param {?} len
+	     * @return {?}
+	     */
+	    function digitCondition(prop, len) {
+	        var /** @type {?} */ result = {};
+	        result[prop] = len === 2 ? '2-digit' : 'numeric';
+	        return result;
+	    }
+	    /**
+	     * @param {?} prop
+	     * @param {?} len
+	     * @return {?}
+	     */
+	    function nameCondition(prop, len) {
+	        var /** @type {?} */ result = {};
+	        if (len < 4) {
+	            result[prop] = len > 1 ? 'short' : 'narrow';
+	        }
+	        else {
+	            result[prop] = 'long';
+	        }
+	        return result;
+	    }
+	    /**
+	     * @param {?} options
+	     * @return {?}
+	     */
+	    function combine(options) {
+	        return (_a = ((Object))).assign.apply(_a, [{}].concat(options));
+	        var _a;
+	    }
+	    /**
+	     * @param {?} ret
+	     * @return {?}
+	     */
+	    function datePartGetterFactory(ret) {
+	        return function (date, locale) { return intlDateFormat(date, locale, ret); };
+	    }
+	    var /** @type {?} */ DATE_FORMATTER_CACHE = new Map();
+	    /**
+	     * @param {?} format
+	     * @param {?} date
+	     * @param {?} locale
+	     * @return {?}
+	     */
+	    function dateFormatter(format, date, locale) {
+	        var /** @type {?} */ fn = PATTERN_ALIASES[format];
+	        if (fn)
+	            return fn(date, locale);
+	        var /** @type {?} */ cacheKey = format;
+	        var /** @type {?} */ parts = DATE_FORMATTER_CACHE.get(cacheKey);
+	        if (!parts) {
+	            parts = [];
+	            var /** @type {?} */ match = void 0;
+	            DATE_FORMATS_SPLIT.exec(format);
+	            while (format) {
+	                match = DATE_FORMATS_SPLIT.exec(format);
+	                if (match) {
+	                    parts = parts.concat(match.slice(1));
+	                    format = parts.pop();
+	                }
+	                else {
+	                    parts.push(format);
+	                    format = null;
+	                }
+	            }
+	            DATE_FORMATTER_CACHE.set(cacheKey, parts);
+	        }
+	        return parts.reduce(function (text, part) {
+	            var /** @type {?} */ fn = DATE_FORMATS[part];
+	            return text + (fn ? fn(date, locale) : partToTime(part));
+	        }, '');
+	    }
+	    /**
+	     * @param {?} part
+	     * @return {?}
+	     */
+	    function partToTime(part) {
+	        return part === '\'\'' ? '\'' : part.replace(/(^'|'$)/g, '').replace(/''/g, '\'');
+	    }
+	    var DateFormatter = (function () {
+	        function DateFormatter() {
+	        }
+	        /**
+	         * @param {?} date
+	         * @param {?} locale
+	         * @param {?} pattern
+	         * @return {?}
+	         */
+	        DateFormatter.format = function (date, locale, pattern) {
+	            return dateFormatter(pattern, date, locale);
+	        };
+	        return DateFormatter;
+	    }());
+
+	    /**
+	     *  *
+	      * Where:
+	      * - `expression` is a date object or a number (milliseconds since UTC epoch) or an ISO string
+	      * (https://www.w3.org/TR/NOTE-datetime).
+	      * - `format` indicates which date/time components to include. The format can be predifined as
+	      * shown below or custom as shown in the table.
+	      * - `'medium'`: equivalent to `'yMMMdjms'` (e.g. `Sep 3, 2010, 12:05:08 PM` for `en-US`)
+	      * - `'short'`: equivalent to `'yMdjm'` (e.g. `9/3/2010, 12:05 PM` for `en-US`)
+	      * - `'fullDate'`: equivalent to `'yMMMMEEEEd'` (e.g. `Friday, September 3, 2010` for `en-US`)
+	      * - `'longDate'`: equivalent to `'yMMMMd'` (e.g. `September 3, 2010` for `en-US`)
+	      * - `'mediumDate'`: equivalent to `'yMMMd'` (e.g. `Sep 3, 2010` for `en-US`)
+	      * - `'shortDate'`: equivalent to `'yMd'` (e.g. `9/3/2010` for `en-US`)
+	      * - `'mediumTime'`: equivalent to `'jms'` (e.g. `12:05:08 PM` for `en-US`)
+	      * - `'shortTime'`: equivalent to `'jm'` (e.g. `12:05 PM` for `en-US`)
+	      * *
+	      * *
+	      * | Component | Symbol | Narrow | Short Form   | Long Form         | Numeric   | 2-digit   |
+	      * |-----------|:------:|--------|--------------|-------------------|-----------|-----------|
+	      * | era       |   G    | G (A)  | GGG (AD)     | GGGG (Anno Domini)| -         | -         |
+	      * | year      |   y    | -      | -            | -                 | y (2015)  | yy (15)   |
+	      * | month     |   M    | L (S)  | MMM (Sep)    | MMMM (September)  | M (9)     | MM (09)   |
+	      * | day       |   d    | -      | -            | -                 | d (3)     | dd (03)   |
+	      * | weekday   |   E    | E (S)  | EEE (Sun)    | EEEE (Sunday)     | -         | -         |
+	      * | hour      |   j    | -      | -            | -                 | j (13)    | jj (13)   |
+	      * | hour12    |   h    | -      | -            | -                 | h (1 PM)  | hh (01 PM)|
+	      * | hour24    |   H    | -      | -            | -                 | H (13)    | HH (13)   |
+	      * | minute    |   m    | -      | -            | -                 | m (5)     | mm (05)   |
+	      * | second    |   s    | -      | -            | -                 | s (9)     | ss (09)   |
+	      * | timezone  |   z    | -      | -            | z (Pacific Standard Time)| -  | -         |
+	      * | timezone  |   Z    | -      | Z (GMT-8:00) | -                 | -         | -         |
+	      * | timezone  |   a    | -      | a (PM)       | -                 | -         | -         |
+	      * *
+	      * In javascript, only the components specified will be respected (not the ordering,
+	      * punctuations, ...) and details of the formatting will be dependent on the locale.
+	      * *
+	      * Timezone of the formatted text will be the local system timezone of the end-user's machine.
+	      * *
+	      * When the expression is a ISO string without time (e.g. 2016-09-19) the time zone offset is not
+	      * applied and the formatted text will have the same day, month and year of the expression.
+	      * *
+	      * WARNINGS:
+	      * - this pipe is marked as pure hence it will not be re-evaluated when the input is mutated.
+	      * Instead users should treat the date as an immutable object and change the reference when the
+	      * pipe needs to re-run (this is to avoid reformatting the date on every change detection run
+	      * which would be an expensive operation).
+	      * - this pipe uses the Internationalization API. Therefore it is only reliable in Chrome and Opera
+	      * browsers.
+	      * *
+	      * ### Examples
+	      * *
+	      * Assuming `dateObj` is (year: 2015, month: 6, day: 15, hour: 21, minute: 43, second: 11)
+	      * in the _local_ time and locale is 'en-US':
+	      * *
+	      * ```
+	      * {{ dateObj | date }}               // output is 'Jun 15, 2015'
+	      * {{ dateObj | date:'medium' }}      // output is 'Jun 15, 2015, 9:43:11 PM'
+	      * {{ dateObj | date:'shortTime' }}   // output is '9:43 PM'
+	      * {{ dateObj | date:'mmss' }}        // output is '43:11'
+	      * ```
+	      * *
+	      * {@example common/pipes/ts/date_pipe.ts region='DatePipe'}
+	      * *
+	     */
+	    var DatePipe = (function () {
+	        /**
+	         * @param {?} _locale
+	         */
+	        function DatePipe(_locale) {
+	            this._locale = _locale;
+	        }
+	        /**
+	         * @param {?} value
+	         * @param {?=} pattern
+	         * @return {?}
+	         */
+	        DatePipe.prototype.transform = function (value, pattern) {
+	            if (pattern === void 0) { pattern = 'mediumDate'; }
+	            var /** @type {?} */ date;
+	            if (isBlank$1(value))
+	                return null;
+	            if (typeof value === 'string') {
+	                value = value.trim();
+	            }
+	            if (isDate(value)) {
+	                date = value;
+	            }
+	            else if (NumberWrapper.isNumeric(value)) {
+	                date = new Date(parseFloat(value));
+	            }
+	            else if (typeof value === 'string' && /^(\d{4}-\d{1,2}-\d{1,2})$/.test(value)) {
+	                /**
+	                * For ISO Strings without time the day, month and year must be extracted from the ISO String
+	                * before Date creation to avoid time offset and errors in the new Date.
+	                * If we only replace '-' with ',' in the ISO String ("2015,01,01"), and try to create a new
+	                * date, some browsers (e.g. IE 9) will throw an invalid Date error
+	                * If we leave the '-' ("2015-01-01") and try to create a new Date("2015-01-01") the timeoffset
+	                * is applied
+	                * Note: ISO months are 0 for January, 1 for February, ...
+	                */
+	                var _a = value.split('-').map(function (val) { return parseInt(val, 10); }), y = _a[0], m = _a[1], d = _a[2];
+	                date = new Date(y, m - 1, d);
+	            }
+	            else {
+	                date = new Date(value);
+	            }
+	            if (!isDate(date)) {
+	                throw new InvalidPipeArgumentError(DatePipe, value);
+	            }
+	            return DateFormatter.format(date, this._locale, DatePipe._ALIASES[pattern] || pattern);
+	        };
+	        /** @internal */
+	        DatePipe._ALIASES = {
+	            'medium': 'yMMMdjms',
+	            'short': 'yMdjm',
+	            'fullDate': 'yMMMMEEEEd',
+	            'longDate': 'yMMMMd',
+	            'mediumDate': 'yMMMd',
+	            'shortDate': 'yMd',
+	            'mediumTime': 'jms',
+	            'shortTime': 'jm'
+	        };
+	        DatePipe.decorators = [
+	            { type: _angular_core.Pipe, args: [{ name: 'date', pure: true },] },
+	        ];
+	        /** @nocollapse */
+	        DatePipe.ctorParameters = function () { return [
+	            { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_core.LOCALE_ID,] },] },
+	        ]; };
+	        return DatePipe;
+	    }());
+	    /**
+	     * @param {?} obj
+	     * @return {?}
+	     */
+	    function isBlank$1(obj) {
+	        return obj == null || obj === '';
+	    }
+
+	    var /** @type {?} */ _INTERPOLATION_REGEXP = /#/g;
+	    /**
+	     *  *
+	      * Where:
+	      * - `expression` is a number.
+	      * - `mapping` is an object that mimics the ICU format, see
+	      * http://userguide.icu-project.org/formatparse/messages
+	      * *
+	      * ## Example
+	      * *
+	      * {@example common/pipes/ts/i18n_pipe.ts region='I18nPluralPipeComponent'}
+	      * *
+	     */
+	    var I18nPluralPipe = (function () {
+	        /**
+	         * @param {?} _localization
+	         */
+	        function I18nPluralPipe(_localization) {
+	            this._localization = _localization;
+	        }
+	        /**
+	         * @param {?} value
+	         * @param {?} pluralMap
+	         * @return {?}
+	         */
+	        I18nPluralPipe.prototype.transform = function (value, pluralMap) {
+	            if (isBlank(value))
+	                return '';
+	            if (typeof pluralMap !== 'object' || pluralMap === null) {
+	                throw new InvalidPipeArgumentError(I18nPluralPipe, pluralMap);
+	            }
+	            var /** @type {?} */ key = getPluralCategory(value, Object.keys(pluralMap), this._localization);
+	            return pluralMap[key].replace(_INTERPOLATION_REGEXP, value.toString());
+	        };
+	        I18nPluralPipe.decorators = [
+	            { type: _angular_core.Pipe, args: [{ name: 'i18nPlural', pure: true },] },
+	        ];
+	        /** @nocollapse */
+	        I18nPluralPipe.ctorParameters = function () { return [
+	            { type: NgLocalization, },
+	        ]; };
+	        return I18nPluralPipe;
+	    }());
+
+	    /**
+	     *  *
+	      * Where `mapping` is an object that indicates the text that should be displayed
+	      * for different values of the provided `expression`.
+	      * If none of the keys of the mapping match the value of the `expression`, then the content
+	      * of the `other` key is returned when present, otherwise an empty string is returned.
+	      * *
+	      * ## Example
+	      * *
+	      * {@example common/pipes/ts/i18n_pipe.ts region='I18nSelectPipeComponent'}
+	      * *
+	      * @experimental
+	     */
+	    var I18nSelectPipe = (function () {
+	        function I18nSelectPipe() {
+	        }
+	        /**
+	         * @param {?} value
+	         * @param {?} mapping
+	         * @return {?}
+	         */
+	        I18nSelectPipe.prototype.transform = function (value, mapping) {
+	            if (value == null)
+	                return '';
+	            if (typeof mapping !== 'object' || typeof value !== 'string') {
+	                throw new InvalidPipeArgumentError(I18nSelectPipe, mapping);
+	            }
+	            if (mapping.hasOwnProperty(value)) {
+	                return mapping[value];
+	            }
+	            if (mapping.hasOwnProperty('other')) {
+	                return mapping['other'];
+	            }
+	            return '';
+	        };
+	        I18nSelectPipe.decorators = [
+	            { type: _angular_core.Pipe, args: [{ name: 'i18nSelect', pure: true },] },
+	        ];
+	        /** @nocollapse */
+	        I18nSelectPipe.ctorParameters = function () { return []; };
+	        return I18nSelectPipe;
+	    }());
+
+	    /**
+	     *  *
+	      * Converts value into string using `JSON.stringify`. Useful for debugging.
+	      * *
+	      * ### Example
+	      * {@example common/pipes/ts/json_pipe.ts region='JsonPipe'}
+	      * *
+	     */
+	    var JsonPipe = (function () {
+	        function JsonPipe() {
+	        }
+	        /**
+	         * @param {?} value
+	         * @return {?}
+	         */
+	        JsonPipe.prototype.transform = function (value) { return JSON.stringify(value, null, 2); };
+	        JsonPipe.decorators = [
+	            { type: _angular_core.Pipe, args: [{ name: 'json', pure: false },] },
+	        ];
+	        /** @nocollapse */
+	        JsonPipe.ctorParameters = function () { return []; };
+	        return JsonPipe;
+	    }());
+
+	    /**
+	     *  *
+	      * Converts value into a lowercase string using `String.prototype.toLowerCase()`.
+	      * *
+	      * ### Example
+	      * *
+	      * {@example common/pipes/ts/lowerupper_pipe.ts region='LowerUpperPipe'}
+	      * *
+	     */
+	    var LowerCasePipe = (function () {
+	        function LowerCasePipe() {
+	        }
+	        /**
+	         * @param {?} value
+	         * @return {?}
+	         */
+	        LowerCasePipe.prototype.transform = function (value) {
+	            if (isBlank(value))
+	                return value;
+	            if (typeof value !== 'string') {
+	                throw new InvalidPipeArgumentError(LowerCasePipe, value);
+	            }
+	            return value.toLowerCase();
+	        };
+	        LowerCasePipe.decorators = [
+	            { type: _angular_core.Pipe, args: [{ name: 'lowercase' },] },
+	        ];
+	        /** @nocollapse */
+	        LowerCasePipe.ctorParameters = function () { return []; };
+	        return LowerCasePipe;
+	    }());
+
+	    var /** @type {?} */ _NUMBER_FORMAT_REGEXP = /^(\d+)?\.((\d+)(-(\d+))?)?$/;
+	    /**
+	     * @param {?} pipe
+	     * @param {?} locale
+	     * @param {?} value
+	     * @param {?} style
+	     * @param {?} digits
+	     * @param {?=} currency
+	     * @param {?=} currencyAsSymbol
+	     * @return {?}
+	     */
+	    function formatNumber(pipe, locale, value, style, digits, currency, currencyAsSymbol) {
+	        if (currency === void 0) { currency = null; }
+	        if (currencyAsSymbol === void 0) { currencyAsSymbol = false; }
+	        if (isBlank(value))
+	            return null;
+	        // Convert strings to numbers
+	        value = typeof value === 'string' && NumberWrapper.isNumeric(value) ? +value : value;
+	        if (typeof value !== 'number') {
+	            throw new InvalidPipeArgumentError(pipe, value);
+	        }
+	        var /** @type {?} */ minInt;
+	        var /** @type {?} */ minFraction;
+	        var /** @type {?} */ maxFraction;
+	        if (style !== NumberFormatStyle.Currency) {
+	            // rely on Intl default for currency
+	            minInt = 1;
+	            minFraction = 0;
+	            maxFraction = 3;
+	        }
+	        if (digits) {
+	            var /** @type {?} */ parts = digits.match(_NUMBER_FORMAT_REGEXP);
+	            if (parts === null) {
+	                throw new Error(digits + " is not a valid digit info for number pipes");
+	            }
+	            if (isPresent(parts[1])) {
+	                minInt = NumberWrapper.parseIntAutoRadix(parts[1]);
+	            }
+	            if (isPresent(parts[3])) {
+	                minFraction = NumberWrapper.parseIntAutoRadix(parts[3]);
+	            }
+	            if (isPresent(parts[5])) {
+	                maxFraction = NumberWrapper.parseIntAutoRadix(parts[5]);
+	            }
+	        }
+	        return NumberFormatter.format(/** @type {?} */ (value), locale, style, {
+	            minimumIntegerDigits: minInt,
+	            minimumFractionDigits: minFraction,
+	            maximumFractionDigits: maxFraction,
+	            currency: currency,
+	            currencyAsSymbol: currencyAsSymbol,
+	        });
+	    }
+	    /**
+	     *  *
+	      * Formats a number as text. Group sizing and separator and other locale-specific
+	      * configurations are based on the active locale.
+	      * *
+	      * where `expression` is a number:
+	      * - `digitInfo` is a `string` which has a following format: <br>
+	      * <code>{minIntegerDigits}.{minFractionDigits}-{maxFractionDigits}</code>
+	      * - `minIntegerDigits` is the minimum number of integer digits to use. Defaults to `1`.
+	      * - `minFractionDigits` is the minimum number of digits after fraction. Defaults to `0`.
+	      * - `maxFractionDigits` is the maximum number of digits after fraction. Defaults to `3`.
+	      * *
+	      * For more information on the acceptable range for each of these numbers and other
+	      * details see your native internationalization library.
+	      * *
+	      * WARNING: this pipe uses the Internationalization API which is not yet available in all browsers
+	      * and may require a polyfill. See {@linkDocs guide/browser-support} for details.
+	      * *
+	      * ### Example
+	      * *
+	      * {@example common/pipes/ts/number_pipe.ts region='NumberPipe'}
+	      * *
+	     */
+	    var DecimalPipe = (function () {
+	        /**
+	         * @param {?} _locale
+	         */
+	        function DecimalPipe(_locale) {
+	            this._locale = _locale;
+	        }
+	        /**
+	         * @param {?} value
+	         * @param {?=} digits
+	         * @return {?}
+	         */
+	        DecimalPipe.prototype.transform = function (value, digits) {
+	            if (digits === void 0) { digits = null; }
+	            return formatNumber(DecimalPipe, this._locale, value, NumberFormatStyle.Decimal, digits);
+	        };
+	        DecimalPipe.decorators = [
+	            { type: _angular_core.Pipe, args: [{ name: 'number' },] },
+	        ];
+	        /** @nocollapse */
+	        DecimalPipe.ctorParameters = function () { return [
+	            { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_core.LOCALE_ID,] },] },
+	        ]; };
+	        return DecimalPipe;
+	    }());
+	    /**
+	     *  *
+	      * *
+	      * Formats a number as percentage.
+	      * *
+	      * - `digitInfo` See {@link DecimalPipe} for detailed description.
+	      * *
+	      * WARNING: this pipe uses the Internationalization API which is not yet available in all browsers
+	      * and may require a polyfill. See {@linkDocs guide/browser-support} for details.
+	      * *
+	      * ### Example
+	      * *
+	      * {@example common/pipes/ts/number_pipe.ts region='PercentPipe'}
+	      * *
+	     */
+	    var PercentPipe = (function () {
+	        /**
+	         * @param {?} _locale
+	         */
+	        function PercentPipe(_locale) {
+	            this._locale = _locale;
+	        }
+	        /**
+	         * @param {?} value
+	         * @param {?=} digits
+	         * @return {?}
+	         */
+	        PercentPipe.prototype.transform = function (value, digits) {
+	            if (digits === void 0) { digits = null; }
+	            return formatNumber(PercentPipe, this._locale, value, NumberFormatStyle.Percent, digits);
+	        };
+	        PercentPipe.decorators = [
+	            { type: _angular_core.Pipe, args: [{ name: 'percent' },] },
+	        ];
+	        /** @nocollapse */
+	        PercentPipe.ctorParameters = function () { return [
+	            { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_core.LOCALE_ID,] },] },
+	        ]; };
+	        return PercentPipe;
+	    }());
+	    /**
+	     *  *
+	      * Use `currency` to format a number as currency.
+	      * *
+	      * - `currencyCode` is the [ISO 4217](https://en.wikipedia.org/wiki/ISO_4217) currency code, such
+	      * as `USD` for the US dollar and `EUR` for the euro.
+	      * - `symbolDisplay` is a boolean indicating whether to use the currency symbol or code.
+	      * - `true`: use symbol (e.g. `$`).
+	      * - `false`(default): use code (e.g. `USD`).
+	      * - `digitInfo` See {@link DecimalPipe} for detailed description.
+	      * *
+	      * WARNING: this pipe uses the Internationalization API which is not yet available in all browsers
+	      * and may require a polyfill. See {@linkDocs guide/browser-support} for details.
+	      * *
+	      * ### Example
+	      * *
+	      * {@example common/pipes/ts/number_pipe.ts region='CurrencyPipe'}
+	      * *
+	     */
+	    var CurrencyPipe = (function () {
+	        /**
+	         * @param {?} _locale
+	         */
+	        function CurrencyPipe(_locale) {
+	            this._locale = _locale;
+	        }
+	        /**
+	         * @param {?} value
+	         * @param {?=} currencyCode
+	         * @param {?=} symbolDisplay
+	         * @param {?=} digits
+	         * @return {?}
+	         */
+	        CurrencyPipe.prototype.transform = function (value, currencyCode, symbolDisplay, digits) {
+	            if (currencyCode === void 0) { currencyCode = 'USD'; }
+	            if (symbolDisplay === void 0) { symbolDisplay = false; }
+	            if (digits === void 0) { digits = null; }
+	            return formatNumber(CurrencyPipe, this._locale, value, NumberFormatStyle.Currency, digits, currencyCode, symbolDisplay);
+	        };
+	        CurrencyPipe.decorators = [
+	            { type: _angular_core.Pipe, args: [{ name: 'currency' },] },
+	        ];
+	        /** @nocollapse */
+	        CurrencyPipe.ctorParameters = function () { return [
+	            { type: undefined, decorators: [{ type: _angular_core.Inject, args: [_angular_core.LOCALE_ID,] },] },
+	        ]; };
+	        return CurrencyPipe;
+	    }());
+
+	    /**
+	     *  *
+	      * Where the input expression is a `List` or `String`, and:
+	      * - `start`: The starting index of the subset to return.
+	      * - **a positive integer**: return the item at `start` index and all items after
+	      * in the list or string expression.
+	      * - **a negative integer**: return the item at `start` index from the end and all items after
+	      * in the list or string expression.
+	      * - **if positive and greater than the size of the expression**: return an empty list or string.
+	      * - **if negative and greater than the size of the expression**: return entire list or string.
+	      * - `end`: The ending index of the subset to return.
+	      * - **omitted**: return all items until the end.
+	      * - **if positive**: return all items before `end` index of the list or string.
+	      * - **if negative**: return all items before `end` index from the end of the list or string.
+	      * *
+	      * All behavior is based on the expected behavior of the JavaScript API `Array.prototype.slice()`
+	      * and `String.prototype.slice()`.
+	      * *
+	      * When operating on a [List], the returned list is always a copy even when all
+	      * the elements are being returned.
+	      * *
+	      * When operating on a blank value, the pipe returns the blank value.
+	      * *
+	      * ## List Example
+	      * *
+	      * This `ngFor` example:
+	      * *
+	      * {@example common/pipes/ts/slice_pipe.ts region='SlicePipe_list'}
+	      * *
+	      * produces the following:
+	      * *
+	      * <li>b</li>
+	      * <li>c</li>
+	      * *
+	      * ## String Examples
+	      * *
+	      * {@example common/pipes/ts/slice_pipe.ts region='SlicePipe_string'}
+	      * *
+	     */
+	    var SlicePipe = (function () {
+	        function SlicePipe() {
+	        }
+	        /**
+	         * @param {?} value
+	         * @param {?} start
+	         * @param {?=} end
+	         * @return {?}
+	         */
+	        SlicePipe.prototype.transform = function (value, start, end) {
+	            if (isBlank(value))
+	                return value;
+	            if (!this.supports(value)) {
+	                throw new InvalidPipeArgumentError(SlicePipe, value);
+	            }
+	            return value.slice(start, end);
+	        };
+	        /**
+	         * @param {?} obj
+	         * @return {?}
+	         */
+	        SlicePipe.prototype.supports = function (obj) { return typeof obj === 'string' || Array.isArray(obj); };
+	        SlicePipe.decorators = [
+	            { type: _angular_core.Pipe, args: [{ name: 'slice', pure: false },] },
+	        ];
+	        /** @nocollapse */
+	        SlicePipe.ctorParameters = function () { return []; };
+	        return SlicePipe;
+	    }());
+
+	    /**
+	     *  *
+	      * Converts value into an uppercase string using `String.prototype.toUpperCase()`.
+	      * *
+	      * ### Example
+	      * *
+	      * {@example common/pipes/ts/lowerupper_pipe.ts region='LowerUpperPipe'}
+	      * *
+	     */
+	    var UpperCasePipe = (function () {
+	        function UpperCasePipe() {
+	        }
+	        /**
+	         * @param {?} value
+	         * @return {?}
+	         */
+	        UpperCasePipe.prototype.transform = function (value) {
+	            if (isBlank(value))
+	                return value;
+	            if (typeof value !== 'string') {
+	                throw new InvalidPipeArgumentError(UpperCasePipe, value);
+	            }
+	            return value.toUpperCase();
+	        };
+	        UpperCasePipe.decorators = [
+	            { type: _angular_core.Pipe, args: [{ name: 'uppercase' },] },
+	        ];
+	        /** @nocollapse */
+	        UpperCasePipe.ctorParameters = function () { return []; };
+	        return UpperCasePipe;
+	    }());
+
+	    /**
+	     * A collection of Angular pipes that are likely to be used in each and every application.
+	     */
+	    var /** @type {?} */ COMMON_PIPES = [
+	        AsyncPipe,
+	        UpperCasePipe,
+	        LowerCasePipe,
+	        JsonPipe,
+	        SlicePipe,
+	        DecimalPipe,
+	        PercentPipe,
+	        CurrencyPipe,
+	        DatePipe,
+	        I18nPluralPipe,
+	        I18nSelectPipe,
+	    ];
+
+	    /**
+	     *  The module that includes all the basic Angular directives like {@link NgIf}, {@link NgFor}, ...
+	      * *
+	     */
+	    var CommonModule = (function () {
+	        function CommonModule() {
+	        }
+	        CommonModule.decorators = [
+	            { type: _angular_core.NgModule, args: [{
+	                        declarations: [COMMON_DIRECTIVES, COMMON_PIPES],
+	                        exports: [COMMON_DIRECTIVES, COMMON_PIPES],
+	                        providers: [
+	                            { provide: NgLocalization, useClass: NgLocaleLocalization },
+	                        ],
+	                    },] },
+	        ];
+	        /** @nocollapse */
+	        CommonModule.ctorParameters = function () { return []; };
+	        return CommonModule;
+	    }());
+
+	    /**
+	     * @stable
+	     */
+	    var /** @type {?} */ VERSION = new _angular_core.Version('2.4.1');
+
+	    exports.NgLocalization = NgLocalization;
+	    exports.CommonModule = CommonModule;
+	    exports.NgClass = NgClass;
+	    exports.NgFor = NgFor;
+	    exports.NgIf = NgIf;
+	    exports.NgPlural = NgPlural;
+	    exports.NgPluralCase = NgPluralCase;
+	    exports.NgStyle = NgStyle;
+	    exports.NgSwitch = NgSwitch;
+	    exports.NgSwitchCase = NgSwitchCase;
+	    exports.NgSwitchDefault = NgSwitchDefault;
+	    exports.NgTemplateOutlet = NgTemplateOutlet;
+	    exports.AsyncPipe = AsyncPipe;
+	    exports.DatePipe = DatePipe;
+	    exports.I18nPluralPipe = I18nPluralPipe;
+	    exports.I18nSelectPipe = I18nSelectPipe;
+	    exports.JsonPipe = JsonPipe;
+	    exports.LowerCasePipe = LowerCasePipe;
+	    exports.CurrencyPipe = CurrencyPipe;
+	    exports.DecimalPipe = DecimalPipe;
+	    exports.PercentPipe = PercentPipe;
+	    exports.SlicePipe = SlicePipe;
+	    exports.UpperCasePipe = UpperCasePipe;
+	    exports.VERSION = VERSION;
+	    exports.Version = _angular_core.Version;
+	    exports.PlatformLocation = PlatformLocation;
+	    exports.LocationStrategy = LocationStrategy;
+	    exports.APP_BASE_HREF = APP_BASE_HREF;
+	    exports.HashLocationStrategy = HashLocationStrategy;
+	    exports.PathLocationStrategy = PathLocationStrategy;
+	    exports.Location = Location;
+
+	}));
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
 /* 23 */,
-/* 24 */,
-/* 25 */,
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * @license Angular v3.4.1
+	 * (c) 2010-2016 Google, Inc. https://angular.io/
+	 * License: MIT
+	 */(function (global, factory) {
+	   true ? factory(exports, __webpack_require__(22), __webpack_require__(3), __webpack_require__(25), __webpack_require__(4), __webpack_require__(26), __webpack_require__(39), __webpack_require__(40), __webpack_require__(45), __webpack_require__(46), __webpack_require__(48), __webpack_require__(41), __webpack_require__(49), __webpack_require__(5), __webpack_require__(50), __webpack_require__(51), __webpack_require__(47), __webpack_require__(53), __webpack_require__(54), __webpack_require__(52), __webpack_require__(21), __webpack_require__(55)) :
+	  typeof define === 'function' && define.amd ? define(['exports', '@angular/common', '@angular/core', 'rxjs/BehaviorSubject', 'rxjs/Subject', 'rxjs/observable/from', 'rxjs/observable/of', 'rxjs/operator/concatMap', 'rxjs/operator/every', 'rxjs/operator/first', 'rxjs/operator/map', 'rxjs/operator/mergeMap', 'rxjs/operator/reduce', 'rxjs/Observable', 'rxjs/operator/catch', 'rxjs/operator/concatAll', 'rxjs/util/EmptyError', 'rxjs/observable/fromPromise', 'rxjs/operator/last', 'rxjs/operator/mergeAll', '@angular/platform-browser', 'rxjs/operator/filter'], factory) :
+	  (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}),global.ng.common,global.ng.core,global.Rx,global.Rx,global.Rx.Observable,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.Rx,global.Rx.Observable,global.Rx.Observable.prototype,global.Rx.Observable.prototype,global.ng.platformBrowser,global.Rx.Observable.prototype));
+	}(this, function (exports,_angular_common,_angular_core,rxjs_BehaviorSubject,rxjs_Subject,rxjs_observable_from,rxjs_observable_of,rxjs_operator_concatMap,rxjs_operator_every,rxjs_operator_first,rxjs_operator_map,rxjs_operator_mergeMap,rxjs_operator_reduce,rxjs_Observable,rxjs_operator_catch,rxjs_operator_concatAll,rxjs_util_EmptyError,rxjs_observable_fromPromise,l,rxjs_operator_mergeAll,_angular_platformBrowser,rxjs_operator_filter) { 'use strict';
+
+	  /**
+	   * @license
+	   * Copyright Google Inc. All Rights Reserved.
+	   *
+	   * Use of this source code is governed by an MIT-style license that can be
+	   * found in the LICENSE file at https://angular.io/license
+	   */
+	  var __extends = (this && this.__extends) || function (d, b) {
+	      for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	      function __() { this.constructor = d; }
+	      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	  };
+	  /**
+	   * @whatItDoes Name of the primary outlet.
+	   *
+	   * @stable
+	   */
+	  var /** @type {?} */ PRIMARY_OUTLET = 'primary';
+	  var NavigationCancelingError = (function (_super) {
+	      __extends(NavigationCancelingError, _super);
+	      /**
+	       * @param {?} message
+	       */
+	      function NavigationCancelingError(message) {
+	          _super.call(this, message);
+	          this.message = message;
+	          this.stack = (new Error(message)).stack;
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      NavigationCancelingError.prototype.toString = function () { return this.message; };
+	      return NavigationCancelingError;
+	  }(Error));
+	  /**
+	   * @param {?} segments
+	   * @param {?} segmentGroup
+	   * @param {?} route
+	   * @return {?}
+	   */
+	  function defaultUrlMatcher(segments, segmentGroup, route) {
+	      var /** @type {?} */ path = route.path;
+	      var /** @type {?} */ parts = path.split('/');
+	      var /** @type {?} */ posParams = {};
+	      var /** @type {?} */ consumed = [];
+	      var /** @type {?} */ currentIndex = 0;
+	      for (var /** @type {?} */ i = 0; i < parts.length; ++i) {
+	          if (currentIndex >= segments.length)
+	              return null;
+	          var /** @type {?} */ current = segments[currentIndex];
+	          var /** @type {?} */ p = parts[i];
+	          var /** @type {?} */ isPosParam = p.startsWith(':');
+	          if (!isPosParam && p !== current.path)
+	              return null;
+	          if (isPosParam) {
+	              posParams[p.substring(1)] = current;
+	          }
+	          consumed.push(current);
+	          currentIndex++;
+	      }
+	      if (route.pathMatch === 'full' &&
+	          (segmentGroup.hasChildren() || currentIndex < segments.length)) {
+	          return null;
+	      }
+	      else {
+	          return { consumed: consumed, posParams: posParams };
+	      }
+	  }
+
+	  /**
+	   * @param {?} a
+	   * @param {?} b
+	   * @return {?}
+	   */
+	  function shallowEqualArrays(a, b) {
+	      if (a.length !== b.length)
+	          return false;
+	      for (var /** @type {?} */ i = 0; i < a.length; ++i) {
+	          if (!shallowEqual(a[i], b[i]))
+	              return false;
+	      }
+	      return true;
+	  }
+	  /**
+	   * @param {?} a
+	   * @param {?} b
+	   * @return {?}
+	   */
+	  function shallowEqual(a, b) {
+	      var /** @type {?} */ k1 = Object.keys(a);
+	      var /** @type {?} */ k2 = Object.keys(b);
+	      if (k1.length != k2.length) {
+	          return false;
+	      }
+	      var /** @type {?} */ key;
+	      for (var /** @type {?} */ i = 0; i < k1.length; i++) {
+	          key = k1[i];
+	          if (a[key] !== b[key]) {
+	              return false;
+	          }
+	      }
+	      return true;
+	  }
+	  /**
+	   * @param {?} a
+	   * @return {?}
+	   */
+	  function flatten(a) {
+	      var /** @type {?} */ target = [];
+	      for (var /** @type {?} */ i = 0; i < a.length; ++i) {
+	          for (var /** @type {?} */ j = 0; j < a[i].length; ++j) {
+	              target.push(a[i][j]);
+	          }
+	      }
+	      return target;
+	  }
+	  /**
+	   * @param {?} a
+	   * @return {?}
+	   */
+	  function last(a) {
+	      return a.length > 0 ? a[a.length - 1] : null;
+	  }
+	  /**
+	   * @param {?} m1
+	   * @param {?} m2
+	   * @return {?}
+	   */
+	  function merge(m1, m2) {
+	      var /** @type {?} */ m = {};
+	      for (var attr in m1) {
+	          if (m1.hasOwnProperty(attr)) {
+	              m[attr] = m1[attr];
+	          }
+	      }
+	      for (var attr in m2) {
+	          if (m2.hasOwnProperty(attr)) {
+	              m[attr] = m2[attr];
+	          }
+	      }
+	      return m;
+	  }
+	  /**
+	   * @param {?} map
+	   * @param {?} callback
+	   * @return {?}
+	   */
+	  function forEach(map, callback) {
+	      for (var prop in map) {
+	          if (map.hasOwnProperty(prop)) {
+	              callback(map[prop], prop);
+	          }
+	      }
+	  }
+	  /**
+	   * @param {?} obj
+	   * @param {?} fn
+	   * @return {?}
+	   */
+	  function waitForMap(obj, fn) {
+	      var /** @type {?} */ waitFor = [];
+	      var /** @type {?} */ res = {};
+	      forEach(obj, function (a, k) {
+	          if (k === PRIMARY_OUTLET) {
+	              waitFor.push(rxjs_operator_map.map.call(fn(k, a), function (_) {
+	                  res[k] = _;
+	                  return _;
+	              }));
+	          }
+	      });
+	      forEach(obj, function (a, k) {
+	          if (k !== PRIMARY_OUTLET) {
+	              waitFor.push(rxjs_operator_map.map.call(fn(k, a), function (_) {
+	                  res[k] = _;
+	                  return _;
+	              }));
+	          }
+	      });
+	      if (waitFor.length > 0) {
+	          var /** @type {?} */ concatted$ = rxjs_operator_concatAll.concatAll.call(rxjs_observable_of.of.apply(void 0, waitFor));
+	          var /** @type {?} */ last$ = l.last.call(concatted$);
+	          return rxjs_operator_map.map.call(last$, function () { return res; });
+	      }
+	      return rxjs_observable_of.of(res);
+	  }
+	  /**
+	   * @param {?} observables
+	   * @return {?}
+	   */
+	  function andObservables(observables) {
+	      var /** @type {?} */ merged$ = rxjs_operator_mergeAll.mergeAll.call(observables);
+	      return rxjs_operator_every.every.call(merged$, function (result) { return result === true; });
+	  }
+	  /**
+	   * @param {?} value
+	   * @return {?}
+	   */
+	  function wrapIntoObservable(value) {
+	      if (value instanceof rxjs_Observable.Observable) {
+	          return value;
+	      }
+	      if (value instanceof Promise) {
+	          return rxjs_observable_fromPromise.fromPromise(value);
+	      }
+	      return rxjs_observable_of.of(value);
+	  }
+
+	  /**
+	   * @experimental
+	   */
+	  var /** @type {?} */ ROUTES = new _angular_core.OpaqueToken('ROUTES');
+	  var LoadedRouterConfig = (function () {
+	      /**
+	       * @param {?} routes
+	       * @param {?} injector
+	       * @param {?} factoryResolver
+	       * @param {?} injectorFactory
+	       */
+	      function LoadedRouterConfig(routes, injector, factoryResolver, injectorFactory) {
+	          this.routes = routes;
+	          this.injector = injector;
+	          this.factoryResolver = factoryResolver;
+	          this.injectorFactory = injectorFactory;
+	      }
+	      return LoadedRouterConfig;
+	  }());
+	  var RouterConfigLoader = (function () {
+	      /**
+	       * @param {?} loader
+	       * @param {?} compiler
+	       */
+	      function RouterConfigLoader(loader, compiler) {
+	          this.loader = loader;
+	          this.compiler = compiler;
+	      }
+	      /**
+	       * @param {?} parentInjector
+	       * @param {?} loadChildren
+	       * @return {?}
+	       */
+	      RouterConfigLoader.prototype.load = function (parentInjector, loadChildren) {
+	          return rxjs_operator_map.map.call(this.loadModuleFactory(loadChildren), function (r) {
+	              var /** @type {?} */ ref = r.create(parentInjector);
+	              var /** @type {?} */ injectorFactory = function (parent) { return r.create(parent).injector; };
+	              return new LoadedRouterConfig(flatten(ref.injector.get(ROUTES)), ref.injector, ref.componentFactoryResolver, injectorFactory);
+	          });
+	      };
+	      /**
+	       * @param {?} loadChildren
+	       * @return {?}
+	       */
+	      RouterConfigLoader.prototype.loadModuleFactory = function (loadChildren) {
+	          var _this = this;
+	          if (typeof loadChildren === 'string') {
+	              return rxjs_observable_fromPromise.fromPromise(this.loader.load(loadChildren));
+	          }
+	          else {
+	              var /** @type {?} */ offlineMode_1 = this.compiler instanceof _angular_core.Compiler;
+	              return rxjs_operator_mergeMap.mergeMap.call(wrapIntoObservable(loadChildren()), function (t) { return offlineMode_1 ? rxjs_observable_of.of(/** @type {?} */ (t)) : rxjs_observable_fromPromise.fromPromise(_this.compiler.compileModuleAsync(t)); });
+	          }
+	      };
+	      return RouterConfigLoader;
+	  }());
+
+	  /**
+	   * @return {?}
+	   */
+	  function createEmptyUrlTree() {
+	      return new UrlTree(new UrlSegmentGroup([], {}), {}, null);
+	  }
+	  /**
+	   * @param {?} container
+	   * @param {?} containee
+	   * @param {?} exact
+	   * @return {?}
+	   */
+	  function containsTree(container, containee, exact) {
+	      if (exact) {
+	          return equalQueryParams(container.queryParams, containee.queryParams) &&
+	              equalSegmentGroups(container.root, containee.root);
+	      }
+	      return containsQueryParams(container.queryParams, containee.queryParams) &&
+	          containsSegmentGroup(container.root, containee.root);
+	  }
+	  /**
+	   * @param {?} container
+	   * @param {?} containee
+	   * @return {?}
+	   */
+	  function equalQueryParams(container, containee) {
+	      return shallowEqual(container, containee);
+	  }
+	  /**
+	   * @param {?} container
+	   * @param {?} containee
+	   * @return {?}
+	   */
+	  function equalSegmentGroups(container, containee) {
+	      if (!equalPath(container.segments, containee.segments))
+	          return false;
+	      if (container.numberOfChildren !== containee.numberOfChildren)
+	          return false;
+	      for (var c in containee.children) {
+	          if (!container.children[c])
+	              return false;
+	          if (!equalSegmentGroups(container.children[c], containee.children[c]))
+	              return false;
+	      }
+	      return true;
+	  }
+	  /**
+	   * @param {?} container
+	   * @param {?} containee
+	   * @return {?}
+	   */
+	  function containsQueryParams(container, containee) {
+	      return Object.keys(containee) <= Object.keys(container) &&
+	          Object.keys(containee).every(function (key) { return containee[key] === container[key]; });
+	  }
+	  /**
+	   * @param {?} container
+	   * @param {?} containee
+	   * @return {?}
+	   */
+	  function containsSegmentGroup(container, containee) {
+	      return containsSegmentGroupHelper(container, containee, containee.segments);
+	  }
+	  /**
+	   * @param {?} container
+	   * @param {?} containee
+	   * @param {?} containeePaths
+	   * @return {?}
+	   */
+	  function containsSegmentGroupHelper(container, containee, containeePaths) {
+	      if (container.segments.length > containeePaths.length) {
+	          var /** @type {?} */ current = container.segments.slice(0, containeePaths.length);
+	          if (!equalPath(current, containeePaths))
+	              return false;
+	          if (containee.hasChildren())
+	              return false;
+	          return true;
+	      }
+	      else if (container.segments.length === containeePaths.length) {
+	          if (!equalPath(container.segments, containeePaths))
+	              return false;
+	          for (var c in containee.children) {
+	              if (!container.children[c])
+	                  return false;
+	              if (!containsSegmentGroup(container.children[c], containee.children[c]))
+	                  return false;
+	          }
+	          return true;
+	      }
+	      else {
+	          var /** @type {?} */ current = containeePaths.slice(0, container.segments.length);
+	          var /** @type {?} */ next = containeePaths.slice(container.segments.length);
+	          if (!equalPath(container.segments, current))
+	              return false;
+	          if (!container.children[PRIMARY_OUTLET])
+	              return false;
+	          return containsSegmentGroupHelper(container.children[PRIMARY_OUTLET], containee, next);
+	      }
+	  }
+	  /**
+	   *  *
+	    * *
+	    * ```
+	    * class MyComponent {
+	    * constructor(router: Router) {
+	    * const tree: UrlTree =
+	    * router.parseUrl('/team/33/(user/victor//support:help)?debug=true#fragment');
+	    * const f = tree.fragment; // return 'fragment'
+	    * const q = tree.queryParams; // returns {debug: 'true'}
+	    * const g: UrlSegmentGroup = tree.root.children[PRIMARY_OUTLET];
+	    * const s: UrlSegment[] = g.segments; // returns 2 segments 'team' and '33'
+	    * g.children[PRIMARY_OUTLET].segments; // returns 2 segments 'user' and 'victor'
+	    * g.children['support'].segments; // return 1 segment 'help'
+	    * }
+	    * }
+	    * ```
+	    * *
+	    * *
+	    * Since a router state is a tree, and the URL is nothing but a serialized state, the URL is a
+	    * serialized tree.
+	    * UrlTree is a data structure that provides a lot of affordances in dealing with URLs
+	    * *
+	   */
+	  var UrlTree = (function () {
+	      /**
+	       * @param {?} root
+	       * @param {?} queryParams
+	       * @param {?} fragment
+	       */
+	      function UrlTree(root, queryParams, fragment) {
+	          this.root = root;
+	          this.queryParams = queryParams;
+	          this.fragment = fragment;
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      UrlTree.prototype.toString = function () { return new DefaultUrlSerializer().serialize(this); };
+	      return UrlTree;
+	  }());
+	  /**
+	   *  *
+	    * See {@link UrlTree} for more information.
+	    * *
+	   */
+	  var UrlSegmentGroup = (function () {
+	      /**
+	       * @param {?} segments
+	       * @param {?} children
+	       */
+	      function UrlSegmentGroup(segments, children) {
+	          var _this = this;
+	          this.segments = segments;
+	          this.children = children;
+	          /** The parent node in the url tree */
+	          this.parent = null;
+	          forEach(children, function (v, k) { return v.parent = _this; });
+	      }
+	      /**
+	       *  Wether the segment has child segments
+	       * @return {?}
+	       */
+	      UrlSegmentGroup.prototype.hasChildren = function () { return this.numberOfChildren > 0; };
+	      Object.defineProperty(UrlSegmentGroup.prototype, "numberOfChildren", {
+	          /**
+	           *  Number of child segments
+	           * @return {?}
+	           */
+	          get: function () { return Object.keys(this.children).length; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      /**
+	       * @return {?}
+	       */
+	      UrlSegmentGroup.prototype.toString = function () { return serializePaths(this); };
+	      return UrlSegmentGroup;
+	  }());
+	  /**
+	   *  *
+	    * *
+	    * ```
+	    * class MyComponent {
+	    * constructor(router: Router) {
+	    * const tree: UrlTree = router.parseUrl('/team;id=33');
+	    * const g: UrlSegmentGroup = tree.root.children[PRIMARY_OUTLET];
+	    * const s: UrlSegment[] = g.segments;
+	    * s[0].path; // returns 'team'
+	    * s[0].parameters; // returns {id: 33}
+	    * }
+	    * }
+	    * ```
+	    * *
+	    * *
+	    * A UrlSegment is a part of a URL between the two slashes. It contains a path and the matrix
+	    * parameters associated with the segment.
+	    * *
+	   */
+	  var UrlSegment = (function () {
+	      /**
+	       * @param {?} path
+	       * @param {?} parameters
+	       */
+	      function UrlSegment(path, parameters) {
+	          this.path = path;
+	          this.parameters = parameters;
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      UrlSegment.prototype.toString = function () { return serializePath(this); };
+	      return UrlSegment;
+	  }());
+	  /**
+	   * @param {?} a
+	   * @param {?} b
+	   * @return {?}
+	   */
+	  function equalSegments(a, b) {
+	      if (a.length !== b.length)
+	          return false;
+	      for (var /** @type {?} */ i = 0; i < a.length; ++i) {
+	          if (a[i].path !== b[i].path)
+	              return false;
+	          if (!shallowEqual(a[i].parameters, b[i].parameters))
+	              return false;
+	      }
+	      return true;
+	  }
+	  /**
+	   * @param {?} a
+	   * @param {?} b
+	   * @return {?}
+	   */
+	  function equalPath(a, b) {
+	      if (a.length !== b.length)
+	          return false;
+	      for (var /** @type {?} */ i = 0; i < a.length; ++i) {
+	          if (a[i].path !== b[i].path)
+	              return false;
+	      }
+	      return true;
+	  }
+	  /**
+	   * @param {?} segment
+	   * @param {?} fn
+	   * @return {?}
+	   */
+	  function mapChildrenIntoArray(segment, fn) {
+	      var /** @type {?} */ res = [];
+	      forEach(segment.children, function (child, childOutlet) {
+	          if (childOutlet === PRIMARY_OUTLET) {
+	              res = res.concat(fn(child, childOutlet));
+	          }
+	      });
+	      forEach(segment.children, function (child, childOutlet) {
+	          if (childOutlet !== PRIMARY_OUTLET) {
+	              res = res.concat(fn(child, childOutlet));
+	          }
+	      });
+	      return res;
+	  }
+	  /**
+	   *  *
+	    * make all URLs case insensitive by providing a custom UrlSerializer.
+	    * *
+	    * See {@link DefaultUrlSerializer} for an example of a URL serializer.
+	    * *
+	   * @abstract
+	   */
+	  var UrlSerializer = (function () {
+	      function UrlSerializer() {
+	      }
+	      /**
+	       *  Parse a url into a {@link UrlTree}
+	       * @abstract
+	       * @param {?} url
+	       * @return {?}
+	       */
+	      UrlSerializer.prototype.parse = function (url) { };
+	      /**
+	       *  Converts a {@link UrlTree} into a url
+	       * @abstract
+	       * @param {?} tree
+	       * @return {?}
+	       */
+	      UrlSerializer.prototype.serialize = function (tree) { };
+	      return UrlSerializer;
+	  }());
+	  /**
+	   *  *
+	    * *
+	    * Example URLs:
+	    * *
+	    * ```
+	    * /inbox/33(popup:compose)
+	    * /inbox/33;open=true/messages/44
+	    * ```
+	    * *
+	    * DefaultUrlSerializer uses parentheses to serialize secondary segments (e.g., popup:compose), the
+	    * colon syntax to specify the outlet, and the ';parameter=value' syntax (e.g., open=true) to
+	    * specify route specific parameters.
+	    * *
+	   */
+	  var DefaultUrlSerializer = (function () {
+	      function DefaultUrlSerializer() {
+	      }
+	      /**
+	       *  Parses a url into a {@link UrlTree}
+	       * @param {?} url
+	       * @return {?}
+	       */
+	      DefaultUrlSerializer.prototype.parse = function (url) {
+	          var /** @type {?} */ p = new UrlParser(url);
+	          return new UrlTree(p.parseRootSegment(), p.parseQueryParams(), p.parseFragment());
+	      };
+	      /**
+	       *  Converts a {@link UrlTree} into a url
+	       * @param {?} tree
+	       * @return {?}
+	       */
+	      DefaultUrlSerializer.prototype.serialize = function (tree) {
+	          var /** @type {?} */ segment = "/" + serializeSegment(tree.root, true);
+	          var /** @type {?} */ query = serializeQueryParams(tree.queryParams);
+	          var /** @type {?} */ fragment = tree.fragment !== null && tree.fragment !== undefined ? "#" + encodeURI(tree.fragment) : '';
+	          return "" + segment + query + fragment;
+	      };
+	      return DefaultUrlSerializer;
+	  }());
+	  /**
+	   * @param {?} segment
+	   * @return {?}
+	   */
+	  function serializePaths(segment) {
+	      return segment.segments.map(function (p) { return serializePath(p); }).join('/');
+	  }
+	  /**
+	   * @param {?} segment
+	   * @param {?} root
+	   * @return {?}
+	   */
+	  function serializeSegment(segment, root) {
+	      if (segment.hasChildren() && root) {
+	          var /** @type {?} */ primary = segment.children[PRIMARY_OUTLET] ?
+	              serializeSegment(segment.children[PRIMARY_OUTLET], false) :
+	              '';
+	          var /** @type {?} */ children_1 = [];
+	          forEach(segment.children, function (v, k) {
+	              if (k !== PRIMARY_OUTLET) {
+	                  children_1.push(k + ":" + serializeSegment(v, false));
+	              }
+	          });
+	          if (children_1.length > 0) {
+	              return primary + "(" + children_1.join('//') + ")";
+	          }
+	          else {
+	              return "" + primary;
+	          }
+	      }
+	      else if (segment.hasChildren() && !root) {
+	          var /** @type {?} */ children = mapChildrenIntoArray(segment, function (v, k) {
+	              if (k === PRIMARY_OUTLET) {
+	                  return [serializeSegment(segment.children[PRIMARY_OUTLET], false)];
+	              }
+	              else {
+	                  return [(k + ":" + serializeSegment(v, false))];
+	              }
+	          });
+	          return serializePaths(segment) + "/(" + children.join('//') + ")";
+	      }
+	      else {
+	          return serializePaths(segment);
+	      }
+	  }
+	  /**
+	   * @param {?} s
+	   * @return {?}
+	   */
+	  function encode(s) {
+	      return encodeURIComponent(s);
+	  }
+	  /**
+	   * @param {?} s
+	   * @return {?}
+	   */
+	  function decode(s) {
+	      return decodeURIComponent(s);
+	  }
+	  /**
+	   * @param {?} path
+	   * @return {?}
+	   */
+	  function serializePath(path) {
+	      return "" + encode(path.path) + serializeParams(path.parameters);
+	  }
+	  /**
+	   * @param {?} params
+	   * @return {?}
+	   */
+	  function serializeParams(params) {
+	      return pairs(params).map(function (p) { return (";" + encode(p.first) + "=" + encode(p.second)); }).join('');
+	  }
+	  /**
+	   * @param {?} params
+	   * @return {?}
+	   */
+	  function serializeQueryParams(params) {
+	      var /** @type {?} */ strParams = Object.keys(params).map(function (name) {
+	          var /** @type {?} */ value = params[name];
+	          return Array.isArray(value) ? value.map(function (v) { return (encode(name) + "=" + encode(v)); }).join('&') :
+	              encode(name) + "=" + encode(value);
+	      });
+	      return strParams.length ? "?" + strParams.join("&") : '';
+	  }
+	  var Pair = (function () {
+	      /**
+	       * @param {?} first
+	       * @param {?} second
+	       */
+	      function Pair(first, second) {
+	          this.first = first;
+	          this.second = second;
+	      }
+	      return Pair;
+	  }());
+	  /**
+	   * @param {?} obj
+	   * @return {?}
+	   */
+	  function pairs(obj) {
+	      var /** @type {?} */ res = [];
+	      for (var prop in obj) {
+	          if (obj.hasOwnProperty(prop)) {
+	              res.push(new Pair(prop, obj[prop]));
+	          }
+	      }
+	      return res;
+	  }
+	  var /** @type {?} */ SEGMENT_RE = /^[^\/()?;=&#]+/;
+	  /**
+	   * @param {?} str
+	   * @return {?}
+	   */
+	  function matchSegments(str) {
+	      SEGMENT_RE.lastIndex = 0;
+	      var /** @type {?} */ match = str.match(SEGMENT_RE);
+	      return match ? match[0] : '';
+	  }
+	  var /** @type {?} */ QUERY_PARAM_RE = /^[^=?&#]+/;
+	  /**
+	   * @param {?} str
+	   * @return {?}
+	   */
+	  function matchQueryParams(str) {
+	      QUERY_PARAM_RE.lastIndex = 0;
+	      var /** @type {?} */ match = str.match(SEGMENT_RE);
+	      return match ? match[0] : '';
+	  }
+	  var /** @type {?} */ QUERY_PARAM_VALUE_RE = /^[^?&#]+/;
+	  /**
+	   * @param {?} str
+	   * @return {?}
+	   */
+	  function matchUrlQueryParamValue(str) {
+	      QUERY_PARAM_VALUE_RE.lastIndex = 0;
+	      var /** @type {?} */ match = str.match(QUERY_PARAM_VALUE_RE);
+	      return match ? match[0] : '';
+	  }
+	  var UrlParser = (function () {
+	      /**
+	       * @param {?} url
+	       */
+	      function UrlParser(url) {
+	          this.url = url;
+	          this.remaining = url;
+	      }
+	      /**
+	       * @param {?} str
+	       * @return {?}
+	       */
+	      UrlParser.prototype.peekStartsWith = function (str) { return this.remaining.startsWith(str); };
+	      /**
+	       * @param {?} str
+	       * @return {?}
+	       */
+	      UrlParser.prototype.capture = function (str) {
+	          if (!this.remaining.startsWith(str)) {
+	              throw new Error("Expected \"" + str + "\".");
+	          }
+	          this.remaining = this.remaining.substring(str.length);
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      UrlParser.prototype.parseRootSegment = function () {
+	          if (this.remaining.startsWith('/')) {
+	              this.capture('/');
+	          }
+	          if (this.remaining === '' || this.remaining.startsWith('?') || this.remaining.startsWith('#')) {
+	              return new UrlSegmentGroup([], {});
+	          }
+	          return new UrlSegmentGroup([], this.parseChildren());
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      UrlParser.prototype.parseChildren = function () {
+	          if (this.remaining.length == 0) {
+	              return {};
+	          }
+	          if (this.peekStartsWith('/')) {
+	              this.capture('/');
+	          }
+	          var /** @type {?} */ paths = [];
+	          if (!this.peekStartsWith('(')) {
+	              paths.push(this.parseSegments());
+	          }
+	          while (this.peekStartsWith('/') && !this.peekStartsWith('//') && !this.peekStartsWith('/(')) {
+	              this.capture('/');
+	              paths.push(this.parseSegments());
+	          }
+	          var /** @type {?} */ children = {};
+	          if (this.peekStartsWith('/(')) {
+	              this.capture('/');
+	              children = this.parseParens(true);
+	          }
+	          var /** @type {?} */ res = {};
+	          if (this.peekStartsWith('(')) {
+	              res = this.parseParens(false);
+	          }
+	          if (paths.length > 0 || Object.keys(children).length > 0) {
+	              res[PRIMARY_OUTLET] = new UrlSegmentGroup(paths, children);
+	          }
+	          return res;
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      UrlParser.prototype.parseSegments = function () {
+	          var /** @type {?} */ path = matchSegments(this.remaining);
+	          if (path === '' && this.peekStartsWith(';')) {
+	              throw new Error("Empty path url segment cannot have parameters: '" + this.remaining + "'.");
+	          }
+	          this.capture(path);
+	          var /** @type {?} */ matrixParams = {};
+	          if (this.peekStartsWith(';')) {
+	              matrixParams = this.parseMatrixParams();
+	          }
+	          return new UrlSegment(decode(path), matrixParams);
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      UrlParser.prototype.parseQueryParams = function () {
+	          var /** @type {?} */ params = {};
+	          if (this.peekStartsWith('?')) {
+	              this.capture('?');
+	              this.parseQueryParam(params);
+	              while (this.remaining.length > 0 && this.peekStartsWith('&')) {
+	                  this.capture('&');
+	                  this.parseQueryParam(params);
+	              }
+	          }
+	          return params;
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      UrlParser.prototype.parseFragment = function () {
+	          if (this.peekStartsWith('#')) {
+	              return decodeURI(this.remaining.substring(1));
+	          }
+	          return null;
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      UrlParser.prototype.parseMatrixParams = function () {
+	          var /** @type {?} */ params = {};
+	          while (this.remaining.length > 0 && this.peekStartsWith(';')) {
+	              this.capture(';');
+	              this.parseParam(params);
+	          }
+	          return params;
+	      };
+	      /**
+	       * @param {?} params
+	       * @return {?}
+	       */
+	      UrlParser.prototype.parseParam = function (params) {
+	          var /** @type {?} */ key = matchSegments(this.remaining);
+	          if (!key) {
+	              return;
+	          }
+	          this.capture(key);
+	          var /** @type {?} */ value = '';
+	          if (this.peekStartsWith('=')) {
+	              this.capture('=');
+	              var /** @type {?} */ valueMatch = matchSegments(this.remaining);
+	              if (valueMatch) {
+	                  value = valueMatch;
+	                  this.capture(value);
+	              }
+	          }
+	          params[decode(key)] = decode(value);
+	      };
+	      /**
+	       * @param {?} params
+	       * @return {?}
+	       */
+	      UrlParser.prototype.parseQueryParam = function (params) {
+	          var /** @type {?} */ key = matchQueryParams(this.remaining);
+	          if (!key) {
+	              return;
+	          }
+	          this.capture(key);
+	          var /** @type {?} */ value = '';
+	          if (this.peekStartsWith('=')) {
+	              this.capture('=');
+	              var /** @type {?} */ valueMatch = matchUrlQueryParamValue(this.remaining);
+	              if (valueMatch) {
+	                  value = valueMatch;
+	                  this.capture(value);
+	              }
+	          }
+	          var /** @type {?} */ decodedKey = decode(key);
+	          var /** @type {?} */ decodedVal = decode(value);
+	          if (params.hasOwnProperty(decodedKey)) {
+	              // Append to existing values
+	              var /** @type {?} */ currentVal = params[decodedKey];
+	              if (!Array.isArray(currentVal)) {
+	                  currentVal = [currentVal];
+	                  params[decodedKey] = currentVal;
+	              }
+	              currentVal.push(decodedVal);
+	          }
+	          else {
+	              // Create a new value
+	              params[decodedKey] = decodedVal;
+	          }
+	      };
+	      /**
+	       * @param {?} allowPrimary
+	       * @return {?}
+	       */
+	      UrlParser.prototype.parseParens = function (allowPrimary) {
+	          var /** @type {?} */ segments = {};
+	          this.capture('(');
+	          while (!this.peekStartsWith(')') && this.remaining.length > 0) {
+	              var /** @type {?} */ path = matchSegments(this.remaining);
+	              var /** @type {?} */ next = this.remaining[path.length];
+	              // if is is not one of these characters, then the segment was unescaped
+	              // or the group was not closed
+	              if (next !== '/' && next !== ')' && next !== ';') {
+	                  throw new Error("Cannot parse url '" + this.url + "'");
+	              }
+	              var /** @type {?} */ outletName = void 0;
+	              if (path.indexOf(':') > -1) {
+	                  outletName = path.substr(0, path.indexOf(':'));
+	                  this.capture(outletName);
+	                  this.capture(':');
+	              }
+	              else if (allowPrimary) {
+	                  outletName = PRIMARY_OUTLET;
+	              }
+	              var /** @type {?} */ children = this.parseChildren();
+	              segments[outletName] = Object.keys(children).length === 1 ? children[PRIMARY_OUTLET] :
+	                  new UrlSegmentGroup([], children);
+	              if (this.peekStartsWith('//')) {
+	                  this.capture('//');
+	              }
+	          }
+	          this.capture(')');
+	          return segments;
+	      };
+	      return UrlParser;
+	  }());
+
+	  var NoMatch = (function () {
+	      /**
+	       * @param {?=} segmentGroup
+	       */
+	      function NoMatch(segmentGroup) {
+	          if (segmentGroup === void 0) { segmentGroup = null; }
+	          this.segmentGroup = segmentGroup;
+	      }
+	      return NoMatch;
+	  }());
+	  var AbsoluteRedirect = (function () {
+	      /**
+	       * @param {?} urlTree
+	       */
+	      function AbsoluteRedirect(urlTree) {
+	          this.urlTree = urlTree;
+	      }
+	      return AbsoluteRedirect;
+	  }());
+	  /**
+	   * @param {?} segmentGroup
+	   * @return {?}
+	   */
+	  function noMatch(segmentGroup) {
+	      return new rxjs_Observable.Observable(function (obs) { return obs.error(new NoMatch(segmentGroup)); });
+	  }
+	  /**
+	   * @param {?} newTree
+	   * @return {?}
+	   */
+	  function absoluteRedirect(newTree) {
+	      return new rxjs_Observable.Observable(function (obs) { return obs.error(new AbsoluteRedirect(newTree)); });
+	  }
+	  /**
+	   * @param {?} redirectTo
+	   * @return {?}
+	   */
+	  function namedOutletsRedirect(redirectTo) {
+	      return new rxjs_Observable.Observable(function (obs) { return obs.error(new Error("Only absolute redirects can have named outlets. redirectTo: '" + redirectTo + "'")); });
+	  }
+	  /**
+	   * @param {?} route
+	   * @return {?}
+	   */
+	  function canLoadFails(route) {
+	      return new rxjs_Observable.Observable(function (obs) { return obs.error(new NavigationCancelingError("Cannot load children because the guard of the route \"path: '" + route.path + "'\" returned false")); });
+	  }
+	  /**
+	   * @param {?} injector
+	   * @param {?} configLoader
+	   * @param {?} urlSerializer
+	   * @param {?} urlTree
+	   * @param {?} config
+	   * @return {?}
+	   */
+	  function applyRedirects(injector, configLoader, urlSerializer, urlTree, config) {
+	      return new ApplyRedirects(injector, configLoader, urlSerializer, urlTree, config).apply();
+	  }
+	  var ApplyRedirects = (function () {
+	      /**
+	       * @param {?} injector
+	       * @param {?} configLoader
+	       * @param {?} urlSerializer
+	       * @param {?} urlTree
+	       * @param {?} config
+	       */
+	      function ApplyRedirects(injector, configLoader, urlSerializer, urlTree, config) {
+	          this.injector = injector;
+	          this.configLoader = configLoader;
+	          this.urlSerializer = urlSerializer;
+	          this.urlTree = urlTree;
+	          this.config = config;
+	          this.allowRedirects = true;
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.apply = function () {
+	          var _this = this;
+	          var /** @type {?} */ expanded$ = this.expandSegmentGroup(this.injector, this.config, this.urlTree.root, PRIMARY_OUTLET);
+	          var /** @type {?} */ urlTrees$ = rxjs_operator_map.map.call(expanded$, function (rootSegmentGroup) { return _this.createUrlTree(rootSegmentGroup, _this.urlTree.queryParams, _this.urlTree.fragment); });
+	          return rxjs_operator_catch._catch.call(urlTrees$, function (e) {
+	              if (e instanceof AbsoluteRedirect) {
+	                  // after an absolute redirect we do not apply any more redirects!
+	                  _this.allowRedirects = false;
+	                  // we need to run matching, so we can fetch all lazy-loaded modules
+	                  return _this.match(e.urlTree);
+	              }
+	              else if (e instanceof NoMatch) {
+	                  throw _this.noMatchError(e);
+	              }
+	              else {
+	                  throw e;
+	              }
+	          });
+	      };
+	      /**
+	       * @param {?} tree
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.match = function (tree) {
+	          var _this = this;
+	          var /** @type {?} */ expanded$ = this.expandSegmentGroup(this.injector, this.config, tree.root, PRIMARY_OUTLET);
+	          var /** @type {?} */ mapped$ = rxjs_operator_map.map.call(expanded$, function (rootSegmentGroup) {
+	              return _this.createUrlTree(rootSegmentGroup, tree.queryParams, tree.fragment);
+	          });
+	          return rxjs_operator_catch._catch.call(mapped$, function (e) {
+	              if (e instanceof NoMatch) {
+	                  throw _this.noMatchError(e);
+	              }
+	              else {
+	                  throw e;
+	              }
+	          });
+	      };
+	      /**
+	       * @param {?} e
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.noMatchError = function (e) {
+	          return new Error("Cannot match any routes. URL Segment: '" + e.segmentGroup + "'");
+	      };
+	      /**
+	       * @param {?} rootCandidate
+	       * @param {?} queryParams
+	       * @param {?} fragment
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.createUrlTree = function (rootCandidate, queryParams, fragment) {
+	          var /** @type {?} */ root = rootCandidate.segments.length > 0 ?
+	              new UrlSegmentGroup([], (_a = {}, _a[PRIMARY_OUTLET] = rootCandidate, _a)) :
+	              rootCandidate;
+	          return new UrlTree(root, queryParams, fragment);
+	          var _a;
+	      };
+	      /**
+	       * @param {?} injector
+	       * @param {?} routes
+	       * @param {?} segmentGroup
+	       * @param {?} outlet
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.expandSegmentGroup = function (injector, routes, segmentGroup, outlet) {
+	          if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
+	              return rxjs_operator_map.map.call(this.expandChildren(injector, routes, segmentGroup), function (children) { return new UrlSegmentGroup([], children); });
+	          }
+	          else {
+	              return this.expandSegment(injector, segmentGroup, routes, segmentGroup.segments, outlet, true);
+	          }
+	      };
+	      /**
+	       * @param {?} injector
+	       * @param {?} routes
+	       * @param {?} segmentGroup
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.expandChildren = function (injector, routes, segmentGroup) {
+	          var _this = this;
+	          return waitForMap(segmentGroup.children, function (childOutlet, child) { return _this.expandSegmentGroup(injector, routes, child, childOutlet); });
+	      };
+	      /**
+	       * @param {?} injector
+	       * @param {?} segmentGroup
+	       * @param {?} routes
+	       * @param {?} segments
+	       * @param {?} outlet
+	       * @param {?} allowRedirects
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.expandSegment = function (injector, segmentGroup, routes, segments, outlet, allowRedirects) {
+	          var _this = this;
+	          var /** @type {?} */ routes$ = rxjs_observable_of.of.apply(void 0, routes);
+	          var /** @type {?} */ processedRoutes$ = rxjs_operator_map.map.call(routes$, function (r) {
+	              var /** @type {?} */ expanded$ = _this.expandSegmentAgainstRoute(injector, segmentGroup, routes, r, segments, outlet, allowRedirects);
+	              return rxjs_operator_catch._catch.call(expanded$, function (e) {
+	                  if (e instanceof NoMatch)
+	                      return rxjs_observable_of.of(null);
+	                  else
+	                      throw e;
+	              });
+	          });
+	          var /** @type {?} */ concattedProcessedRoutes$ = rxjs_operator_concatAll.concatAll.call(processedRoutes$);
+	          var /** @type {?} */ first$ = rxjs_operator_first.first.call(concattedProcessedRoutes$, function (s) { return !!s; });
+	          return rxjs_operator_catch._catch.call(first$, function (e, _) {
+	              if (e instanceof rxjs_util_EmptyError.EmptyError) {
+	                  if (_this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
+	                      return rxjs_observable_of.of(new UrlSegmentGroup([], {}));
+	                  }
+	                  else {
+	                      throw new NoMatch(segmentGroup);
+	                  }
+	              }
+	              else {
+	                  throw e;
+	              }
+	          });
+	      };
+	      /**
+	       * @param {?} segmentGroup
+	       * @param {?} segments
+	       * @param {?} outlet
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.noLeftoversInUrl = function (segmentGroup, segments, outlet) {
+	          return segments.length === 0 && !segmentGroup.children[outlet];
+	      };
+	      /**
+	       * @param {?} injector
+	       * @param {?} segmentGroup
+	       * @param {?} routes
+	       * @param {?} route
+	       * @param {?} paths
+	       * @param {?} outlet
+	       * @param {?} allowRedirects
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.expandSegmentAgainstRoute = function (injector, segmentGroup, routes, route, paths, outlet, allowRedirects) {
+	          if (getOutlet$1(route) !== outlet)
+	              return noMatch(segmentGroup);
+	          if (route.redirectTo !== undefined && !(allowRedirects && this.allowRedirects))
+	              return noMatch(segmentGroup);
+	          if (route.redirectTo === undefined) {
+	              return this.matchSegmentAgainstRoute(injector, segmentGroup, route, paths);
+	          }
+	          else {
+	              return this.expandSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, paths, outlet);
+	          }
+	      };
+	      /**
+	       * @param {?} injector
+	       * @param {?} segmentGroup
+	       * @param {?} routes
+	       * @param {?} route
+	       * @param {?} segments
+	       * @param {?} outlet
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.expandSegmentAgainstRouteUsingRedirect = function (injector, segmentGroup, routes, route, segments, outlet) {
+	          if (route.path === '**') {
+	              return this.expandWildCardWithParamsAgainstRouteUsingRedirect(injector, routes, route, outlet);
+	          }
+	          else {
+	              return this.expandRegularSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, segments, outlet);
+	          }
+	      };
+	      /**
+	       * @param {?} injector
+	       * @param {?} routes
+	       * @param {?} route
+	       * @param {?} outlet
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.expandWildCardWithParamsAgainstRouteUsingRedirect = function (injector, routes, route, outlet) {
+	          var _this = this;
+	          var /** @type {?} */ newTree = this.applyRedirectCommands([], route.redirectTo, {});
+	          if (route.redirectTo.startsWith('/')) {
+	              return absoluteRedirect(newTree);
+	          }
+	          else {
+	              return rxjs_operator_mergeMap.mergeMap.call(this.lineralizeSegments(route, newTree), function (newSegments) {
+	                  var /** @type {?} */ group = new UrlSegmentGroup(newSegments, {});
+	                  return _this.expandSegment(injector, group, routes, newSegments, outlet, false);
+	              });
+	          }
+	      };
+	      /**
+	       * @param {?} injector
+	       * @param {?} segmentGroup
+	       * @param {?} routes
+	       * @param {?} route
+	       * @param {?} segments
+	       * @param {?} outlet
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.expandRegularSegmentAgainstRouteUsingRedirect = function (injector, segmentGroup, routes, route, segments, outlet) {
+	          var _this = this;
+	          var _a = match(segmentGroup, route, segments), matched = _a.matched, consumedSegments = _a.consumedSegments, lastChild = _a.lastChild, positionalParamSegments = _a.positionalParamSegments;
+	          if (!matched)
+	              return noMatch(segmentGroup);
+	          var /** @type {?} */ newTree = this.applyRedirectCommands(consumedSegments, route.redirectTo, /** @type {?} */ (positionalParamSegments));
+	          if (route.redirectTo.startsWith('/')) {
+	              return absoluteRedirect(newTree);
+	          }
+	          else {
+	              return rxjs_operator_mergeMap.mergeMap.call(this.lineralizeSegments(route, newTree), function (newSegments) {
+	                  return _this.expandSegment(injector, segmentGroup, routes, newSegments.concat(segments.slice(lastChild)), outlet, false);
+	              });
+	          }
+	      };
+	      /**
+	       * @param {?} injector
+	       * @param {?} rawSegmentGroup
+	       * @param {?} route
+	       * @param {?} segments
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.matchSegmentAgainstRoute = function (injector, rawSegmentGroup, route, segments) {
+	          var _this = this;
+	          if (route.path === '**') {
+	              if (route.loadChildren) {
+	                  return rxjs_operator_map.map.call(this.configLoader.load(injector, route.loadChildren), function (r) {
+	                      ((route))._loadedConfig = r;
+	                      return rxjs_observable_of.of(new UrlSegmentGroup(segments, {}));
+	                  });
+	              }
+	              else {
+	                  return rxjs_observable_of.of(new UrlSegmentGroup(segments, {}));
+	              }
+	          }
+	          else {
+	              var _a = match(rawSegmentGroup, route, segments), matched = _a.matched, consumedSegments_1 = _a.consumedSegments, lastChild = _a.lastChild;
+	              if (!matched)
+	                  return noMatch(rawSegmentGroup);
+	              var /** @type {?} */ rawSlicedSegments_1 = segments.slice(lastChild);
+	              var /** @type {?} */ childConfig$ = this.getChildConfig(injector, route);
+	              return rxjs_operator_mergeMap.mergeMap.call(childConfig$, function (routerConfig) {
+	                  var /** @type {?} */ childInjector = routerConfig.injector;
+	                  var /** @type {?} */ childConfig = routerConfig.routes;
+	                  var _a = split(rawSegmentGroup, consumedSegments_1, rawSlicedSegments_1, childConfig), segmentGroup = _a.segmentGroup, slicedSegments = _a.slicedSegments;
+	                  if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
+	                      var /** @type {?} */ expanded$ = _this.expandChildren(childInjector, childConfig, segmentGroup);
+	                      return rxjs_operator_map.map.call(expanded$, function (children) { return new UrlSegmentGroup(consumedSegments_1, children); });
+	                  }
+	                  else if (childConfig.length === 0 && slicedSegments.length === 0) {
+	                      return rxjs_observable_of.of(new UrlSegmentGroup(consumedSegments_1, {}));
+	                  }
+	                  else {
+	                      var /** @type {?} */ expanded$ = _this.expandSegment(childInjector, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
+	                      return rxjs_operator_map.map.call(expanded$, function (cs) { return new UrlSegmentGroup(consumedSegments_1.concat(cs.segments), cs.children); });
+	                  }
+	              });
+	          }
+	      };
+	      /**
+	       * @param {?} injector
+	       * @param {?} route
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.getChildConfig = function (injector, route) {
+	          var _this = this;
+	          if (route.children) {
+	              return rxjs_observable_of.of(new LoadedRouterConfig(route.children, injector, null, null));
+	          }
+	          else if (route.loadChildren) {
+	              return rxjs_operator_mergeMap.mergeMap.call(runGuards(injector, route), function (shouldLoad) {
+	                  if (shouldLoad) {
+	                      if (((route))._loadedConfig) {
+	                          return rxjs_observable_of.of(((route))._loadedConfig);
+	                      }
+	                      else {
+	                          return rxjs_operator_map.map.call(_this.configLoader.load(injector, route.loadChildren), function (r) {
+	                              ((route))._loadedConfig = r;
+	                              return r;
+	                          });
+	                      }
+	                  }
+	                  else {
+	                      return canLoadFails(route);
+	                  }
+	              });
+	          }
+	          else {
+	              return rxjs_observable_of.of(new LoadedRouterConfig([], injector, null, null));
+	          }
+	      };
+	      /**
+	       * @param {?} route
+	       * @param {?} urlTree
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.lineralizeSegments = function (route, urlTree) {
+	          var /** @type {?} */ res = [];
+	          var /** @type {?} */ c = urlTree.root;
+	          while (true) {
+	              res = res.concat(c.segments);
+	              if (c.numberOfChildren === 0) {
+	                  return rxjs_observable_of.of(res);
+	              }
+	              else if (c.numberOfChildren > 1 || !c.children[PRIMARY_OUTLET]) {
+	                  return namedOutletsRedirect(route.redirectTo);
+	              }
+	              else {
+	                  c = c.children[PRIMARY_OUTLET];
+	              }
+	          }
+	      };
+	      /**
+	       * @param {?} segments
+	       * @param {?} redirectTo
+	       * @param {?} posParams
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.applyRedirectCommands = function (segments, redirectTo, posParams) {
+	          var /** @type {?} */ t = this.urlSerializer.parse(redirectTo);
+	          return this.applyRedirectCreatreUrlTree(redirectTo, this.urlSerializer.parse(redirectTo), segments, posParams);
+	      };
+	      /**
+	       * @param {?} redirectTo
+	       * @param {?} urlTree
+	       * @param {?} segments
+	       * @param {?} posParams
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.applyRedirectCreatreUrlTree = function (redirectTo, urlTree, segments, posParams) {
+	          var /** @type {?} */ newRoot = this.createSegmentGroup(redirectTo, urlTree.root, segments, posParams);
+	          return new UrlTree(newRoot, this.createQueryParams(urlTree.queryParams, this.urlTree.queryParams), urlTree.fragment);
+	      };
+	      /**
+	       * @param {?} redirectToParams
+	       * @param {?} actualParams
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.createQueryParams = function (redirectToParams, actualParams) {
+	          var /** @type {?} */ res = {};
+	          forEach(redirectToParams, function (v, k) {
+	              if (v.startsWith(':')) {
+	                  res[k] = actualParams[v.substring(1)];
+	              }
+	              else {
+	                  res[k] = v;
+	              }
+	          });
+	          return res;
+	      };
+	      /**
+	       * @param {?} redirectTo
+	       * @param {?} group
+	       * @param {?} segments
+	       * @param {?} posParams
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.createSegmentGroup = function (redirectTo, group, segments, posParams) {
+	          var _this = this;
+	          var /** @type {?} */ updatedSegments = this.createSegments(redirectTo, group.segments, segments, posParams);
+	          var /** @type {?} */ children = {};
+	          forEach(group.children, function (child, name) {
+	              children[name] = _this.createSegmentGroup(redirectTo, child, segments, posParams);
+	          });
+	          return new UrlSegmentGroup(updatedSegments, children);
+	      };
+	      /**
+	       * @param {?} redirectTo
+	       * @param {?} redirectToSegments
+	       * @param {?} actualSegments
+	       * @param {?} posParams
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.createSegments = function (redirectTo, redirectToSegments, actualSegments, posParams) {
+	          var _this = this;
+	          return redirectToSegments.map(function (s) { return s.path.startsWith(':') ? _this.findPosParam(redirectTo, s, posParams) :
+	              _this.findOrReturn(s, actualSegments); });
+	      };
+	      /**
+	       * @param {?} redirectTo
+	       * @param {?} redirectToUrlSegment
+	       * @param {?} posParams
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.findPosParam = function (redirectTo, redirectToUrlSegment, posParams) {
+	          var /** @type {?} */ pos = posParams[redirectToUrlSegment.path.substring(1)];
+	          if (!pos)
+	              throw new Error("Cannot redirect to '" + redirectTo + "'. Cannot find '" + redirectToUrlSegment.path + "'.");
+	          return pos;
+	      };
+	      /**
+	       * @param {?} redirectToUrlSegment
+	       * @param {?} actualSegments
+	       * @return {?}
+	       */
+	      ApplyRedirects.prototype.findOrReturn = function (redirectToUrlSegment, actualSegments) {
+	          var /** @type {?} */ idx = 0;
+	          for (var _i = 0, actualSegments_1 = actualSegments; _i < actualSegments_1.length; _i++) {
+	              var s = actualSegments_1[_i];
+	              if (s.path === redirectToUrlSegment.path) {
+	                  actualSegments.splice(idx);
+	                  return s;
+	              }
+	              idx++;
+	          }
+	          return redirectToUrlSegment;
+	      };
+	      return ApplyRedirects;
+	  }());
+	  /**
+	   * @param {?} injector
+	   * @param {?} route
+	   * @return {?}
+	   */
+	  function runGuards(injector, route) {
+	      var /** @type {?} */ canLoad = route.canLoad;
+	      if (!canLoad || canLoad.length === 0)
+	          return rxjs_observable_of.of(true);
+	      var /** @type {?} */ obs = rxjs_operator_map.map.call(rxjs_observable_from.from(canLoad), function (c) {
+	          var /** @type {?} */ guard = injector.get(c);
+	          if (guard.canLoad) {
+	              return wrapIntoObservable(guard.canLoad(route));
+	          }
+	          else {
+	              return wrapIntoObservable(guard(route));
+	          }
+	      });
+	      return andObservables(obs);
+	  }
+	  /**
+	   * @param {?} segmentGroup
+	   * @param {?} route
+	   * @param {?} segments
+	   * @return {?}
+	   */
+	  function match(segmentGroup, route, segments) {
+	      var /** @type {?} */ noMatch = { matched: false, consumedSegments: /** @type {?} */ ([]), lastChild: 0, positionalParamSegments: {} };
+	      if (route.path === '') {
+	          if ((route.pathMatch === 'full') && (segmentGroup.hasChildren() || segments.length > 0)) {
+	              return { matched: false, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
+	          }
+	          else {
+	              return { matched: true, consumedSegments: [], lastChild: 0, positionalParamSegments: {} };
+	          }
+	      }
+	      var /** @type {?} */ matcher = route.matcher || defaultUrlMatcher;
+	      var /** @type {?} */ res = matcher(segments, segmentGroup, route);
+	      if (!res)
+	          return noMatch;
+	      return {
+	          matched: true,
+	          consumedSegments: res.consumed,
+	          lastChild: res.consumed.length,
+	          positionalParamSegments: res.posParams
+	      };
+	  }
+	  /**
+	   * @param {?} segmentGroup
+	   * @param {?} consumedSegments
+	   * @param {?} slicedSegments
+	   * @param {?} config
+	   * @return {?}
+	   */
+	  function split(segmentGroup, consumedSegments, slicedSegments, config) {
+	      if (slicedSegments.length > 0 &&
+	          containsEmptyPathRedirectsWithNamedOutlets(segmentGroup, slicedSegments, config)) {
+	          var /** @type {?} */ s = new UrlSegmentGroup(consumedSegments, createChildrenForEmptySegments(config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
+	          return { segmentGroup: mergeTrivialChildren(s), slicedSegments: [] };
+	      }
+	      else if (slicedSegments.length === 0 &&
+	          containsEmptyPathRedirects(segmentGroup, slicedSegments, config)) {
+	          var /** @type {?} */ s = new UrlSegmentGroup(segmentGroup.segments, addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
+	          return { segmentGroup: mergeTrivialChildren(s), slicedSegments: slicedSegments };
+	      }
+	      else {
+	          return { segmentGroup: segmentGroup, slicedSegments: slicedSegments };
+	      }
+	  }
+	  /**
+	   * @param {?} s
+	   * @return {?}
+	   */
+	  function mergeTrivialChildren(s) {
+	      if (s.numberOfChildren === 1 && s.children[PRIMARY_OUTLET]) {
+	          var /** @type {?} */ c = s.children[PRIMARY_OUTLET];
+	          return new UrlSegmentGroup(s.segments.concat(c.segments), c.children);
+	      }
+	      else {
+	          return s;
+	      }
+	  }
+	  /**
+	   * @param {?} segmentGroup
+	   * @param {?} slicedSegments
+	   * @param {?} routes
+	   * @param {?} children
+	   * @return {?}
+	   */
+	  function addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
+	      var /** @type {?} */ res = {};
+	      for (var _i = 0, routes_1 = routes; _i < routes_1.length; _i++) {
+	          var r = routes_1[_i];
+	          if (emptyPathRedirect(segmentGroup, slicedSegments, r) && !children[getOutlet$1(r)]) {
+	              res[getOutlet$1(r)] = new UrlSegmentGroup([], {});
+	          }
+	      }
+	      return merge(children, res);
+	  }
+	  /**
+	   * @param {?} routes
+	   * @param {?} primarySegmentGroup
+	   * @return {?}
+	   */
+	  function createChildrenForEmptySegments(routes, primarySegmentGroup) {
+	      var /** @type {?} */ res = {};
+	      res[PRIMARY_OUTLET] = primarySegmentGroup;
+	      for (var _i = 0, routes_2 = routes; _i < routes_2.length; _i++) {
+	          var r = routes_2[_i];
+	          if (r.path === '' && getOutlet$1(r) !== PRIMARY_OUTLET) {
+	              res[getOutlet$1(r)] = new UrlSegmentGroup([], {});
+	          }
+	      }
+	      return res;
+	  }
+	  /**
+	   * @param {?} segmentGroup
+	   * @param {?} slicedSegments
+	   * @param {?} routes
+	   * @return {?}
+	   */
+	  function containsEmptyPathRedirectsWithNamedOutlets(segmentGroup, slicedSegments, routes) {
+	      return routes
+	          .filter(function (r) { return emptyPathRedirect(segmentGroup, slicedSegments, r) &&
+	          getOutlet$1(r) !== PRIMARY_OUTLET; })
+	          .length > 0;
+	  }
+	  /**
+	   * @param {?} segmentGroup
+	   * @param {?} slicedSegments
+	   * @param {?} routes
+	   * @return {?}
+	   */
+	  function containsEmptyPathRedirects(segmentGroup, slicedSegments, routes) {
+	      return routes.filter(function (r) { return emptyPathRedirect(segmentGroup, slicedSegments, r); }).length > 0;
+	  }
+	  /**
+	   * @param {?} segmentGroup
+	   * @param {?} slicedSegments
+	   * @param {?} r
+	   * @return {?}
+	   */
+	  function emptyPathRedirect(segmentGroup, slicedSegments, r) {
+	      if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full')
+	          return false;
+	      return r.path === '' && r.redirectTo !== undefined;
+	  }
+	  /**
+	   * @param {?} route
+	   * @return {?}
+	   */
+	  function getOutlet$1(route) {
+	      return route.outlet ? route.outlet : PRIMARY_OUTLET;
+	  }
+
+	  /**
+	   * @param {?} config
+	   * @param {?=} parentPath
+	   * @return {?}
+	   */
+	  function validateConfig(config, parentPath) {
+	      if (parentPath === void 0) { parentPath = ''; }
+	      // forEach doesn't iterate undefined values
+	      for (var /** @type {?} */ i = 0; i < config.length; i++) {
+	          var /** @type {?} */ route = config[i];
+	          var /** @type {?} */ fullPath = getFullPath(parentPath, route);
+	          validateNode(route, fullPath);
+	      }
+	  }
+	  /**
+	   * @param {?} route
+	   * @param {?} fullPath
+	   * @return {?}
+	   */
+	  function validateNode(route, fullPath) {
+	      if (!route) {
+	          throw new Error("\n      Invalid configuration of route '" + fullPath + "': Encountered undefined route.\n      The reason might be an extra comma.\n       \n      Example: \n      const routes: Routes = [\n        { path: '', redirectTo: '/dashboard', pathMatch: 'full' },\n        { path: 'dashboard',  component: DashboardComponent },, << two commas\n        { path: 'detail/:id', component: HeroDetailComponent }\n      ];\n    ");
+	      }
+	      if (Array.isArray(route)) {
+	          throw new Error("Invalid configuration of route '" + fullPath + "': Array cannot be specified");
+	      }
+	      if (!route.component && (route.outlet && route.outlet !== PRIMARY_OUTLET)) {
+	          throw new Error("Invalid configuration of route '" + fullPath + "': a componentless route cannot have a named outlet set");
+	      }
+	      if (route.redirectTo && route.children) {
+	          throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and children cannot be used together");
+	      }
+	      if (route.redirectTo && route.loadChildren) {
+	          throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and loadChildren cannot be used together");
+	      }
+	      if (route.children && route.loadChildren) {
+	          throw new Error("Invalid configuration of route '" + fullPath + "': children and loadChildren cannot be used together");
+	      }
+	      if (route.redirectTo && route.component) {
+	          throw new Error("Invalid configuration of route '" + fullPath + "': redirectTo and component cannot be used together");
+	      }
+	      if (route.path && route.matcher) {
+	          throw new Error("Invalid configuration of route '" + fullPath + "': path and matcher cannot be used together");
+	      }
+	      if (route.redirectTo === void 0 && !route.component && !route.children && !route.loadChildren) {
+	          throw new Error("Invalid configuration of route '" + fullPath + "'. One of the following must be provided: component, redirectTo, children or loadChildren");
+	      }
+	      if (route.path === void 0 && route.matcher === void 0) {
+	          throw new Error("Invalid configuration of route '" + fullPath + "': routes must have either a path or a matcher specified");
+	      }
+	      if (typeof route.path === 'string' && route.path.charAt(0) === '/') {
+	          throw new Error("Invalid configuration of route '" + fullPath + "': path cannot start with a slash");
+	      }
+	      if (route.path === '' && route.redirectTo !== void 0 && route.pathMatch === void 0) {
+	          var /** @type {?} */ exp = "The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.";
+	          throw new Error("Invalid configuration of route '{path: \"" + fullPath + "\", redirectTo: \"" + route.redirectTo + "\"}': please provide 'pathMatch'. " + exp);
+	      }
+	      if (route.pathMatch !== void 0 && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
+	          throw new Error("Invalid configuration of route '" + fullPath + "': pathMatch can only be set to 'prefix' or 'full'");
+	      }
+	      if (route.children) {
+	          validateConfig(route.children, fullPath);
+	      }
+	  }
+	  /**
+	   * @param {?} parentPath
+	   * @param {?} currentRoute
+	   * @return {?}
+	   */
+	  function getFullPath(parentPath, currentRoute) {
+	      if (!currentRoute) {
+	          return parentPath;
+	      }
+	      if (!parentPath && !currentRoute.path) {
+	          return '';
+	      }
+	      else if (parentPath && !currentRoute.path) {
+	          return parentPath + "/";
+	      }
+	      else if (!parentPath && currentRoute.path) {
+	          return currentRoute.path;
+	      }
+	      else {
+	          return parentPath + "/" + currentRoute.path;
+	      }
+	  }
+
+	  /**
+	   * @license undefined
+	    * Copyright Google Inc. All Rights Reserved.
+	    * *
+	    * Use of this source code is governed by an MIT-style license that can be
+	    * found in the LICENSE file at https://angular.io/license
+	   */
+	  var Tree = (function () {
+	      /**
+	       * @param {?} root
+	       */
+	      function Tree(root) {
+	          this._root = root;
+	      }
+	      Object.defineProperty(Tree.prototype, "root", {
+	          /**
+	           * @return {?}
+	           */
+	          get: function () { return this._root.value; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      /**
+	       * @param {?} t
+	       * @return {?}
+	       */
+	      Tree.prototype.parent = function (t) {
+	          var /** @type {?} */ p = this.pathFromRoot(t);
+	          return p.length > 1 ? p[p.length - 2] : null;
+	      };
+	      /**
+	       * @param {?} t
+	       * @return {?}
+	       */
+	      Tree.prototype.children = function (t) {
+	          var /** @type {?} */ n = findNode(t, this._root);
+	          return n ? n.children.map(function (t) { return t.value; }) : [];
+	      };
+	      /**
+	       * @param {?} t
+	       * @return {?}
+	       */
+	      Tree.prototype.firstChild = function (t) {
+	          var /** @type {?} */ n = findNode(t, this._root);
+	          return n && n.children.length > 0 ? n.children[0].value : null;
+	      };
+	      /**
+	       * @param {?} t
+	       * @return {?}
+	       */
+	      Tree.prototype.siblings = function (t) {
+	          var /** @type {?} */ p = findPath(t, this._root, []);
+	          if (p.length < 2)
+	              return [];
+	          var /** @type {?} */ c = p[p.length - 2].children.map(function (c) { return c.value; });
+	          return c.filter(function (cc) { return cc !== t; });
+	      };
+	      /**
+	       * @param {?} t
+	       * @return {?}
+	       */
+	      Tree.prototype.pathFromRoot = function (t) { return findPath(t, this._root, []).map(function (s) { return s.value; }); };
+	      return Tree;
+	  }());
+	  /**
+	   * @param {?} expected
+	   * @param {?} c
+	   * @return {?}
+	   */
+	  function findNode(expected, c) {
+	      if (expected === c.value)
+	          return c;
+	      for (var _i = 0, _a = c.children; _i < _a.length; _i++) {
+	          var cc = _a[_i];
+	          var /** @type {?} */ r = findNode(expected, cc);
+	          if (r)
+	              return r;
+	      }
+	      return null;
+	  }
+	  /**
+	   * @param {?} expected
+	   * @param {?} c
+	   * @param {?} collected
+	   * @return {?}
+	   */
+	  function findPath(expected, c, collected) {
+	      collected.push(c);
+	      if (expected === c.value)
+	          return collected;
+	      for (var _i = 0, _a = c.children; _i < _a.length; _i++) {
+	          var cc = _a[_i];
+	          var /** @type {?} */ cloned = collected.slice(0);
+	          var /** @type {?} */ r = findPath(expected, cc, cloned);
+	          if (r.length > 0)
+	              return r;
+	      }
+	      return [];
+	  }
+	  var TreeNode = (function () {
+	      /**
+	       * @param {?} value
+	       * @param {?} children
+	       */
+	      function TreeNode(value, children) {
+	          this.value = value;
+	          this.children = children;
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      TreeNode.prototype.toString = function () { return "TreeNode(" + this.value + ")"; };
+	      return TreeNode;
+	  }());
+
+	  /**
+	   * @license
+	   * Copyright Google Inc. All Rights Reserved.
+	   *
+	   * Use of this source code is governed by an MIT-style license that can be
+	   * found in the LICENSE file at https://angular.io/license
+	   */
+	  var __extends$1 = (this && this.__extends) || function (d, b) {
+	      for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	      function __() { this.constructor = d; }
+	      d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	  };
+	  /**
+	   *  *
+	    * *
+	    * ```
+	    * class MyComponent {
+	    * constructor(router: Router) {
+	    * const state: RouterState = router.routerState;
+	    * const root: ActivatedRoute = state.root;
+	    * const child = root.firstChild;
+	    * const id: Observable<string> = child.params.map(p => p.id);
+	    * //...
+	    * }
+	    * }
+	    * ```
+	    * *
+	    * RouterState is a tree of activated routes. Every node in this tree knows about the "consumed" URL
+	    * segments,
+	    * the extracted parameters, and the resolved data.
+	    * *
+	    * See {@link ActivatedRoute} for more information.
+	    * *
+	   */
+	  var RouterState = (function (_super) {
+	      __extends$1(RouterState, _super);
+	      /**
+	       * @param {?} root
+	       * @param {?} snapshot
+	       */
+	      function RouterState(root, snapshot) {
+	          _super.call(this, root);
+	          this.snapshot = snapshot;
+	          setRouterStateSnapshot(this, root);
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      RouterState.prototype.toString = function () { return this.snapshot.toString(); };
+	      return RouterState;
+	  }(Tree));
+	  /**
+	   * @param {?} urlTree
+	   * @param {?} rootComponent
+	   * @return {?}
+	   */
+	  function createEmptyState(urlTree, rootComponent) {
+	      var /** @type {?} */ snapshot = createEmptyStateSnapshot(urlTree, rootComponent);
+	      var /** @type {?} */ emptyUrl = new rxjs_BehaviorSubject.BehaviorSubject([new UrlSegment('', {})]);
+	      var /** @type {?} */ emptyParams = new rxjs_BehaviorSubject.BehaviorSubject({});
+	      var /** @type {?} */ emptyData = new rxjs_BehaviorSubject.BehaviorSubject({});
+	      var /** @type {?} */ emptyQueryParams = new rxjs_BehaviorSubject.BehaviorSubject({});
+	      var /** @type {?} */ fragment = new rxjs_BehaviorSubject.BehaviorSubject('');
+	      var /** @type {?} */ activated = new ActivatedRoute(emptyUrl, emptyParams, emptyQueryParams, fragment, emptyData, PRIMARY_OUTLET, rootComponent, snapshot.root);
+	      activated.snapshot = snapshot.root;
+	      return new RouterState(new TreeNode(activated, []), snapshot);
+	  }
+	  /**
+	   * @param {?} urlTree
+	   * @param {?} rootComponent
+	   * @return {?}
+	   */
+	  function createEmptyStateSnapshot(urlTree, rootComponent) {
+	      var /** @type {?} */ emptyParams = {};
+	      var /** @type {?} */ emptyData = {};
+	      var /** @type {?} */ emptyQueryParams = {};
+	      var /** @type {?} */ fragment = '';
+	      var /** @type {?} */ activated = new ActivatedRouteSnapshot([], emptyParams, emptyQueryParams, fragment, emptyData, PRIMARY_OUTLET, rootComponent, null, urlTree.root, -1, {});
+	      return new RouterStateSnapshot('', new TreeNode(activated, []));
+	  }
+	  /**
+	   *  outlet.
+	    * An `ActivatedRoute` can also be used to traverse the router state tree.
+	    * *
+	    * *
+	    * ```
+	    * class MyComponent {
+	    * constructor(route: ActivatedRoute) {
+	    * const id: Observable<string> = route.params.map(p => p.id);
+	    * const url: Observable<string> = route.url.map(segments => segments.join(''));
+	    * // route.data includes both `data` and `resolve`
+	    * const user = route.data.map(d => d.user);
+	    * }
+	    * }
+	    * ```
+	    * *
+	   */
+	  var ActivatedRoute = (function () {
+	      /**
+	       * @param {?} url
+	       * @param {?} params
+	       * @param {?} queryParams
+	       * @param {?} fragment
+	       * @param {?} data
+	       * @param {?} outlet
+	       * @param {?} component
+	       * @param {?} futureSnapshot
+	       */
+	      function ActivatedRoute(url, params, queryParams, fragment, data, outlet, component, futureSnapshot) {
+	          this.url = url;
+	          this.params = params;
+	          this.queryParams = queryParams;
+	          this.fragment = fragment;
+	          this.data = data;
+	          this.outlet = outlet;
+	          this.component = component;
+	          this._futureSnapshot = futureSnapshot;
+	      }
+	      Object.defineProperty(ActivatedRoute.prototype, "routeConfig", {
+	          /**
+	           *  The configuration used to match this route
+	           * @return {?}
+	           */
+	          get: function () { return this._futureSnapshot.routeConfig; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      Object.defineProperty(ActivatedRoute.prototype, "root", {
+	          /**
+	           *  The root of the router state
+	           * @return {?}
+	           */
+	          get: function () { return this._routerState.root; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      Object.defineProperty(ActivatedRoute.prototype, "parent", {
+	          /**
+	           *  The parent of this route in the router state tree
+	           * @return {?}
+	           */
+	          get: function () { return this._routerState.parent(this); },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      Object.defineProperty(ActivatedRoute.prototype, "firstChild", {
+	          /**
+	           *  The first child of this route in the router state tree
+	           * @return {?}
+	           */
+	          get: function () { return this._routerState.firstChild(this); },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      Object.defineProperty(ActivatedRoute.prototype, "children", {
+	          /**
+	           *  The children of this route in the router state tree
+	           * @return {?}
+	           */
+	          get: function () { return this._routerState.children(this); },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      Object.defineProperty(ActivatedRoute.prototype, "pathFromRoot", {
+	          /**
+	           *  The path from the root of the router state tree to this route
+	           * @return {?}
+	           */
+	          get: function () { return this._routerState.pathFromRoot(this); },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      /**
+	       * @return {?}
+	       */
+	      ActivatedRoute.prototype.toString = function () {
+	          return this.snapshot ? this.snapshot.toString() : "Future(" + this._futureSnapshot + ")";
+	      };
+	      return ActivatedRoute;
+	  }());
+	  /**
+	   * @param {?} route
+	   * @return {?}
+	   */
+	  function inheritedParamsDataResolve(route) {
+	      var /** @type {?} */ pathToRoot = route.pathFromRoot;
+	      var /** @type {?} */ inhertingStartingFrom = pathToRoot.length - 1;
+	      while (inhertingStartingFrom >= 1) {
+	          var /** @type {?} */ current = pathToRoot[inhertingStartingFrom];
+	          var /** @type {?} */ parent_1 = pathToRoot[inhertingStartingFrom - 1];
+	          // current route is an empty path => inherits its parent's params and data
+	          if (current.routeConfig && current.routeConfig.path === '') {
+	              inhertingStartingFrom--;
+	          }
+	          else if (!parent_1.component) {
+	              inhertingStartingFrom--;
+	          }
+	          else {
+	              break;
+	          }
+	      }
+	      return pathToRoot.slice(inhertingStartingFrom).reduce(function (res, curr) {
+	          var /** @type {?} */ params = merge(res.params, curr.params);
+	          var /** @type {?} */ data = merge(res.data, curr.data);
+	          var /** @type {?} */ resolve = merge(res.resolve, curr._resolvedData);
+	          return { params: params, data: data, resolve: resolve };
+	      }, /** @type {?} */ ({ params: {}, data: {}, resolve: {} }));
+	  }
+	  /**
+	   *  outlet
+	    * at a particular moment in time. ActivatedRouteSnapshot can also be used to traverse the router
+	    * state tree.
+	    * *
+	    * *
+	    * ```
+	    * class MyComponent {
+	    * constructor(route: ActivatedRoute) {
+	    * const id: string = route.snapshot.params.id;
+	    * const url: string = route.snapshot.url.join('');
+	    * const user = route.snapshot.data.user;
+	    * }
+	    * }
+	    * ```
+	    * *
+	   */
+	  var ActivatedRouteSnapshot = (function () {
+	      /**
+	       * @param {?} url
+	       * @param {?} params
+	       * @param {?} queryParams
+	       * @param {?} fragment
+	       * @param {?} data
+	       * @param {?} outlet
+	       * @param {?} component
+	       * @param {?} routeConfig
+	       * @param {?} urlSegment
+	       * @param {?} lastPathIndex
+	       * @param {?} resolve
+	       */
+	      function ActivatedRouteSnapshot(url, params, queryParams, fragment, data, outlet, component, routeConfig, urlSegment, lastPathIndex, resolve) {
+	          this.url = url;
+	          this.params = params;
+	          this.queryParams = queryParams;
+	          this.fragment = fragment;
+	          this.data = data;
+	          this.outlet = outlet;
+	          this.component = component;
+	          this._routeConfig = routeConfig;
+	          this._urlSegment = urlSegment;
+	          this._lastPathIndex = lastPathIndex;
+	          this._resolve = resolve;
+	      }
+	      Object.defineProperty(ActivatedRouteSnapshot.prototype, "routeConfig", {
+	          /**
+	           *  The configuration used to match this route
+	           * @return {?}
+	           */
+	          get: function () { return this._routeConfig; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      Object.defineProperty(ActivatedRouteSnapshot.prototype, "root", {
+	          /**
+	           *  The root of the router state
+	           * @return {?}
+	           */
+	          get: function () { return this._routerState.root; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      Object.defineProperty(ActivatedRouteSnapshot.prototype, "parent", {
+	          /**
+	           *  The parent of this route in the router state tree
+	           * @return {?}
+	           */
+	          get: function () { return this._routerState.parent(this); },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      Object.defineProperty(ActivatedRouteSnapshot.prototype, "firstChild", {
+	          /**
+	           *  The first child of this route in the router state tree
+	           * @return {?}
+	           */
+	          get: function () { return this._routerState.firstChild(this); },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      Object.defineProperty(ActivatedRouteSnapshot.prototype, "children", {
+	          /**
+	           *  The children of this route in the router state tree
+	           * @return {?}
+	           */
+	          get: function () { return this._routerState.children(this); },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      Object.defineProperty(ActivatedRouteSnapshot.prototype, "pathFromRoot", {
+	          /**
+	           *  The path from the root of the router state tree to this route
+	           * @return {?}
+	           */
+	          get: function () { return this._routerState.pathFromRoot(this); },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      /**
+	       * @return {?}
+	       */
+	      ActivatedRouteSnapshot.prototype.toString = function () {
+	          var /** @type {?} */ url = this.url.map(function (segment) { return segment.toString(); }).join('/');
+	          var /** @type {?} */ matched = this._routeConfig ? this._routeConfig.path : '';
+	          return "Route(url:'" + url + "', path:'" + matched + "')";
+	      };
+	      return ActivatedRouteSnapshot;
+	  }());
+	  /**
+	   *  *
+	    * *
+	    * ```
+	    * class MyComponent {
+	    * constructor(router: Router) {
+	    * const state: RouterState = router.routerState;
+	    * const snapshot: RouterStateSnapshot = state.snapshot;
+	    * const root: ActivatedRouteSnapshot = snapshot.root;
+	    * const child = root.firstChild;
+	    * const id: Observable<string> = child.params.map(p => p.id);
+	    * //...
+	    * }
+	    * }
+	    * ```
+	    * *
+	    * RouterStateSnapshot is a tree of activated route snapshots. Every node in this tree knows about
+	    * the "consumed" URL segments, the extracted parameters, and the resolved data.
+	    * *
+	   */
+	  var RouterStateSnapshot = (function (_super) {
+	      __extends$1(RouterStateSnapshot, _super);
+	      /**
+	       * @param {?} url
+	       * @param {?} root
+	       */
+	      function RouterStateSnapshot(url, root) {
+	          _super.call(this, root);
+	          this.url = url;
+	          setRouterStateSnapshot(this, root);
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      RouterStateSnapshot.prototype.toString = function () { return serializeNode(this._root); };
+	      return RouterStateSnapshot;
+	  }(Tree));
+	  /**
+	   * @param {?} state
+	   * @param {?} node
+	   * @return {?}
+	   */
+	  function setRouterStateSnapshot(state, node) {
+	      node.value._routerState = state;
+	      node.children.forEach(function (c) { return setRouterStateSnapshot(state, c); });
+	  }
+	  /**
+	   * @param {?} node
+	   * @return {?}
+	   */
+	  function serializeNode(node) {
+	      var /** @type {?} */ c = node.children.length > 0 ? " { " + node.children.map(serializeNode).join(", ") + " } " : '';
+	      return "" + node.value + c;
+	  }
+	  /**
+	   *  The expectation is that the activate route is created with the right set of parameters.
+	    * So we push new values into the observables only when they are not the initial values.
+	    * And we detect that by checking if the snapshot field is set.
+	   * @param {?} route
+	   * @return {?}
+	   */
+	  function advanceActivatedRoute(route) {
+	      if (route.snapshot) {
+	          if (!shallowEqual(route.snapshot.queryParams, route._futureSnapshot.queryParams)) {
+	              ((route.queryParams)).next(route._futureSnapshot.queryParams);
+	          }
+	          if (route.snapshot.fragment !== route._futureSnapshot.fragment) {
+	              ((route.fragment)).next(route._futureSnapshot.fragment);
+	          }
+	          if (!shallowEqual(route.snapshot.params, route._futureSnapshot.params)) {
+	              ((route.params)).next(route._futureSnapshot.params);
+	          }
+	          if (!shallowEqualArrays(route.snapshot.url, route._futureSnapshot.url)) {
+	              ((route.url)).next(route._futureSnapshot.url);
+	          }
+	          if (!equalParamsAndUrlSegments(route.snapshot, route._futureSnapshot)) {
+	              ((route.data)).next(route._futureSnapshot.data);
+	          }
+	          route.snapshot = route._futureSnapshot;
+	      }
+	      else {
+	          route.snapshot = route._futureSnapshot;
+	          // this is for resolved data
+	          ((route.data)).next(route._futureSnapshot.data);
+	      }
+	  }
+	  /**
+	   * @param {?} a
+	   * @param {?} b
+	   * @return {?}
+	   */
+	  function equalParamsAndUrlSegments(a, b) {
+	      return shallowEqual(a.params, b.params) && equalSegments(a.url, b.url);
+	  }
+
+	  /**
+	   * @param {?} routeReuseStrategy
+	   * @param {?} curr
+	   * @param {?} prevState
+	   * @return {?}
+	   */
+	  function createRouterState(routeReuseStrategy, curr, prevState) {
+	      var /** @type {?} */ root = createNode(routeReuseStrategy, curr._root, prevState ? prevState._root : undefined);
+	      return new RouterState(root, curr);
+	  }
+	  /**
+	   * @param {?} routeReuseStrategy
+	   * @param {?} curr
+	   * @param {?=} prevState
+	   * @return {?}
+	   */
+	  function createNode(routeReuseStrategy, curr, prevState) {
+	      // reuse an activated route that is currently displayed on the screen
+	      if (prevState && routeReuseStrategy.shouldReuseRoute(curr.value, prevState.value.snapshot)) {
+	          var /** @type {?} */ value = prevState.value;
+	          value._futureSnapshot = curr.value;
+	          var /** @type {?} */ children = createOrReuseChildren(routeReuseStrategy, curr, prevState);
+	          return new TreeNode(value, children);
+	      }
+	      else if (routeReuseStrategy.retrieve(curr.value)) {
+	          var /** @type {?} */ tree = ((routeReuseStrategy.retrieve(curr.value))).route;
+	          setFutureSnapshotsOfActivatedRoutes(curr, tree);
+	          return tree;
+	      }
+	      else {
+	          var /** @type {?} */ value = createActivatedRoute(curr.value);
+	          var /** @type {?} */ children = curr.children.map(function (c) { return createNode(routeReuseStrategy, c); });
+	          return new TreeNode(value, children);
+	      }
+	  }
+	  /**
+	   * @param {?} curr
+	   * @param {?} result
+	   * @return {?}
+	   */
+	  function setFutureSnapshotsOfActivatedRoutes(curr, result) {
+	      if (curr.value.routeConfig !== result.value.routeConfig) {
+	          throw new Error('Cannot reattach ActivatedRouteSnapshot created from a different route');
+	      }
+	      if (curr.children.length !== result.children.length) {
+	          throw new Error('Cannot reattach ActivatedRouteSnapshot with a different number of children');
+	      }
+	      result.value._futureSnapshot = curr.value;
+	      for (var /** @type {?} */ i = 0; i < curr.children.length; ++i) {
+	          setFutureSnapshotsOfActivatedRoutes(curr.children[i], result.children[i]);
+	      }
+	  }
+	  /**
+	   * @param {?} routeReuseStrategy
+	   * @param {?} curr
+	   * @param {?} prevState
+	   * @return {?}
+	   */
+	  function createOrReuseChildren(routeReuseStrategy, curr, prevState) {
+	      return curr.children.map(function (child) {
+	          for (var _i = 0, _a = prevState.children; _i < _a.length; _i++) {
+	              var p = _a[_i];
+	              if (routeReuseStrategy.shouldReuseRoute(p.value.snapshot, child.value)) {
+	                  return createNode(routeReuseStrategy, child, p);
+	              }
+	          }
+	          return createNode(routeReuseStrategy, child);
+	      });
+	  }
+	  /**
+	   * @param {?} c
+	   * @return {?}
+	   */
+	  function createActivatedRoute(c) {
+	      return new ActivatedRoute(new rxjs_BehaviorSubject.BehaviorSubject(c.url), new rxjs_BehaviorSubject.BehaviorSubject(c.params), new rxjs_BehaviorSubject.BehaviorSubject(c.queryParams), new rxjs_BehaviorSubject.BehaviorSubject(c.fragment), new rxjs_BehaviorSubject.BehaviorSubject(c.data), c.outlet, c.component, c);
+	  }
+
+	  /**
+	   * @param {?} route
+	   * @param {?} urlTree
+	   * @param {?} commands
+	   * @param {?} queryParams
+	   * @param {?} fragment
+	   * @return {?}
+	   */
+	  function createUrlTree(route, urlTree, commands, queryParams, fragment) {
+	      if (commands.length === 0) {
+	          return tree(urlTree.root, urlTree.root, urlTree, queryParams, fragment);
+	      }
+	      var /** @type {?} */ nav = computeNavigation(commands);
+	      if (nav.toRoot()) {
+	          return tree(urlTree.root, new UrlSegmentGroup([], {}), urlTree, queryParams, fragment);
+	      }
+	      var /** @type {?} */ startingPosition = findStartingPosition(nav, urlTree, route);
+	      var /** @type {?} */ segmentGroup = startingPosition.processChildren ?
+	          updateSegmentGroupChildren(startingPosition.segmentGroup, startingPosition.index, nav.commands) :
+	          updateSegmentGroup(startingPosition.segmentGroup, startingPosition.index, nav.commands);
+	      return tree(startingPosition.segmentGroup, segmentGroup, urlTree, queryParams, fragment);
+	  }
+	  /**
+	   * @param {?} command
+	   * @return {?}
+	   */
+	  function isMatrixParams(command) {
+	      return typeof command === 'object' && !command.outlets && !command.segmentPath;
+	  }
+	  /**
+	   * @param {?} oldSegmentGroup
+	   * @param {?} newSegmentGroup
+	   * @param {?} urlTree
+	   * @param {?} queryParams
+	   * @param {?} fragment
+	   * @return {?}
+	   */
+	  function tree(oldSegmentGroup, newSegmentGroup, urlTree, queryParams, fragment) {
+	      if (urlTree.root === oldSegmentGroup) {
+	          return new UrlTree(newSegmentGroup, stringify(queryParams), fragment);
+	      }
+	      return new UrlTree(replaceSegment(urlTree.root, oldSegmentGroup, newSegmentGroup), stringify(queryParams), fragment);
+	  }
+	  /**
+	   * @param {?} current
+	   * @param {?} oldSegment
+	   * @param {?} newSegment
+	   * @return {?}
+	   */
+	  function replaceSegment(current, oldSegment, newSegment) {
+	      var /** @type {?} */ children = {};
+	      forEach(current.children, function (c, outletName) {
+	          if (c === oldSegment) {
+	              children[outletName] = newSegment;
+	          }
+	          else {
+	              children[outletName] = replaceSegment(c, oldSegment, newSegment);
+	          }
+	      });
+	      return new UrlSegmentGroup(current.segments, children);
+	  }
+	  var Navigation = (function () {
+	      /**
+	       * @param {?} isAbsolute
+	       * @param {?} numberOfDoubleDots
+	       * @param {?} commands
+	       */
+	      function Navigation(isAbsolute, numberOfDoubleDots, commands) {
+	          this.isAbsolute = isAbsolute;
+	          this.numberOfDoubleDots = numberOfDoubleDots;
+	          this.commands = commands;
+	          if (isAbsolute && commands.length > 0 && isMatrixParams(commands[0])) {
+	              throw new Error('Root segment cannot have matrix parameters');
+	          }
+	          var cmdWithOutlet = commands.find(function (c) { return typeof c === 'object' && c.outlets; });
+	          if (cmdWithOutlet && cmdWithOutlet !== last(commands)) {
+	              throw new Error('{outlets:{}} has to be the last command');
+	          }
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      Navigation.prototype.toRoot = function () {
+	          return this.isAbsolute && this.commands.length === 1 && this.commands[0] == '/';
+	      };
+	      return Navigation;
+	  }());
+	  /**
+	   *  Transforms commands to a normalized `Navigation`
+	   * @param {?} commands
+	   * @return {?}
+	   */
+	  function computeNavigation(commands) {
+	      if ((typeof commands[0] === 'string') && commands.length === 1 && commands[0] === '/') {
+	          return new Navigation(true, 0, commands);
+	      }
+	      var /** @type {?} */ numberOfDoubleDots = 0;
+	      var /** @type {?} */ isAbsolute = false;
+	      var /** @type {?} */ res = commands.reduce(function (res, cmd, cmdIdx) {
+	          if (typeof cmd === 'object') {
+	              if (cmd.outlets) {
+	                  var /** @type {?} */ outlets_1 = {};
+	                  forEach(cmd.outlets, function (commands, name) {
+	                      outlets_1[name] = typeof commands === 'string' ? commands.split('/') : commands;
+	                  });
+	                  return res.concat([{ outlets: outlets_1 }]);
+	              }
+	              if (cmd.segmentPath) {
+	                  return res.concat([cmd.segmentPath]);
+	              }
+	          }
+	          if (!(typeof cmd === 'string')) {
+	              return res.concat([cmd]);
+	          }
+	          if (cmdIdx === 0) {
+	              cmd.split('/').forEach(function (urlPart, partIndex) {
+	                  if (partIndex == 0 && urlPart === '.') {
+	                  }
+	                  else if (partIndex == 0 && urlPart === '') {
+	                      isAbsolute = true;
+	                  }
+	                  else if (urlPart === '..') {
+	                      numberOfDoubleDots++;
+	                  }
+	                  else if (urlPart != '') {
+	                      res.push(urlPart);
+	                  }
+	              });
+	              return res;
+	          }
+	          return res.concat([cmd]);
+	      }, []);
+	      return new Navigation(isAbsolute, numberOfDoubleDots, res);
+	  }
+	  var Position = (function () {
+	      /**
+	       * @param {?} segmentGroup
+	       * @param {?} processChildren
+	       * @param {?} index
+	       */
+	      function Position(segmentGroup, processChildren, index) {
+	          this.segmentGroup = segmentGroup;
+	          this.processChildren = processChildren;
+	          this.index = index;
+	      }
+	      return Position;
+	  }());
+	  /**
+	   * @param {?} nav
+	   * @param {?} tree
+	   * @param {?} route
+	   * @return {?}
+	   */
+	  function findStartingPosition(nav, tree, route) {
+	      if (nav.isAbsolute) {
+	          return new Position(tree.root, true, 0);
+	      }
+	      if (route.snapshot._lastPathIndex === -1) {
+	          return new Position(route.snapshot._urlSegment, true, 0);
+	      }
+	      var /** @type {?} */ modifier = isMatrixParams(nav.commands[0]) ? 0 : 1;
+	      var /** @type {?} */ index = route.snapshot._lastPathIndex + modifier;
+	      return createPositionApplyingDoubleDots(route.snapshot._urlSegment, index, nav.numberOfDoubleDots);
+	  }
+	  /**
+	   * @param {?} group
+	   * @param {?} index
+	   * @param {?} numberOfDoubleDots
+	   * @return {?}
+	   */
+	  function createPositionApplyingDoubleDots(group, index, numberOfDoubleDots) {
+	      var /** @type {?} */ g = group;
+	      var /** @type {?} */ ci = index;
+	      var /** @type {?} */ dd = numberOfDoubleDots;
+	      while (dd > ci) {
+	          dd -= ci;
+	          g = g.parent;
+	          if (!g) {
+	              throw new Error('Invalid number of \'../\'');
+	          }
+	          ci = g.segments.length;
+	      }
+	      return new Position(g, false, ci - dd);
+	  }
+	  /**
+	   * @param {?} command
+	   * @return {?}
+	   */
+	  function getPath(command) {
+	      if (typeof command === 'object' && command.outlets)
+	          return command.outlets[PRIMARY_OUTLET];
+	      return "" + command;
+	  }
+	  /**
+	   * @param {?} commands
+	   * @return {?}
+	   */
+	  function getOutlets(commands) {
+	      if (!(typeof commands[0] === 'object'))
+	          return (_a = {}, _a[PRIMARY_OUTLET] = commands, _a);
+	      if (commands[0].outlets === undefined)
+	          return (_b = {}, _b[PRIMARY_OUTLET] = commands, _b);
+	      return commands[0].outlets;
+	      var _a, _b;
+	  }
+	  /**
+	   * @param {?} segmentGroup
+	   * @param {?} startIndex
+	   * @param {?} commands
+	   * @return {?}
+	   */
+	  function updateSegmentGroup(segmentGroup, startIndex, commands) {
+	      if (!segmentGroup) {
+	          segmentGroup = new UrlSegmentGroup([], {});
+	      }
+	      if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
+	          return updateSegmentGroupChildren(segmentGroup, startIndex, commands);
+	      }
+	      var /** @type {?} */ m = prefixedWith(segmentGroup, startIndex, commands);
+	      var /** @type {?} */ slicedCommands = commands.slice(m.commandIndex);
+	      if (m.match && m.pathIndex < segmentGroup.segments.length) {
+	          var /** @type {?} */ g = new UrlSegmentGroup(segmentGroup.segments.slice(0, m.pathIndex), {});
+	          g.children[PRIMARY_OUTLET] =
+	              new UrlSegmentGroup(segmentGroup.segments.slice(m.pathIndex), segmentGroup.children);
+	          return updateSegmentGroupChildren(g, 0, slicedCommands);
+	      }
+	      else if (m.match && slicedCommands.length === 0) {
+	          return new UrlSegmentGroup(segmentGroup.segments, {});
+	      }
+	      else if (m.match && !segmentGroup.hasChildren()) {
+	          return createNewSegmentGroup(segmentGroup, startIndex, commands);
+	      }
+	      else if (m.match) {
+	          return updateSegmentGroupChildren(segmentGroup, 0, slicedCommands);
+	      }
+	      else {
+	          return createNewSegmentGroup(segmentGroup, startIndex, commands);
+	      }
+	  }
+	  /**
+	   * @param {?} segmentGroup
+	   * @param {?} startIndex
+	   * @param {?} commands
+	   * @return {?}
+	   */
+	  function updateSegmentGroupChildren(segmentGroup, startIndex, commands) {
+	      if (commands.length === 0) {
+	          return new UrlSegmentGroup(segmentGroup.segments, {});
+	      }
+	      else {
+	          var /** @type {?} */ outlets_2 = getOutlets(commands);
+	          var /** @type {?} */ children_1 = {};
+	          forEach(outlets_2, function (commands, outlet) {
+	              if (commands !== null) {
+	                  children_1[outlet] = updateSegmentGroup(segmentGroup.children[outlet], startIndex, commands);
+	              }
+	          });
+	          forEach(segmentGroup.children, function (child, childOutlet) {
+	              if (outlets_2[childOutlet] === undefined) {
+	                  children_1[childOutlet] = child;
+	              }
+	          });
+	          return new UrlSegmentGroup(segmentGroup.segments, children_1);
+	      }
+	  }
+	  /**
+	   * @param {?} segmentGroup
+	   * @param {?} startIndex
+	   * @param {?} commands
+	   * @return {?}
+	   */
+	  function prefixedWith(segmentGroup, startIndex, commands) {
+	      var /** @type {?} */ currentCommandIndex = 0;
+	      var /** @type {?} */ currentPathIndex = startIndex;
+	      var /** @type {?} */ noMatch = { match: false, pathIndex: 0, commandIndex: 0 };
+	      while (currentPathIndex < segmentGroup.segments.length) {
+	          if (currentCommandIndex >= commands.length)
+	              return noMatch;
+	          var /** @type {?} */ path = segmentGroup.segments[currentPathIndex];
+	          var /** @type {?} */ curr = getPath(commands[currentCommandIndex]);
+	          var /** @type {?} */ next = currentCommandIndex < commands.length - 1 ? commands[currentCommandIndex + 1] : null;
+	          if (currentPathIndex > 0 && curr === undefined)
+	              break;
+	          if (curr && next && (typeof next === 'object') && next.outlets === undefined) {
+	              if (!compare(curr, next, path))
+	                  return noMatch;
+	              currentCommandIndex += 2;
+	          }
+	          else {
+	              if (!compare(curr, {}, path))
+	                  return noMatch;
+	              currentCommandIndex++;
+	          }
+	          currentPathIndex++;
+	      }
+	      return { match: true, pathIndex: currentPathIndex, commandIndex: currentCommandIndex };
+	  }
+	  /**
+	   * @param {?} segmentGroup
+	   * @param {?} startIndex
+	   * @param {?} commands
+	   * @return {?}
+	   */
+	  function createNewSegmentGroup(segmentGroup, startIndex, commands) {
+	      var /** @type {?} */ paths = segmentGroup.segments.slice(0, startIndex);
+	      var /** @type {?} */ i = 0;
+	      while (i < commands.length) {
+	          if (typeof commands[i] === 'object' && commands[i].outlets !== undefined) {
+	              var /** @type {?} */ children = createNewSegmentChildren(commands[i].outlets);
+	              return new UrlSegmentGroup(paths, children);
+	          }
+	          // if we start with an object literal, we need to reuse the path part from the segment
+	          if (i === 0 && isMatrixParams(commands[0])) {
+	              var /** @type {?} */ p = segmentGroup.segments[startIndex];
+	              paths.push(new UrlSegment(p.path, commands[0]));
+	              i++;
+	              continue;
+	          }
+	          var /** @type {?} */ curr = getPath(commands[i]);
+	          var /** @type {?} */ next = (i < commands.length - 1) ? commands[i + 1] : null;
+	          if (curr && next && isMatrixParams(next)) {
+	              paths.push(new UrlSegment(curr, stringify(next)));
+	              i += 2;
+	          }
+	          else {
+	              paths.push(new UrlSegment(curr, {}));
+	              i++;
+	          }
+	      }
+	      return new UrlSegmentGroup(paths, {});
+	  }
+	  /**
+	   * @param {?} outlets
+	   * @return {?}
+	   */
+	  function createNewSegmentChildren(outlets) {
+	      var /** @type {?} */ children = {};
+	      forEach(outlets, function (commands, outlet) {
+	          if (commands !== null) {
+	              children[outlet] = createNewSegmentGroup(new UrlSegmentGroup([], {}), 0, commands);
+	          }
+	      });
+	      return children;
+	  }
+	  /**
+	   * @param {?} params
+	   * @return {?}
+	   */
+	  function stringify(params) {
+	      var /** @type {?} */ res = {};
+	      forEach(params, function (v, k) { return res[k] = "" + v; });
+	      return res;
+	  }
+	  /**
+	   * @param {?} path
+	   * @param {?} params
+	   * @param {?} segment
+	   * @return {?}
+	   */
+	  function compare(path, params, segment) {
+	      return path == segment.path && shallowEqual(params, segment.parameters);
+	  }
+
+	  var NoMatch$1 = (function () {
+	      function NoMatch() {
+	      }
+	      return NoMatch;
+	  }());
+	  /**
+	   * @param {?} rootComponentType
+	   * @param {?} config
+	   * @param {?} urlTree
+	   * @param {?} url
+	   * @return {?}
+	   */
+	  function recognize(rootComponentType, config, urlTree, url) {
+	      return new Recognizer(rootComponentType, config, urlTree, url).recognize();
+	  }
+	  var Recognizer = (function () {
+	      /**
+	       * @param {?} rootComponentType
+	       * @param {?} config
+	       * @param {?} urlTree
+	       * @param {?} url
+	       */
+	      function Recognizer(rootComponentType, config, urlTree, url) {
+	          this.rootComponentType = rootComponentType;
+	          this.config = config;
+	          this.urlTree = urlTree;
+	          this.url = url;
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      Recognizer.prototype.recognize = function () {
+	          try {
+	              var /** @type {?} */ rootSegmentGroup = split$1(this.urlTree.root, [], [], this.config).segmentGroup;
+	              var /** @type {?} */ children = this.processSegmentGroup(this.config, rootSegmentGroup, PRIMARY_OUTLET);
+	              var /** @type {?} */ root = new ActivatedRouteSnapshot([], Object.freeze({}), Object.freeze(this.urlTree.queryParams), this.urlTree.fragment, {}, PRIMARY_OUTLET, this.rootComponentType, null, this.urlTree.root, -1, {});
+	              var /** @type {?} */ rootNode = new TreeNode(root, children);
+	              var /** @type {?} */ routeState = new RouterStateSnapshot(this.url, rootNode);
+	              this.inheriteParamsAndData(routeState._root);
+	              return rxjs_observable_of.of(routeState);
+	          }
+	          catch (e) {
+	              return new rxjs_Observable.Observable(function (obs) { return obs.error(e); });
+	          }
+	      };
+	      /**
+	       * @param {?} routeNode
+	       * @return {?}
+	       */
+	      Recognizer.prototype.inheriteParamsAndData = function (routeNode) {
+	          var _this = this;
+	          var /** @type {?} */ route = routeNode.value;
+	          var /** @type {?} */ i = inheritedParamsDataResolve(route);
+	          route.params = Object.freeze(i.params);
+	          route.data = Object.freeze(i.data);
+	          routeNode.children.forEach(function (n) { return _this.inheriteParamsAndData(n); });
+	      };
+	      /**
+	       * @param {?} config
+	       * @param {?} segmentGroup
+	       * @param {?} outlet
+	       * @return {?}
+	       */
+	      Recognizer.prototype.processSegmentGroup = function (config, segmentGroup, outlet) {
+	          if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
+	              return this.processChildren(config, segmentGroup);
+	          }
+	          else {
+	              return this.processSegment(config, segmentGroup, segmentGroup.segments, outlet);
+	          }
+	      };
+	      /**
+	       * @param {?} config
+	       * @param {?} segmentGroup
+	       * @return {?}
+	       */
+	      Recognizer.prototype.processChildren = function (config, segmentGroup) {
+	          var _this = this;
+	          var /** @type {?} */ children = mapChildrenIntoArray(segmentGroup, function (child, childOutlet) { return _this.processSegmentGroup(config, child, childOutlet); });
+	          checkOutletNameUniqueness(children);
+	          sortActivatedRouteSnapshots(children);
+	          return children;
+	      };
+	      /**
+	       * @param {?} config
+	       * @param {?} segmentGroup
+	       * @param {?} segments
+	       * @param {?} outlet
+	       * @return {?}
+	       */
+	      Recognizer.prototype.processSegment = function (config, segmentGroup, segments, outlet) {
+	          for (var _i = 0, config_1 = config; _i < config_1.length; _i++) {
+	              var r = config_1[_i];
+	              try {
+	                  return this.processSegmentAgainstRoute(r, segmentGroup, segments, outlet);
+	              }
+	              catch (e) {
+	                  if (!(e instanceof NoMatch$1))
+	                      throw e;
+	              }
+	          }
+	          if (this.noLeftoversInUrl(segmentGroup, segments, outlet)) {
+	              return [];
+	          }
+	          else {
+	              throw new NoMatch$1();
+	          }
+	      };
+	      /**
+	       * @param {?} segmentGroup
+	       * @param {?} segments
+	       * @param {?} outlet
+	       * @return {?}
+	       */
+	      Recognizer.prototype.noLeftoversInUrl = function (segmentGroup, segments, outlet) {
+	          return segments.length === 0 && !segmentGroup.children[outlet];
+	      };
+	      /**
+	       * @param {?} route
+	       * @param {?} rawSegment
+	       * @param {?} segments
+	       * @param {?} outlet
+	       * @return {?}
+	       */
+	      Recognizer.prototype.processSegmentAgainstRoute = function (route, rawSegment, segments, outlet) {
+	          if (route.redirectTo)
+	              throw new NoMatch$1();
+	          if ((route.outlet ? route.outlet : PRIMARY_OUTLET) !== outlet)
+	              throw new NoMatch$1();
+	          if (route.path === '**') {
+	              var /** @type {?} */ params = segments.length > 0 ? last(segments).parameters : {};
+	              var /** @type {?} */ snapshot_1 = new ActivatedRouteSnapshot(segments, params, Object.freeze(this.urlTree.queryParams), this.urlTree.fragment, getData(route), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + segments.length, getResolve(route));
+	              return [new TreeNode(snapshot_1, [])];
+	          }
+	          var _a = match$1(rawSegment, route, segments), consumedSegments = _a.consumedSegments, parameters = _a.parameters, lastChild = _a.lastChild;
+	          var /** @type {?} */ rawSlicedSegments = segments.slice(lastChild);
+	          var /** @type {?} */ childConfig = getChildConfig(route);
+	          var _b = split$1(rawSegment, consumedSegments, rawSlicedSegments, childConfig), segmentGroup = _b.segmentGroup, slicedSegments = _b.slicedSegments;
+	          var /** @type {?} */ snapshot = new ActivatedRouteSnapshot(consumedSegments, parameters, Object.freeze(this.urlTree.queryParams), this.urlTree.fragment, getData(route), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + consumedSegments.length, getResolve(route));
+	          if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
+	              var /** @type {?} */ children = this.processChildren(childConfig, segmentGroup);
+	              return [new TreeNode(snapshot, children)];
+	          }
+	          else if (childConfig.length === 0 && slicedSegments.length === 0) {
+	              return [new TreeNode(snapshot, [])];
+	          }
+	          else {
+	              var /** @type {?} */ children = this.processSegment(childConfig, segmentGroup, slicedSegments, PRIMARY_OUTLET);
+	              return [new TreeNode(snapshot, children)];
+	          }
+	      };
+	      return Recognizer;
+	  }());
+	  /**
+	   * @param {?} nodes
+	   * @return {?}
+	   */
+	  function sortActivatedRouteSnapshots(nodes) {
+	      nodes.sort(function (a, b) {
+	          if (a.value.outlet === PRIMARY_OUTLET)
+	              return -1;
+	          if (b.value.outlet === PRIMARY_OUTLET)
+	              return 1;
+	          return a.value.outlet.localeCompare(b.value.outlet);
+	      });
+	  }
+	  /**
+	   * @param {?} route
+	   * @return {?}
+	   */
+	  function getChildConfig(route) {
+	      if (route.children) {
+	          return route.children;
+	      }
+	      else if (route.loadChildren) {
+	          return ((route))._loadedConfig.routes;
+	      }
+	      else {
+	          return [];
+	      }
+	  }
+	  /**
+	   * @param {?} segmentGroup
+	   * @param {?} route
+	   * @param {?} segments
+	   * @return {?}
+	   */
+	  function match$1(segmentGroup, route, segments) {
+	      if (route.path === '') {
+	          if (route.pathMatch === 'full' && (segmentGroup.hasChildren() || segments.length > 0)) {
+	              throw new NoMatch$1();
+	          }
+	          else {
+	              return { consumedSegments: [], lastChild: 0, parameters: {} };
+	          }
+	      }
+	      var /** @type {?} */ matcher = route.matcher || defaultUrlMatcher;
+	      var /** @type {?} */ res = matcher(segments, segmentGroup, route);
+	      if (!res)
+	          throw new NoMatch$1();
+	      var /** @type {?} */ posParams = {};
+	      forEach(res.posParams, function (v, k) { posParams[k] = v.path; });
+	      var /** @type {?} */ parameters = merge(posParams, res.consumed[res.consumed.length - 1].parameters);
+	      return { consumedSegments: res.consumed, lastChild: res.consumed.length, parameters: parameters };
+	  }
+	  /**
+	   * @param {?} nodes
+	   * @return {?}
+	   */
+	  function checkOutletNameUniqueness(nodes) {
+	      var /** @type {?} */ names = {};
+	      nodes.forEach(function (n) {
+	          var /** @type {?} */ routeWithSameOutletName = names[n.value.outlet];
+	          if (routeWithSameOutletName) {
+	              var /** @type {?} */ p = routeWithSameOutletName.url.map(function (s) { return s.toString(); }).join('/');
+	              var /** @type {?} */ c = n.value.url.map(function (s) { return s.toString(); }).join('/');
+	              throw new Error("Two segments cannot have the same outlet name: '" + p + "' and '" + c + "'.");
+	          }
+	          names[n.value.outlet] = n.value;
+	      });
+	  }
+	  /**
+	   * @param {?} segmentGroup
+	   * @return {?}
+	   */
+	  function getSourceSegmentGroup(segmentGroup) {
+	      var /** @type {?} */ s = segmentGroup;
+	      while (s._sourceSegment) {
+	          s = s._sourceSegment;
+	      }
+	      return s;
+	  }
+	  /**
+	   * @param {?} segmentGroup
+	   * @return {?}
+	   */
+	  function getPathIndexShift(segmentGroup) {
+	      var /** @type {?} */ s = segmentGroup;
+	      var /** @type {?} */ res = (s._segmentIndexShift ? s._segmentIndexShift : 0);
+	      while (s._sourceSegment) {
+	          s = s._sourceSegment;
+	          res += (s._segmentIndexShift ? s._segmentIndexShift : 0);
+	      }
+	      return res - 1;
+	  }
+	  /**
+	   * @param {?} segmentGroup
+	   * @param {?} consumedSegments
+	   * @param {?} slicedSegments
+	   * @param {?} config
+	   * @return {?}
+	   */
+	  function split$1(segmentGroup, consumedSegments, slicedSegments, config) {
+	      if (slicedSegments.length > 0 &&
+	          containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, config)) {
+	          var /** @type {?} */ s = new UrlSegmentGroup(consumedSegments, createChildrenForEmptyPaths(segmentGroup, consumedSegments, config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
+	          s._sourceSegment = segmentGroup;
+	          s._segmentIndexShift = consumedSegments.length;
+	          return { segmentGroup: s, slicedSegments: [] };
+	      }
+	      else if (slicedSegments.length === 0 &&
+	          containsEmptyPathMatches(segmentGroup, slicedSegments, config)) {
+	          var /** @type {?} */ s = new UrlSegmentGroup(segmentGroup.segments, addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
+	          s._sourceSegment = segmentGroup;
+	          s._segmentIndexShift = consumedSegments.length;
+	          return { segmentGroup: s, slicedSegments: slicedSegments };
+	      }
+	      else {
+	          var /** @type {?} */ s = new UrlSegmentGroup(segmentGroup.segments, segmentGroup.children);
+	          s._sourceSegment = segmentGroup;
+	          s._segmentIndexShift = consumedSegments.length;
+	          return { segmentGroup: s, slicedSegments: slicedSegments };
+	      }
+	  }
+	  /**
+	   * @param {?} segmentGroup
+	   * @param {?} slicedSegments
+	   * @param {?} routes
+	   * @param {?} children
+	   * @return {?}
+	   */
+	  function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
+	      var /** @type {?} */ res = {};
+	      for (var _i = 0, routes_1 = routes; _i < routes_1.length; _i++) {
+	          var r = routes_1[_i];
+	          if (emptyPathMatch(segmentGroup, slicedSegments, r) && !children[getOutlet$2(r)]) {
+	              var /** @type {?} */ s = new UrlSegmentGroup([], {});
+	              s._sourceSegment = segmentGroup;
+	              s._segmentIndexShift = segmentGroup.segments.length;
+	              res[getOutlet$2(r)] = s;
+	          }
+	      }
+	      return merge(children, res);
+	  }
+	  /**
+	   * @param {?} segmentGroup
+	   * @param {?} consumedSegments
+	   * @param {?} routes
+	   * @param {?} primarySegment
+	   * @return {?}
+	   */
+	  function createChildrenForEmptyPaths(segmentGroup, consumedSegments, routes, primarySegment) {
+	      var /** @type {?} */ res = {};
+	      res[PRIMARY_OUTLET] = primarySegment;
+	      primarySegment._sourceSegment = segmentGroup;
+	      primarySegment._segmentIndexShift = consumedSegments.length;
+	      for (var _i = 0, routes_2 = routes; _i < routes_2.length; _i++) {
+	          var r = routes_2[_i];
+	          if (r.path === '' && getOutlet$2(r) !== PRIMARY_OUTLET) {
+	              var /** @type {?} */ s = new UrlSegmentGroup([], {});
+	              s._sourceSegment = segmentGroup;
+	              s._segmentIndexShift = consumedSegments.length;
+	              res[getOutlet$2(r)] = s;
+	          }
+	      }
+	      return res;
+	  }
+	  /**
+	   * @param {?} segmentGroup
+	   * @param {?} slicedSegments
+	   * @param {?} routes
+	   * @return {?}
+	   */
+	  function containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, routes) {
+	      return routes
+	          .filter(function (r) { return emptyPathMatch(segmentGroup, slicedSegments, r) &&
+	          getOutlet$2(r) !== PRIMARY_OUTLET; })
+	          .length > 0;
+	  }
+	  /**
+	   * @param {?} segmentGroup
+	   * @param {?} slicedSegments
+	   * @param {?} routes
+	   * @return {?}
+	   */
+	  function containsEmptyPathMatches(segmentGroup, slicedSegments, routes) {
+	      return routes.filter(function (r) { return emptyPathMatch(segmentGroup, slicedSegments, r); }).length > 0;
+	  }
+	  /**
+	   * @param {?} segmentGroup
+	   * @param {?} slicedSegments
+	   * @param {?} r
+	   * @return {?}
+	   */
+	  function emptyPathMatch(segmentGroup, slicedSegments, r) {
+	      if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full')
+	          return false;
+	      return r.path === '' && r.redirectTo === undefined;
+	  }
+	  /**
+	   * @param {?} route
+	   * @return {?}
+	   */
+	  function getOutlet$2(route) {
+	      return route.outlet ? route.outlet : PRIMARY_OUTLET;
+	  }
+	  /**
+	   * @param {?} route
+	   * @return {?}
+	   */
+	  function getData(route) {
+	      return route.data ? route.data : {};
+	  }
+	  /**
+	   * @param {?} route
+	   * @return {?}
+	   */
+	  function getResolve(route) {
+	      return route.resolve ? route.resolve : {};
+	  }
+
+	  /**
+	   * @license
+	   * Copyright Google Inc. All Rights Reserved.
+	   *
+	   * Use of this source code is governed by an MIT-style license that can be
+	   * found in the LICENSE file at https://angular.io/license
+	   */
+	  /**
+	   *  *
+	   */
+	  var RouterOutletMap = (function () {
+	      function RouterOutletMap() {
+	          /** @internal */
+	          this._outlets = {};
+	      }
+	      /**
+	       *  Adds an outlet to this map.
+	       * @param {?} name
+	       * @param {?} outlet
+	       * @return {?}
+	       */
+	      RouterOutletMap.prototype.registerOutlet = function (name, outlet) { this._outlets[name] = outlet; };
+	      /**
+	       *  Removes an outlet from this map.
+	       * @param {?} name
+	       * @return {?}
+	       */
+	      RouterOutletMap.prototype.removeOutlet = function (name) { this._outlets[name] = undefined; };
+	      return RouterOutletMap;
+	  }());
+
+	  /**
+	   * @license
+	   * Copyright Google Inc. All Rights Reserved.
+	   *
+	   * Use of this source code is governed by an MIT-style license that can be
+	   * found in the LICENSE file at https://angular.io/license
+	   */
+	  /**
+	   *  *
+	   * @abstract
+	   */
+	  var UrlHandlingStrategy = (function () {
+	      function UrlHandlingStrategy() {
+	      }
+	      /**
+	       *  Tells the router if this URL should be processed.
+	        * *
+	        * When it returns true, the router will execute the regular navigation.
+	        * When it returns false, the router will set the router state to an empty state.
+	        * As a result, all the active components will be destroyed.
+	        * *
+	       * @abstract
+	       * @param {?} url
+	       * @return {?}
+	       */
+	      UrlHandlingStrategy.prototype.shouldProcessUrl = function (url) { };
+	      /**
+	       *  Extracts the part of the URL that should be handled by the router.
+	        * The rest of the URL will remain untouched.
+	       * @abstract
+	       * @param {?} url
+	       * @return {?}
+	       */
+	      UrlHandlingStrategy.prototype.extract = function (url) { };
+	      /**
+	       *  Merges the URL fragment with the rest of the URL.
+	       * @abstract
+	       * @param {?} newUrlPart
+	       * @param {?} rawUrl
+	       * @return {?}
+	       */
+	      UrlHandlingStrategy.prototype.merge = function (newUrlPart, rawUrl) { };
+	      return UrlHandlingStrategy;
+	  }());
+	  /**
+	   * @experimental
+	   */
+	  var DefaultUrlHandlingStrategy = (function () {
+	      function DefaultUrlHandlingStrategy() {
+	      }
+	      /**
+	       * @param {?} url
+	       * @return {?}
+	       */
+	      DefaultUrlHandlingStrategy.prototype.shouldProcessUrl = function (url) { return true; };
+	      /**
+	       * @param {?} url
+	       * @return {?}
+	       */
+	      DefaultUrlHandlingStrategy.prototype.extract = function (url) { return url; };
+	      /**
+	       * @param {?} newUrlPart
+	       * @param {?} wholeUrl
+	       * @return {?}
+	       */
+	      DefaultUrlHandlingStrategy.prototype.merge = function (newUrlPart, wholeUrl) { return newUrlPart; };
+	      return DefaultUrlHandlingStrategy;
+	  }());
+
+	  /**
+	   *  *
+	   */
+	  var NavigationStart = (function () {
+	      /**
+	       * @param {?} id
+	       * @param {?} url
+	       */
+	      function NavigationStart(id, url) {
+	          this.id = id;
+	          this.url = url;
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      NavigationStart.prototype.toString = function () { return "NavigationStart(id: " + this.id + ", url: '" + this.url + "')"; };
+	      return NavigationStart;
+	  }());
+	  /**
+	   *  *
+	   */
+	  var NavigationEnd = (function () {
+	      /**
+	       * @param {?} id
+	       * @param {?} url
+	       * @param {?} urlAfterRedirects
+	       */
+	      function NavigationEnd(id, url, urlAfterRedirects) {
+	          this.id = id;
+	          this.url = url;
+	          this.urlAfterRedirects = urlAfterRedirects;
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      NavigationEnd.prototype.toString = function () {
+	          return "NavigationEnd(id: " + this.id + ", url: '" + this.url + "', urlAfterRedirects: '" + this.urlAfterRedirects + "')";
+	      };
+	      return NavigationEnd;
+	  }());
+	  /**
+	   *  *
+	   */
+	  var NavigationCancel = (function () {
+	      /**
+	       * @param {?} id
+	       * @param {?} url
+	       * @param {?} reason
+	       */
+	      function NavigationCancel(id, url, reason) {
+	          this.id = id;
+	          this.url = url;
+	          this.reason = reason;
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      NavigationCancel.prototype.toString = function () { return "NavigationCancel(id: " + this.id + ", url: '" + this.url + "')"; };
+	      return NavigationCancel;
+	  }());
+	  /**
+	   *  *
+	   */
+	  var NavigationError = (function () {
+	      /**
+	       * @param {?} id
+	       * @param {?} url
+	       * @param {?} error
+	       */
+	      function NavigationError(id, url, error) {
+	          this.id = id;
+	          this.url = url;
+	          this.error = error;
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      NavigationError.prototype.toString = function () {
+	          return "NavigationError(id: " + this.id + ", url: '" + this.url + "', error: " + this.error + ")";
+	      };
+	      return NavigationError;
+	  }());
+	  /**
+	   *  *
+	   */
+	  var RoutesRecognized = (function () {
+	      /**
+	       * @param {?} id
+	       * @param {?} url
+	       * @param {?} urlAfterRedirects
+	       * @param {?} state
+	       */
+	      function RoutesRecognized(id, url, urlAfterRedirects, state) {
+	          this.id = id;
+	          this.url = url;
+	          this.urlAfterRedirects = urlAfterRedirects;
+	          this.state = state;
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      RoutesRecognized.prototype.toString = function () {
+	          return "RoutesRecognized(id: " + this.id + ", url: '" + this.url + "', urlAfterRedirects: '" + this.urlAfterRedirects + "', state: " + this.state + ")";
+	      };
+	      return RoutesRecognized;
+	  }());
+	  /**
+	   * @param {?} error
+	   * @return {?}
+	   */
+	  function defaultErrorHandler(error) {
+	      throw error;
+	  }
+	  /**
+	   *  Does not detach any subtrees. Reuses routes as long as their route config is the same.
+	   */
+	  var DefaultRouteReuseStrategy = (function () {
+	      function DefaultRouteReuseStrategy() {
+	      }
+	      /**
+	       * @param {?} route
+	       * @return {?}
+	       */
+	      DefaultRouteReuseStrategy.prototype.shouldDetach = function (route) { return false; };
+	      /**
+	       * @param {?} route
+	       * @param {?} detachedTree
+	       * @return {?}
+	       */
+	      DefaultRouteReuseStrategy.prototype.store = function (route, detachedTree) { };
+	      /**
+	       * @param {?} route
+	       * @return {?}
+	       */
+	      DefaultRouteReuseStrategy.prototype.shouldAttach = function (route) { return false; };
+	      /**
+	       * @param {?} route
+	       * @return {?}
+	       */
+	      DefaultRouteReuseStrategy.prototype.retrieve = function (route) { return null; };
+	      /**
+	       * @param {?} future
+	       * @param {?} curr
+	       * @return {?}
+	       */
+	      DefaultRouteReuseStrategy.prototype.shouldReuseRoute = function (future, curr) {
+	          return future.routeConfig === curr.routeConfig;
+	      };
+	      return DefaultRouteReuseStrategy;
+	  }());
+	  /**
+	   *  *
+	    * See {@link Routes} for more details and examples.
+	    * *
+	    * *
+	   */
+	  var Router = (function () {
+	      /**
+	       * @param {?} rootComponentType
+	       * @param {?} urlSerializer
+	       * @param {?} outletMap
+	       * @param {?} location
+	       * @param {?} injector
+	       * @param {?} loader
+	       * @param {?} compiler
+	       * @param {?} config
+	       */
+	      function Router(rootComponentType, urlSerializer, outletMap, location, injector, loader, compiler, config) {
+	          this.rootComponentType = rootComponentType;
+	          this.urlSerializer = urlSerializer;
+	          this.outletMap = outletMap;
+	          this.location = location;
+	          this.injector = injector;
+	          this.config = config;
+	          this.navigations = new rxjs_BehaviorSubject.BehaviorSubject(null);
+	          this.routerEvents = new rxjs_Subject.Subject();
+	          this.navigationId = 0;
+	          /**
+	           * Error handler that is invoked when a navigation errors.
+	           *
+	           * See {@link ErrorHandler} for more information.
+	           */
+	          this.errorHandler = defaultErrorHandler;
+	          /**
+	           * Indicates if at least one navigation happened.
+	           */
+	          this.navigated = false;
+	          /**
+	           * Extracts and merges URLs. Used for Angular 1 to Angular 2 migrations.
+	           */
+	          this.urlHandlingStrategy = new DefaultUrlHandlingStrategy();
+	          this.routeReuseStrategy = new DefaultRouteReuseStrategy();
+	          this.resetConfig(config);
+	          this.currentUrlTree = createEmptyUrlTree();
+	          this.rawUrlTree = this.currentUrlTree;
+	          this.configLoader = new RouterConfigLoader(loader, compiler);
+	          this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
+	          this.processNavigations();
+	      }
+	      /**
+	       *  TODO: this should be removed once the constructor of the router made internal
+	       * @param {?} rootComponentType
+	       * @return {?}
+	       */
+	      Router.prototype.resetRootComponentType = function (rootComponentType) {
+	          this.rootComponentType = rootComponentType;
+	          // TODO: vsavkin router 4.0 should make the root component set to null
+	          // this will simplify the lifecycle of the router.
+	          this.currentRouterState.root.component = this.rootComponentType;
+	      };
+	      /**
+	       *  Sets up the location change listener and performs the initial navigation.
+	       * @return {?}
+	       */
+	      Router.prototype.initialNavigation = function () {
+	          this.setUpLocationChangeListener();
+	          this.navigateByUrl(this.location.path(true), { replaceUrl: true });
+	      };
+	      /**
+	       *  Sets up the location change listener.
+	       * @return {?}
+	       */
+	      Router.prototype.setUpLocationChangeListener = function () {
+	          var _this = this;
+	          // Zone.current.wrap is needed because of the issue with RxJS scheduler,
+	          // which does not work properly with zone.js in IE and Safari
+	          if (!this.locationSubscription) {
+	              this.locationSubscription = (this.location.subscribe(Zone.current.wrap(function (change) {
+	                  var /** @type {?} */ rawUrlTree = _this.urlSerializer.parse(change['url']);
+	                  var /** @type {?} */ source = change['type'] === 'popstate' ? 'popstate' : 'hashchange';
+	                  setTimeout(function () { _this.scheduleNavigation(rawUrlTree, source, { replaceUrl: true }); }, 0);
+	              })));
+	          }
+	      };
+	      Object.defineProperty(Router.prototype, "routerState", {
+	          /**
+	           *  The current route state
+	           * @return {?}
+	           */
+	          get: function () { return this.currentRouterState; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      Object.defineProperty(Router.prototype, "url", {
+	          /**
+	           *  The current url
+	           * @return {?}
+	           */
+	          get: function () { return this.serializeUrl(this.currentUrlTree); },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      Object.defineProperty(Router.prototype, "events", {
+	          /**
+	           *  An observable of router events
+	           * @return {?}
+	           */
+	          get: function () { return this.routerEvents; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      /**
+	       *  Resets the configuration used for navigation and generating links.
+	        * *
+	        * ### Usage
+	        * *
+	        * ```
+	        * router.resetConfig([
+	        * { path: 'team/:id', component: TeamCmp, children: [
+	        * { path: 'simple', component: SimpleCmp },
+	        * { path: 'user/:name', component: UserCmp }
+	        * ]}
+	        * ]);
+	        * ```
+	       * @param {?} config
+	       * @return {?}
+	       */
+	      Router.prototype.resetConfig = function (config) {
+	          validateConfig(config);
+	          this.config = config;
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      Router.prototype.ngOnDestroy = function () { this.dispose(); };
+	      /**
+	       *  Disposes of the router
+	       * @return {?}
+	       */
+	      Router.prototype.dispose = function () {
+	          if (this.locationSubscription) {
+	              this.locationSubscription.unsubscribe();
+	              this.locationSubscription = null;
+	          }
+	      };
+	      /**
+	       *  Applies an array of commands to the current url tree and creates a new url tree.
+	        * *
+	        * When given an activate route, applies the given commands starting from the route.
+	        * When not given a route, applies the given command starting from the root.
+	        * *
+	        * ### Usage
+	        * *
+	        * ```
+	        * // create /team/33/user/11
+	        * router.createUrlTree(['/team', 33, 'user', 11]);
+	        * *
+	        * // create /team/33;expand=true/user/11
+	        * router.createUrlTree(['/team', 33, {expand: true}, 'user', 11]);
+	        * *
+	        * // you can collapse static segments like this (this works only with the first passed-in value):
+	        * router.createUrlTree(['/team/33/user', userId]);
+	        * *
+	        * // If the first segment can contain slashes, and you do not want the router to split it, you
+	        * // can do the following:
+	        * *
+	        * router.createUrlTree([{segmentPath: '/one/two'}]);
+	        * *
+	        * // create /team/33/(user/11//right:chat)
+	        * router.createUrlTree(['/team', 33, {outlets: {primary: 'user/11', right: 'chat'}}]);
+	        * *
+	        * // remove the right secondary node
+	        * router.createUrlTree(['/team', 33, {outlets: {primary: 'user/11', right: null}}]);
+	        * *
+	        * // assuming the current url is `/team/33/user/11` and the route points to `user/11`
+	        * *
+	        * // navigate to /team/33/user/11/details
+	        * router.createUrlTree(['details'], {relativeTo: route});
+	        * *
+	        * // navigate to /team/33/user/22
+	        * router.createUrlTree(['../22'], {relativeTo: route});
+	        * *
+	        * // navigate to /team/44/user/22
+	        * router.createUrlTree(['../../team/44/user/22'], {relativeTo: route});
+	        * ```
+	       * @param {?} commands
+	       * @param {?=} __1
+	       * @return {?}
+	       */
+	      Router.prototype.createUrlTree = function (commands, _a) {
+	          var _b = _a === void 0 ? {} : _a, relativeTo = _b.relativeTo, queryParams = _b.queryParams, fragment = _b.fragment, preserveQueryParams = _b.preserveQueryParams, preserveFragment = _b.preserveFragment;
+	          var /** @type {?} */ a = relativeTo || this.routerState.root;
+	          var /** @type {?} */ q = preserveQueryParams ? this.currentUrlTree.queryParams : queryParams;
+	          var /** @type {?} */ f = preserveFragment ? this.currentUrlTree.fragment : fragment;
+	          return createUrlTree(a, this.currentUrlTree, commands, q, f);
+	      };
+	      /**
+	       *  Navigate based on the provided url. This navigation is always absolute.
+	        * *
+	        * Returns a promise that:
+	        * - resolves to 'true' when navigation succeeds,
+	        * - resolves to 'false' when navigation fails,
+	        * - is rejected when an error happens.
+	        * *
+	        * ### Usage
+	        * *
+	        * ```
+	        * router.navigateByUrl("/team/33/user/11");
+	        * *
+	        * // Navigate without updating the URL
+	        * router.navigateByUrl("/team/33/user/11", { skipLocationChange: true });
+	        * ```
+	        * *
+	        * In opposite to `navigate`, `navigateByUrl` takes a whole URL
+	        * and does not apply any delta to the current one.
+	       * @param {?} url
+	       * @param {?=} extras
+	       * @return {?}
+	       */
+	      Router.prototype.navigateByUrl = function (url, extras) {
+	          if (extras === void 0) { extras = { skipLocationChange: false }; }
+	          if (url instanceof UrlTree) {
+	              return this.scheduleNavigation(this.urlHandlingStrategy.merge(url, this.rawUrlTree), 'imperative', extras);
+	          }
+	          var /** @type {?} */ urlTree = this.urlSerializer.parse(url);
+	          return this.scheduleNavigation(this.urlHandlingStrategy.merge(urlTree, this.rawUrlTree), 'imperative', extras);
+	      };
+	      /**
+	       *  Navigate based on the provided array of commands and a starting point.
+	        * If no starting route is provided, the navigation is absolute.
+	        * *
+	        * Returns a promise that:
+	        * - resolves to 'true' when navigation succeeds,
+	        * - resolves to 'false' when navigation fails,
+	        * - is rejected when an error happens.
+	        * *
+	        * ### Usage
+	        * *
+	        * ```
+	        * router.navigate(['team', 33, 'user', 11], {relativeTo: route});
+	        * *
+	        * // Navigate without updating the URL
+	        * router.navigate(['team', 33, 'user', 11], {relativeTo: route, skipLocationChange: true});
+	        * ```
+	        * *
+	        * In opposite to `navigateByUrl`, `navigate` always takes a delta that is applied to the current
+	        * URL.
+	       * @param {?} commands
+	       * @param {?=} extras
+	       * @return {?}
+	       */
+	      Router.prototype.navigate = function (commands, extras) {
+	          if (extras === void 0) { extras = { skipLocationChange: false }; }
+	          if (typeof extras.queryParams === 'object' && extras.queryParams !== null) {
+	              extras.queryParams = this.removeEmptyProps(extras.queryParams);
+	          }
+	          return this.navigateByUrl(this.createUrlTree(commands, extras), extras);
+	      };
+	      /**
+	       *  Serializes a {@link UrlTree} into a string
+	       * @param {?} url
+	       * @return {?}
+	       */
+	      Router.prototype.serializeUrl = function (url) { return this.urlSerializer.serialize(url); };
+	      /**
+	       *  Parses a string into a {@link UrlTree}
+	       * @param {?} url
+	       * @return {?}
+	       */
+	      Router.prototype.parseUrl = function (url) { return this.urlSerializer.parse(url); };
+	      /**
+	       *  Returns whether the url is activated
+	       * @param {?} url
+	       * @param {?} exact
+	       * @return {?}
+	       */
+	      Router.prototype.isActive = function (url, exact) {
+	          if (url instanceof UrlTree) {
+	              return containsTree(this.currentUrlTree, url, exact);
+	          }
+	          else {
+	              var /** @type {?} */ urlTree = this.urlSerializer.parse(url);
+	              return containsTree(this.currentUrlTree, urlTree, exact);
+	          }
+	      };
+	      /**
+	       * @param {?} params
+	       * @return {?}
+	       */
+	      Router.prototype.removeEmptyProps = function (params) {
+	          return Object.keys(params).reduce(function (result, key) {
+	              var /** @type {?} */ value = params[key];
+	              if (value !== null && value !== undefined) {
+	                  result[key] = value;
+	              }
+	              return result;
+	          }, {});
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      Router.prototype.processNavigations = function () {
+	          var _this = this;
+	          rxjs_operator_concatMap.concatMap
+	              .call(this.navigations, function (nav) {
+	              if (nav) {
+	                  _this.executeScheduledNavigation(nav);
+	                  // a failed navigation should not stop the router from processing
+	                  // further navigations => the catch
+	                  return nav.promise.catch(function () { });
+	              }
+	              else {
+	                  return (rxjs_observable_of.of(null));
+	              }
+	          })
+	              .subscribe(function () { });
+	      };
+	      /**
+	       * @param {?} rawUrl
+	       * @param {?} source
+	       * @param {?} extras
+	       * @return {?}
+	       */
+	      Router.prototype.scheduleNavigation = function (rawUrl, source, extras) {
+	          var /** @type {?} */ lastNavigation = this.navigations.value;
+	          // If the user triggers a navigation imperatively (e.g., by using navigateByUrl),
+	          // and that navigation results in 'replaceState' that leads to the same URL,
+	          // we should skip those.
+	          if (lastNavigation && source !== 'imperative' && lastNavigation.source === 'imperative' &&
+	              lastNavigation.rawUrl.toString() === rawUrl.toString()) {
+	              return null; // return value is not used
+	          }
+	          // Because of a bug in IE and Edge, the location class fires two events (popstate and
+	          // hashchange)
+	          // every single time. The second one should be ignored. Otherwise, the URL will flicker.
+	          if (lastNavigation && source == 'hashchange' && lastNavigation.source === 'popstate' &&
+	              lastNavigation.rawUrl.toString() === rawUrl.toString()) {
+	              return null; // return value is not used
+	          }
+	          var /** @type {?} */ resolve = null;
+	          var /** @type {?} */ reject = null;
+	          var /** @type {?} */ promise = new Promise(function (res, rej) {
+	              resolve = res;
+	              reject = rej;
+	          });
+	          var /** @type {?} */ id = ++this.navigationId;
+	          this.navigations.next({ id: id, source: source, rawUrl: rawUrl, extras: extras, resolve: resolve, reject: reject, promise: promise });
+	          // Make sure that the error is propagated even though `processNavigations` catch
+	          // handler does not rethrow
+	          return promise.catch(function (e) { return Promise.reject(e); });
+	      };
+	      /**
+	       * @param {?} __0
+	       * @return {?}
+	       */
+	      Router.prototype.executeScheduledNavigation = function (_a) {
+	          var _this = this;
+	          var id = _a.id, rawUrl = _a.rawUrl, extras = _a.extras, resolve = _a.resolve, reject = _a.reject;
+	          var /** @type {?} */ url = this.urlHandlingStrategy.extract(rawUrl);
+	          var /** @type {?} */ urlTransition = !this.navigated || url.toString() !== this.currentUrlTree.toString();
+	          if (urlTransition && this.urlHandlingStrategy.shouldProcessUrl(rawUrl)) {
+	              this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
+	              Promise.resolve()
+	                  .then(function (_) { return _this.runNavigate(url, rawUrl, extras.skipLocationChange, extras.replaceUrl, id, null); })
+	                  .then(resolve, reject);
+	          }
+	          else if (urlTransition && this.rawUrlTree &&
+	              this.urlHandlingStrategy.shouldProcessUrl(this.rawUrlTree)) {
+	              this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
+	              Promise.resolve()
+	                  .then(function (_) { return _this.runNavigate(url, rawUrl, false, false, id, createEmptyState(url, _this.rootComponentType).snapshot); })
+	                  .then(resolve, reject);
+	          }
+	          else {
+	              this.rawUrlTree = rawUrl;
+	              resolve(null);
+	          }
+	      };
+	      /**
+	       * @param {?} url
+	       * @param {?} rawUrl
+	       * @param {?} shouldPreventPushState
+	       * @param {?} shouldReplaceUrl
+	       * @param {?} id
+	       * @param {?} precreatedState
+	       * @return {?}
+	       */
+	      Router.prototype.runNavigate = function (url, rawUrl, shouldPreventPushState, shouldReplaceUrl, id, precreatedState) {
+	          var _this = this;
+	          if (id !== this.navigationId) {
+	              this.location.go(this.urlSerializer.serialize(this.currentUrlTree));
+	              this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url), "Navigation ID " + id + " is not equal to the current navigation id " + this.navigationId));
+	              return Promise.resolve(false);
+	          }
+	          return new Promise(function (resolvePromise, rejectPromise) {
+	              // create an observable of the url and route state snapshot
+	              // this operation do not result in any side effects
+	              var /** @type {?} */ urlAndSnapshot$;
+	              if (!precreatedState) {
+	                  var /** @type {?} */ redirectsApplied$ = applyRedirects(_this.injector, _this.configLoader, _this.urlSerializer, url, _this.config);
+	                  urlAndSnapshot$ = rxjs_operator_mergeMap.mergeMap.call(redirectsApplied$, function (appliedUrl) {
+	                      return rxjs_operator_map.map.call(recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl)), function (snapshot) {
+	                          _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), snapshot));
+	                          return { appliedUrl: appliedUrl, snapshot: snapshot };
+	                      });
+	                  });
+	              }
+	              else {
+	                  urlAndSnapshot$ = rxjs_observable_of.of({ appliedUrl: url, snapshot: precreatedState });
+	              }
+	              // run preactivation: guards and data resolvers
+	              var /** @type {?} */ preActivation;
+	              var /** @type {?} */ preactivationTraverse$ = rxjs_operator_map.map.call(urlAndSnapshot$, function (_a) {
+	                  var appliedUrl = _a.appliedUrl, snapshot = _a.snapshot;
+	                  preActivation =
+	                      new PreActivation(snapshot, _this.currentRouterState.snapshot, _this.injector);
+	                  preActivation.traverse(_this.outletMap);
+	                  return { appliedUrl: appliedUrl, snapshot: snapshot };
+	              });
+	              var /** @type {?} */ preactivationCheckGuards = rxjs_operator_mergeMap.mergeMap.call(preactivationTraverse$, function (_a) {
+	                  var appliedUrl = _a.appliedUrl, snapshot = _a.snapshot;
+	                  if (_this.navigationId !== id)
+	                      return rxjs_observable_of.of(false);
+	                  return rxjs_operator_map.map.call(preActivation.checkGuards(), function (shouldActivate) {
+	                      return { appliedUrl: appliedUrl, snapshot: snapshot, shouldActivate: shouldActivate };
+	                  });
+	              });
+	              var /** @type {?} */ preactivationResolveData$ = rxjs_operator_mergeMap.mergeMap.call(preactivationCheckGuards, function (p) {
+	                  if (_this.navigationId !== id)
+	                      return rxjs_observable_of.of(false);
+	                  if (p.shouldActivate) {
+	                      return rxjs_operator_map.map.call(preActivation.resolveData(), function () { return p; });
+	                  }
+	                  else {
+	                      return rxjs_observable_of.of(p);
+	                  }
+	              });
+	              // create router state
+	              // this operation has side effects => route state is being affected
+	              var /** @type {?} */ routerState$ = rxjs_operator_map.map.call(preactivationResolveData$, function (_a) {
+	                  var appliedUrl = _a.appliedUrl, snapshot = _a.snapshot, shouldActivate = _a.shouldActivate;
+	                  if (shouldActivate) {
+	                      var /** @type {?} */ state = createRouterState(_this.routeReuseStrategy, snapshot, _this.currentRouterState);
+	                      return { appliedUrl: appliedUrl, state: state, shouldActivate: shouldActivate };
+	                  }
+	                  else {
+	                      return { appliedUrl: appliedUrl, state: null, shouldActivate: shouldActivate };
+	                  }
+	              });
+	              // applied the new router state
+	              // this operation has side effects
+	              var /** @type {?} */ navigationIsSuccessful;
+	              var /** @type {?} */ storedState = _this.currentRouterState;
+	              var /** @type {?} */ storedUrl = _this.currentUrlTree;
+	              routerState$
+	                  .forEach(function (_a) {
+	                  var appliedUrl = _a.appliedUrl, state = _a.state, shouldActivate = _a.shouldActivate;
+	                  if (!shouldActivate || id !== _this.navigationId) {
+	                      navigationIsSuccessful = false;
+	                      return;
+	                  }
+	                  _this.currentUrlTree = appliedUrl;
+	                  _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
+	                  _this.currentRouterState = state;
+	                  if (!shouldPreventPushState) {
+	                      var /** @type {?} */ path = _this.urlSerializer.serialize(_this.rawUrlTree);
+	                      if (_this.location.isCurrentPathEqualTo(path) || shouldReplaceUrl) {
+	                          _this.location.replaceState(path);
+	                      }
+	                      else {
+	                          _this.location.go(path);
+	                      }
+	                  }
+	                  new ActivateRoutes(_this.routeReuseStrategy, state, storedState)
+	                      .activate(_this.outletMap);
+	                  navigationIsSuccessful = true;
+	              })
+	                  .then(function () {
+	                  _this.navigated = true;
+	                  if (navigationIsSuccessful) {
+	                      _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(_this.currentUrlTree)));
+	                      resolvePromise(true);
+	                  }
+	                  else {
+	                      _this.resetUrlToCurrentUrlTree();
+	                      _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url), ''));
+	                      resolvePromise(false);
+	                  }
+	              }, function (e) {
+	                  if (e instanceof NavigationCancelingError) {
+	                      _this.resetUrlToCurrentUrlTree();
+	                      _this.navigated = true;
+	                      _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url), e.message));
+	                      resolvePromise(false);
+	                  }
+	                  else {
+	                      _this.routerEvents.next(new NavigationError(id, _this.serializeUrl(url), e));
+	                      try {
+	                          resolvePromise(_this.errorHandler(e));
+	                      }
+	                      catch (ee) {
+	                          rejectPromise(ee);
+	                      }
+	                  }
+	                  _this.currentRouterState = storedState;
+	                  _this.currentUrlTree = storedUrl;
+	                  _this.rawUrlTree = _this.urlHandlingStrategy.merge(_this.currentUrlTree, rawUrl);
+	                  _this.location.replaceState(_this.serializeUrl(_this.rawUrlTree));
+	              });
+	          });
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      Router.prototype.resetUrlToCurrentUrlTree = function () {
+	          var /** @type {?} */ path = this.urlSerializer.serialize(this.rawUrlTree);
+	          this.location.replaceState(path);
+	      };
+	      return Router;
+	  }());
+	  var CanActivate = (function () {
+	      /**
+	       * @param {?} path
+	       */
+	      function CanActivate(path) {
+	          this.path = path;
+	      }
+	      Object.defineProperty(CanActivate.prototype, "route", {
+	          /**
+	           * @return {?}
+	           */
+	          get: function () { return this.path[this.path.length - 1]; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      return CanActivate;
+	  }());
+	  var CanDeactivate = (function () {
+	      /**
+	       * @param {?} component
+	       * @param {?} route
+	       */
+	      function CanDeactivate(component, route) {
+	          this.component = component;
+	          this.route = route;
+	      }
+	      return CanDeactivate;
+	  }());
+	  var PreActivation = (function () {
+	      /**
+	       * @param {?} future
+	       * @param {?} curr
+	       * @param {?} injector
+	       */
+	      function PreActivation(future, curr, injector) {
+	          this.future = future;
+	          this.curr = curr;
+	          this.injector = injector;
+	          this.checks = [];
+	      }
+	      /**
+	       * @param {?} parentOutletMap
+	       * @return {?}
+	       */
+	      PreActivation.prototype.traverse = function (parentOutletMap) {
+	          var /** @type {?} */ futureRoot = this.future._root;
+	          var /** @type {?} */ currRoot = this.curr ? this.curr._root : null;
+	          this.traverseChildRoutes(futureRoot, currRoot, parentOutletMap, [futureRoot.value]);
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      PreActivation.prototype.checkGuards = function () {
+	          var _this = this;
+	          if (this.checks.length === 0)
+	              return rxjs_observable_of.of(true);
+	          var /** @type {?} */ checks$ = rxjs_observable_from.from(this.checks);
+	          var /** @type {?} */ runningChecks$ = rxjs_operator_mergeMap.mergeMap.call(checks$, function (s) {
+	              if (s instanceof CanActivate) {
+	                  return andObservables(rxjs_observable_from.from([_this.runCanActivateChild(s.path), _this.runCanActivate(s.route)]));
+	              }
+	              else if (s instanceof CanDeactivate) {
+	                  // workaround https://github.com/Microsoft/TypeScript/issues/7271
+	                  var /** @type {?} */ s2 = (s);
+	                  return _this.runCanDeactivate(s2.component, s2.route);
+	              }
+	              else {
+	                  throw new Error('Cannot be reached');
+	              }
+	          });
+	          return rxjs_operator_every.every.call(runningChecks$, function (result) { return result === true; });
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      PreActivation.prototype.resolveData = function () {
+	          var _this = this;
+	          if (this.checks.length === 0)
+	              return rxjs_observable_of.of(null);
+	          var /** @type {?} */ checks$ = rxjs_observable_from.from(this.checks);
+	          var /** @type {?} */ runningChecks$ = rxjs_operator_concatMap.concatMap.call(checks$, function (s) {
+	              if (s instanceof CanActivate) {
+	                  return _this.runResolve(s.route);
+	              }
+	              else {
+	                  return rxjs_observable_of.of(null);
+	              }
+	          });
+	          return rxjs_operator_reduce.reduce.call(runningChecks$, function (_, __) { return _; });
+	      };
+	      /**
+	       * @param {?} futureNode
+	       * @param {?} currNode
+	       * @param {?} outletMap
+	       * @param {?} futurePath
+	       * @return {?}
+	       */
+	      PreActivation.prototype.traverseChildRoutes = function (futureNode, currNode, outletMap, futurePath) {
+	          var _this = this;
+	          var /** @type {?} */ prevChildren = nodeChildrenAsMap(currNode);
+	          futureNode.children.forEach(function (c) {
+	              _this.traverseRoutes(c, prevChildren[c.value.outlet], outletMap, futurePath.concat([c.value]));
+	              delete prevChildren[c.value.outlet];
+	          });
+	          forEach(prevChildren, function (v, k) { return _this.deactiveRouteAndItsChildren(v, outletMap._outlets[k]); });
+	      };
+	      /**
+	       * @param {?} futureNode
+	       * @param {?} currNode
+	       * @param {?} parentOutletMap
+	       * @param {?} futurePath
+	       * @return {?}
+	       */
+	      PreActivation.prototype.traverseRoutes = function (futureNode, currNode, parentOutletMap, futurePath) {
+	          var /** @type {?} */ future = futureNode.value;
+	          var /** @type {?} */ curr = currNode ? currNode.value : null;
+	          var /** @type {?} */ outlet = parentOutletMap ? parentOutletMap._outlets[futureNode.value.outlet] : null;
+	          // reusing the node
+	          if (curr && future._routeConfig === curr._routeConfig) {
+	              if (!equalParamsAndUrlSegments(future, curr)) {
+	                  this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(futurePath));
+	              }
+	              else {
+	                  // we need to set the data
+	                  future.data = curr.data;
+	                  future._resolvedData = curr._resolvedData;
+	              }
+	              // If we have a component, we need to go through an outlet.
+	              if (future.component) {
+	                  this.traverseChildRoutes(futureNode, currNode, outlet ? outlet.outletMap : null, futurePath);
+	              }
+	              else {
+	                  this.traverseChildRoutes(futureNode, currNode, parentOutletMap, futurePath);
+	              }
+	          }
+	          else {
+	              if (curr) {
+	                  this.deactiveRouteAndItsChildren(currNode, outlet);
+	              }
+	              this.checks.push(new CanActivate(futurePath));
+	              // If we have a component, we need to go through an outlet.
+	              if (future.component) {
+	                  this.traverseChildRoutes(futureNode, null, outlet ? outlet.outletMap : null, futurePath);
+	              }
+	              else {
+	                  this.traverseChildRoutes(futureNode, null, parentOutletMap, futurePath);
+	              }
+	          }
+	      };
+	      /**
+	       * @param {?} route
+	       * @param {?} outlet
+	       * @return {?}
+	       */
+	      PreActivation.prototype.deactiveRouteAndItsChildren = function (route, outlet) {
+	          var _this = this;
+	          var /** @type {?} */ prevChildren = nodeChildrenAsMap(route);
+	          var /** @type {?} */ r = route.value;
+	          forEach(prevChildren, function (v, k) {
+	              if (!r.component) {
+	                  _this.deactiveRouteAndItsChildren(v, outlet);
+	              }
+	              else if (!!outlet) {
+	                  _this.deactiveRouteAndItsChildren(v, outlet.outletMap._outlets[k]);
+	              }
+	              else {
+	                  _this.deactiveRouteAndItsChildren(v, null);
+	              }
+	          });
+	          if (!r.component) {
+	              this.checks.push(new CanDeactivate(null, r));
+	          }
+	          else if (outlet && outlet.isActivated) {
+	              this.checks.push(new CanDeactivate(outlet.component, r));
+	          }
+	          else {
+	              this.checks.push(new CanDeactivate(null, r));
+	          }
+	      };
+	      /**
+	       * @param {?} future
+	       * @return {?}
+	       */
+	      PreActivation.prototype.runCanActivate = function (future) {
+	          var _this = this;
+	          var /** @type {?} */ canActivate = future._routeConfig ? future._routeConfig.canActivate : null;
+	          if (!canActivate || canActivate.length === 0)
+	              return rxjs_observable_of.of(true);
+	          var /** @type {?} */ obs = rxjs_operator_map.map.call(rxjs_observable_from.from(canActivate), function (c) {
+	              var /** @type {?} */ guard = _this.getToken(c, future);
+	              var /** @type {?} */ observable;
+	              if (guard.canActivate) {
+	                  observable = wrapIntoObservable(guard.canActivate(future, _this.future));
+	              }
+	              else {
+	                  observable = wrapIntoObservable(guard(future, _this.future));
+	              }
+	              return rxjs_operator_first.first.call(observable);
+	          });
+	          return andObservables(obs);
+	      };
+	      /**
+	       * @param {?} path
+	       * @return {?}
+	       */
+	      PreActivation.prototype.runCanActivateChild = function (path) {
+	          var _this = this;
+	          var /** @type {?} */ future = path[path.length - 1];
+	          var /** @type {?} */ canActivateChildGuards = path.slice(0, path.length - 1)
+	              .reverse()
+	              .map(function (p) { return _this.extractCanActivateChild(p); })
+	              .filter(function (_) { return _ !== null; });
+	          return andObservables(rxjs_operator_map.map.call(rxjs_observable_from.from(canActivateChildGuards), function (d) {
+	              var /** @type {?} */ obs = rxjs_operator_map.map.call(rxjs_observable_from.from(d.guards), function (c) {
+	                  var /** @type {?} */ guard = _this.getToken(c, c.node);
+	                  var /** @type {?} */ observable;
+	                  if (guard.canActivateChild) {
+	                      observable = wrapIntoObservable(guard.canActivateChild(future, _this.future));
+	                  }
+	                  else {
+	                      observable = wrapIntoObservable(guard(future, _this.future));
+	                  }
+	                  return rxjs_operator_first.first.call(observable);
+	              });
+	              return andObservables(obs);
+	          }));
+	      };
+	      /**
+	       * @param {?} p
+	       * @return {?}
+	       */
+	      PreActivation.prototype.extractCanActivateChild = function (p) {
+	          var /** @type {?} */ canActivateChild = p._routeConfig ? p._routeConfig.canActivateChild : null;
+	          if (!canActivateChild || canActivateChild.length === 0)
+	              return null;
+	          return { node: p, guards: canActivateChild };
+	      };
+	      /**
+	       * @param {?} component
+	       * @param {?} curr
+	       * @return {?}
+	       */
+	      PreActivation.prototype.runCanDeactivate = function (component, curr) {
+	          var _this = this;
+	          var /** @type {?} */ canDeactivate = curr && curr._routeConfig ? curr._routeConfig.canDeactivate : null;
+	          if (!canDeactivate || canDeactivate.length === 0)
+	              return rxjs_observable_of.of(true);
+	          var /** @type {?} */ canDeactivate$ = rxjs_operator_mergeMap.mergeMap.call(rxjs_observable_from.from(canDeactivate), function (c) {
+	              var /** @type {?} */ guard = _this.getToken(c, curr);
+	              var /** @type {?} */ observable;
+	              if (guard.canDeactivate) {
+	                  observable = wrapIntoObservable(guard.canDeactivate(component, curr, _this.curr));
+	              }
+	              else {
+	                  observable = wrapIntoObservable(guard(component, curr, _this.curr));
+	              }
+	              return rxjs_operator_first.first.call(observable);
+	          });
+	          return rxjs_operator_every.every.call(canDeactivate$, function (result) { return result === true; });
+	      };
+	      /**
+	       * @param {?} future
+	       * @return {?}
+	       */
+	      PreActivation.prototype.runResolve = function (future) {
+	          var /** @type {?} */ resolve = future._resolve;
+	          return rxjs_operator_map.map.call(this.resolveNode(resolve, future), function (resolvedData) {
+	              future._resolvedData = resolvedData;
+	              future.data = merge(future.data, inheritedParamsDataResolve(future).resolve);
+	              return null;
+	          });
+	      };
+	      /**
+	       * @param {?} resolve
+	       * @param {?} future
+	       * @return {?}
+	       */
+	      PreActivation.prototype.resolveNode = function (resolve, future) {
+	          var _this = this;
+	          return waitForMap(resolve, function (k, v) {
+	              var /** @type {?} */ resolver = _this.getToken(v, future);
+	              return resolver.resolve ? wrapIntoObservable(resolver.resolve(future, _this.future)) :
+	                  wrapIntoObservable(resolver(future, _this.future));
+	          });
+	      };
+	      /**
+	       * @param {?} token
+	       * @param {?} snapshot
+	       * @return {?}
+	       */
+	      PreActivation.prototype.getToken = function (token, snapshot) {
+	          var /** @type {?} */ config = closestLoadedConfig(snapshot);
+	          var /** @type {?} */ injector = config ? config.injector : this.injector;
+	          return injector.get(token);
+	      };
+	      return PreActivation;
+	  }());
+	  var ActivateRoutes = (function () {
+	      /**
+	       * @param {?} routeReuseStrategy
+	       * @param {?} futureState
+	       * @param {?} currState
+	       */
+	      function ActivateRoutes(routeReuseStrategy, futureState, currState) {
+	          this.routeReuseStrategy = routeReuseStrategy;
+	          this.futureState = futureState;
+	          this.currState = currState;
+	      }
+	      /**
+	       * @param {?} parentOutletMap
+	       * @return {?}
+	       */
+	      ActivateRoutes.prototype.activate = function (parentOutletMap) {
+	          var /** @type {?} */ futureRoot = this.futureState._root;
+	          var /** @type {?} */ currRoot = this.currState ? this.currState._root : null;
+	          this.deactivateChildRoutes(futureRoot, currRoot, parentOutletMap);
+	          advanceActivatedRoute(this.futureState.root);
+	          this.activateChildRoutes(futureRoot, currRoot, parentOutletMap);
+	      };
+	      /**
+	       * @param {?} futureNode
+	       * @param {?} currNode
+	       * @param {?} outletMap
+	       * @return {?}
+	       */
+	      ActivateRoutes.prototype.deactivateChildRoutes = function (futureNode, currNode, outletMap) {
+	          var _this = this;
+	          var /** @type {?} */ prevChildren = nodeChildrenAsMap(currNode);
+	          futureNode.children.forEach(function (c) {
+	              _this.deactivateRoutes(c, prevChildren[c.value.outlet], outletMap);
+	              delete prevChildren[c.value.outlet];
+	          });
+	          forEach(prevChildren, function (v, k) { return _this.deactiveRouteAndItsChildren(v, outletMap); });
+	      };
+	      /**
+	       * @param {?} futureNode
+	       * @param {?} currNode
+	       * @param {?} outletMap
+	       * @return {?}
+	       */
+	      ActivateRoutes.prototype.activateChildRoutes = function (futureNode, currNode, outletMap) {
+	          var _this = this;
+	          var /** @type {?} */ prevChildren = nodeChildrenAsMap(currNode);
+	          futureNode.children.forEach(function (c) { _this.activateRoutes(c, prevChildren[c.value.outlet], outletMap); });
+	      };
+	      /**
+	       * @param {?} futureNode
+	       * @param {?} currNode
+	       * @param {?} parentOutletMap
+	       * @return {?}
+	       */
+	      ActivateRoutes.prototype.deactivateRoutes = function (futureNode, currNode, parentOutletMap) {
+	          var /** @type {?} */ future = futureNode.value;
+	          var /** @type {?} */ curr = currNode ? currNode.value : null;
+	          // reusing the node
+	          if (future === curr) {
+	              // If we have a normal route, we need to go through an outlet.
+	              if (future.component) {
+	                  var /** @type {?} */ outlet = getOutlet(parentOutletMap, future);
+	                  this.deactivateChildRoutes(futureNode, currNode, outlet.outletMap);
+	              }
+	              else {
+	                  this.deactivateChildRoutes(futureNode, currNode, parentOutletMap);
+	              }
+	          }
+	          else {
+	              if (curr) {
+	                  this.deactiveRouteAndItsChildren(currNode, parentOutletMap);
+	              }
+	          }
+	      };
+	      /**
+	       * @param {?} futureNode
+	       * @param {?} currNode
+	       * @param {?} parentOutletMap
+	       * @return {?}
+	       */
+	      ActivateRoutes.prototype.activateRoutes = function (futureNode, currNode, parentOutletMap) {
+	          var /** @type {?} */ future = futureNode.value;
+	          var /** @type {?} */ curr = currNode ? currNode.value : null;
+	          // reusing the node
+	          if (future === curr) {
+	              // advance the route to push the parameters
+	              advanceActivatedRoute(future);
+	              // If we have a normal route, we need to go through an outlet.
+	              if (future.component) {
+	                  var /** @type {?} */ outlet = getOutlet(parentOutletMap, future);
+	                  this.activateChildRoutes(futureNode, currNode, outlet.outletMap);
+	              }
+	              else {
+	                  this.activateChildRoutes(futureNode, currNode, parentOutletMap);
+	              }
+	          }
+	          else {
+	              // if we have a normal route, we need to advance the route
+	              // and place the component into the outlet. After that recurse.
+	              if (future.component) {
+	                  advanceActivatedRoute(future);
+	                  var /** @type {?} */ outlet = getOutlet(parentOutletMap, futureNode.value);
+	                  if (this.routeReuseStrategy.shouldAttach(future.snapshot)) {
+	                      var /** @type {?} */ stored = ((this.routeReuseStrategy.retrieve(future.snapshot)));
+	                      this.routeReuseStrategy.store(future.snapshot, null);
+	                      outlet.attach(stored.componentRef, stored.route.value);
+	                      advanceActivatedRouteNodeAndItsChildren(stored.route);
+	                  }
+	                  else {
+	                      var /** @type {?} */ outletMap = new RouterOutletMap();
+	                      this.placeComponentIntoOutlet(outletMap, future, outlet);
+	                      this.activateChildRoutes(futureNode, null, outletMap);
+	                  }
+	              }
+	              else {
+	                  advanceActivatedRoute(future);
+	                  this.activateChildRoutes(futureNode, null, parentOutletMap);
+	              }
+	          }
+	      };
+	      /**
+	       * @param {?} outletMap
+	       * @param {?} future
+	       * @param {?} outlet
+	       * @return {?}
+	       */
+	      ActivateRoutes.prototype.placeComponentIntoOutlet = function (outletMap, future, outlet) {
+	          var /** @type {?} */ resolved = ([{ provide: ActivatedRoute, useValue: future }, {
+	                  provide: RouterOutletMap,
+	                  useValue: outletMap
+	              }]);
+	          var /** @type {?} */ config = parentLoadedConfig(future.snapshot);
+	          var /** @type {?} */ resolver = null;
+	          var /** @type {?} */ injector = null;
+	          if (config) {
+	              injector = config.injectorFactory(outlet.locationInjector);
+	              resolver = config.factoryResolver;
+	              resolved.push({ provide: _angular_core.ComponentFactoryResolver, useValue: resolver });
+	          }
+	          else {
+	              injector = outlet.locationInjector;
+	              resolver = outlet.locationFactoryResolver;
+	          }
+	          outlet.activate(future, resolver, injector, _angular_core.ReflectiveInjector.resolve(resolved), outletMap);
+	      };
+	      /**
+	       * @param {?} route
+	       * @param {?} parentOutletMap
+	       * @return {?}
+	       */
+	      ActivateRoutes.prototype.deactiveRouteAndItsChildren = function (route, parentOutletMap) {
+	          if (this.routeReuseStrategy.shouldDetach(route.value.snapshot)) {
+	              this.detachAndStoreRouteSubtree(route, parentOutletMap);
+	          }
+	          else {
+	              this.deactiveRouteAndOutlet(route, parentOutletMap);
+	          }
+	      };
+	      /**
+	       * @param {?} route
+	       * @param {?} parentOutletMap
+	       * @return {?}
+	       */
+	      ActivateRoutes.prototype.detachAndStoreRouteSubtree = function (route, parentOutletMap) {
+	          var /** @type {?} */ outlet = getOutlet(parentOutletMap, route.value);
+	          var /** @type {?} */ componentRef = outlet.detach();
+	          this.routeReuseStrategy.store(route.value.snapshot, { componentRef: componentRef, route: route });
+	      };
+	      /**
+	       * @param {?} route
+	       * @param {?} parentOutletMap
+	       * @return {?}
+	       */
+	      ActivateRoutes.prototype.deactiveRouteAndOutlet = function (route, parentOutletMap) {
+	          var _this = this;
+	          var /** @type {?} */ prevChildren = nodeChildrenAsMap(route);
+	          var /** @type {?} */ outlet = null;
+	          // getOutlet throws when cannot find the right outlet,
+	          // which can happen if an outlet was in an NgIf and was removed
+	          try {
+	              outlet = getOutlet(parentOutletMap, route.value);
+	          }
+	          catch (e) {
+	              return;
+	          }
+	          var /** @type {?} */ childOutletMap = outlet.outletMap;
+	          forEach(prevChildren, function (v, k) {
+	              if (route.value.component) {
+	                  _this.deactiveRouteAndItsChildren(v, childOutletMap);
+	              }
+	              else {
+	                  _this.deactiveRouteAndItsChildren(v, parentOutletMap);
+	              }
+	          });
+	          if (outlet && outlet.isActivated) {
+	              outlet.deactivate();
+	          }
+	      };
+	      return ActivateRoutes;
+	  }());
+	  /**
+	   * @param {?} node
+	   * @return {?}
+	   */
+	  function advanceActivatedRouteNodeAndItsChildren(node) {
+	      advanceActivatedRoute(node.value);
+	      node.children.forEach(advanceActivatedRouteNodeAndItsChildren);
+	  }
+	  /**
+	   * @param {?} snapshot
+	   * @return {?}
+	   */
+	  function parentLoadedConfig(snapshot) {
+	      var /** @type {?} */ s = snapshot.parent;
+	      while (s) {
+	          var /** @type {?} */ c = s._routeConfig;
+	          if (c && c._loadedConfig)
+	              return c._loadedConfig;
+	          if (c && c.component)
+	              return null;
+	          s = s.parent;
+	      }
+	      return null;
+	  }
+	  /**
+	   * @param {?} snapshot
+	   * @return {?}
+	   */
+	  function closestLoadedConfig(snapshot) {
+	      if (!snapshot)
+	          return null;
+	      var /** @type {?} */ s = snapshot.parent;
+	      while (s) {
+	          var /** @type {?} */ c = s._routeConfig;
+	          if (c && c._loadedConfig)
+	              return c._loadedConfig;
+	          s = s.parent;
+	      }
+	      return null;
+	  }
+	  /**
+	   * @param {?} node
+	   * @return {?}
+	   */
+	  function nodeChildrenAsMap(node) {
+	      return node ? node.children.reduce(function (m, c) {
+	          m[c.value.outlet] = c;
+	          return m;
+	      }, {}) : {};
+	  }
+	  /**
+	   * @param {?} outletMap
+	   * @param {?} route
+	   * @return {?}
+	   */
+	  function getOutlet(outletMap, route) {
+	      var /** @type {?} */ outlet = outletMap._outlets[route.outlet];
+	      if (!outlet) {
+	          var /** @type {?} */ componentName = ((route.component)).name;
+	          if (route.outlet === PRIMARY_OUTLET) {
+	              throw new Error("Cannot find primary outlet to load '" + componentName + "'");
+	          }
+	          else {
+	              throw new Error("Cannot find the outlet " + route.outlet + " to load '" + componentName + "'");
+	          }
+	      }
+	      return outlet;
+	  }
+
+	  /**
+	   *  *
+	    * *
+	    * Consider the following route configuration:
+	    * `[{ path: 'user/:name', component: UserCmp }]`
+	    * *
+	    * When linking to this `user/:name` route, you can write:
+	    * `<a routerLink='/user/bob'>link to user component</a>`
+	    * *
+	    * *
+	    * The RouterLink directives let you link to specific parts of your app.
+	    * *
+	    * When the link is static, you can use the directive as follows:
+	    * `<a routerLink="/user/bob">link to user component</a>`
+	    * *
+	    * If you use dynamic values to generate the link, you can pass an array of path
+	    * segments, followed by the params for each segment.
+	    * *
+	    * For instance `['/team', teamId, 'user', userName, {details: true}]`
+	    * means that we want to generate a link to `/team/11/user/bob;details=true`.
+	    * *
+	    * Multiple static segments can be merged into one
+	    * (e.g., `['/team/11/user', userName, {details: true}]`).
+	    * *
+	    * The first segment name can be prepended with `/`, `./`, or `../`:
+	    * * If the first segment begins with `/`, the router will look up the route from the root of the
+	    * app.
+	    * * If the first segment begins with `./`, or doesn't begin with a slash, the router will
+	    * instead look in the children of the current activated route.
+	    * * And if the first segment begins with `../`, the router will go up one level.
+	    * *
+	    * You can set query params and fragment as follows:
+	    * *
+	    * ```
+	    * <a [routerLink]="['/user/bob']" [queryParams]="{debug: true}" fragment="education">
+	    * link to user component
+	    * </a>
+	    * ```
+	    * RouterLink will use these to generate this link: `/user/bob#education?debug=true`.
+	    * *
+	    * You can also tell the directive to preserve the current query params and fragment:
+	    * *
+	    * ```
+	    * <a [routerLink]="['/user/bob']" preserveQueryParams preserveFragment>
+	    * link to user component
+	    * </a>
+	    * ```
+	    * *
+	    * The router link directive always treats the provided input as a delta to the current url.
+	    * *
+	    * For instance, if the current url is `/user/(box//aux:team)`.
+	    * *
+	    * Then the following link `<a [routerLink]="['/user/jim']">Jim</a>` will generate the link
+	    * `/user/(jim//aux:team)`.
+	    * *
+	    * *
+	    * See {@link Router.createUrlTree} for more information.
+	    * *
+	   */
+	  var RouterLink = (function () {
+	      /**
+	       * @param {?} router
+	       * @param {?} route
+	       */
+	      function RouterLink(router, route) {
+	          this.router = router;
+	          this.route = route;
+	          this.commands = [];
+	      }
+	      Object.defineProperty(RouterLink.prototype, "routerLink", {
+	          /**
+	           * @param {?} data
+	           * @return {?}
+	           */
+	          set: function (data) {
+	              if (Array.isArray(data)) {
+	                  this.commands = data;
+	              }
+	              else {
+	                  this.commands = [data];
+	              }
+	          },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      /**
+	       * @return {?}
+	       */
+	      RouterLink.prototype.onClick = function () {
+	          var /** @type {?} */ extras = {
+	              skipLocationChange: attrBoolValue(this.skipLocationChange),
+	              replaceUrl: attrBoolValue(this.replaceUrl),
+	          };
+	          this.router.navigateByUrl(this.urlTree, extras);
+	          return true;
+	      };
+	      Object.defineProperty(RouterLink.prototype, "urlTree", {
+	          /**
+	           * @return {?}
+	           */
+	          get: function () {
+	              return this.router.createUrlTree(this.commands, {
+	                  relativeTo: this.route,
+	                  queryParams: this.queryParams,
+	                  fragment: this.fragment,
+	                  preserveQueryParams: attrBoolValue(this.preserveQueryParams),
+	                  preserveFragment: attrBoolValue(this.preserveFragment),
+	              });
+	          },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      RouterLink.decorators = [
+	          { type: _angular_core.Directive, args: [{ selector: ':not(a)[routerLink]' },] },
+	      ];
+	      /** @nocollapse */
+	      RouterLink.ctorParameters = function () { return [
+	          { type: Router, },
+	          { type: ActivatedRoute, },
+	      ]; };
+	      RouterLink.propDecorators = {
+	          'queryParams': [{ type: _angular_core.Input },],
+	          'fragment': [{ type: _angular_core.Input },],
+	          'preserveQueryParams': [{ type: _angular_core.Input },],
+	          'preserveFragment': [{ type: _angular_core.Input },],
+	          'skipLocationChange': [{ type: _angular_core.Input },],
+	          'replaceUrl': [{ type: _angular_core.Input },],
+	          'routerLink': [{ type: _angular_core.Input },],
+	          'onClick': [{ type: _angular_core.HostListener, args: ['click', [],] },],
+	      };
+	      return RouterLink;
+	  }());
+	  /**
+	   *  *
+	    * See {@link RouterLink} for more information.
+	    * *
+	    * *
+	   */
+	  var RouterLinkWithHref = (function () {
+	      /**
+	       * @param {?} router
+	       * @param {?} route
+	       * @param {?} locationStrategy
+	       */
+	      function RouterLinkWithHref(router, route, locationStrategy) {
+	          var _this = this;
+	          this.router = router;
+	          this.route = route;
+	          this.locationStrategy = locationStrategy;
+	          this.commands = [];
+	          this.subscription = router.events.subscribe(function (s) {
+	              if (s instanceof NavigationEnd) {
+	                  _this.updateTargetUrlAndHref();
+	              }
+	          });
+	      }
+	      Object.defineProperty(RouterLinkWithHref.prototype, "routerLink", {
+	          /**
+	           * @param {?} data
+	           * @return {?}
+	           */
+	          set: function (data) {
+	              if (Array.isArray(data)) {
+	                  this.commands = data;
+	              }
+	              else {
+	                  this.commands = [data];
+	              }
+	          },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      /**
+	       * @param {?} changes
+	       * @return {?}
+	       */
+	      RouterLinkWithHref.prototype.ngOnChanges = function (changes) { this.updateTargetUrlAndHref(); };
+	      /**
+	       * @return {?}
+	       */
+	      RouterLinkWithHref.prototype.ngOnDestroy = function () { this.subscription.unsubscribe(); };
+	      /**
+	       * @param {?} button
+	       * @param {?} ctrlKey
+	       * @param {?} metaKey
+	       * @return {?}
+	       */
+	      RouterLinkWithHref.prototype.onClick = function (button, ctrlKey, metaKey) {
+	          if (button !== 0 || ctrlKey || metaKey) {
+	              return true;
+	          }
+	          if (typeof this.target === 'string' && this.target != '_self') {
+	              return true;
+	          }
+	          var /** @type {?} */ extras = {
+	              skipLocationChange: attrBoolValue(this.skipLocationChange),
+	              replaceUrl: attrBoolValue(this.replaceUrl),
+	          };
+	          this.router.navigateByUrl(this.urlTree, extras);
+	          return false;
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      RouterLinkWithHref.prototype.updateTargetUrlAndHref = function () {
+	          this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
+	      };
+	      Object.defineProperty(RouterLinkWithHref.prototype, "urlTree", {
+	          /**
+	           * @return {?}
+	           */
+	          get: function () {
+	              return this.router.createUrlTree(this.commands, {
+	                  relativeTo: this.route,
+	                  queryParams: this.queryParams,
+	                  fragment: this.fragment,
+	                  preserveQueryParams: attrBoolValue(this.preserveQueryParams),
+	                  preserveFragment: attrBoolValue(this.preserveFragment),
+	              });
+	          },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      RouterLinkWithHref.decorators = [
+	          { type: _angular_core.Directive, args: [{ selector: 'a[routerLink]' },] },
+	      ];
+	      /** @nocollapse */
+	      RouterLinkWithHref.ctorParameters = function () { return [
+	          { type: Router, },
+	          { type: ActivatedRoute, },
+	          { type: _angular_common.LocationStrategy, },
+	      ]; };
+	      RouterLinkWithHref.propDecorators = {
+	          'target': [{ type: _angular_core.Input },],
+	          'queryParams': [{ type: _angular_core.Input },],
+	          'fragment': [{ type: _angular_core.Input },],
+	          'preserveQueryParams': [{ type: _angular_core.Input },],
+	          'preserveFragment': [{ type: _angular_core.Input },],
+	          'skipLocationChange': [{ type: _angular_core.Input },],
+	          'replaceUrl': [{ type: _angular_core.Input },],
+	          'href': [{ type: _angular_core.HostBinding },],
+	          'routerLink': [{ type: _angular_core.Input },],
+	          'onClick': [{ type: _angular_core.HostListener, args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey'],] },],
+	      };
+	      return RouterLinkWithHref;
+	  }());
+	  /**
+	   * @param {?} s
+	   * @return {?}
+	   */
+	  function attrBoolValue(s) {
+	      return s === '' || !!s;
+	  }
+
+	  /**
+	   *  *
+	    * *
+	    * ```
+	    * <a routerLink="/user/bob" routerLinkActive="active-link">Bob</a>
+	    * ```
+	    * *
+	    * *
+	    * The RouterLinkActive directive lets you add a CSS class to an element when the link's route
+	    * becomes active.
+	    * *
+	    * Consider the following example:
+	    * *
+	    * ```
+	    * <a routerLink="/user/bob" routerLinkActive="active-link">Bob</a>
+	    * ```
+	    * *
+	    * When the url is either '/user' or '/user/bob', the active-link class will
+	    * be added to the `a` tag. If the url changes, the class will be removed.
+	    * *
+	    * You can set more than one class, as follows:
+	    * *
+	    * ```
+	    * <a routerLink="/user/bob" routerLinkActive="class1 class2">Bob</a>
+	    * <a routerLink="/user/bob" [routerLinkActive]="['class1', 'class2']">Bob</a>
+	    * ```
+	    * *
+	    * You can configure RouterLinkActive by passing `exact: true`. This will add the classes
+	    * only when the url matches the link exactly.
+	    * *
+	    * ```
+	    * <a routerLink="/user/bob" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:
+	    * true}">Bob</a>
+	    * ```
+	    * *
+	    * You can assign the RouterLinkActive instance to a template variable and directly check
+	    * the `isActive` status.
+	    * ```
+	    * <a routerLink="/user/bob" routerLinkActive #rla="routerLinkActive">
+	    * Bob {{ rla.isActive ? '(already open)' : ''}}
+	    * </a>
+	    * ```
+	    * *
+	    * Finally, you can apply the RouterLinkActive directive to an ancestor of a RouterLink.
+	    * *
+	    * ```
+	    * <div routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+	    * <a routerLink="/user/jim">Jim</a>
+	    * <a routerLink="/user/bob">Bob</a>
+	    * </div>
+	    * ```
+	    * *
+	    * This will set the active-link class on the div tag if the url is either '/user/jim' or
+	    * '/user/bob'.
+	    * *
+	    * *
+	   */
+	  var RouterLinkActive = (function () {
+	      /**
+	       * @param {?} router
+	       * @param {?} element
+	       * @param {?} renderer
+	       */
+	      function RouterLinkActive(router, element, renderer) {
+	          var _this = this;
+	          this.router = router;
+	          this.element = element;
+	          this.renderer = renderer;
+	          this.classes = [];
+	          this.routerLinkActiveOptions = { exact: false };
+	          this.subscription = router.events.subscribe(function (s) {
+	              if (s instanceof NavigationEnd) {
+	                  _this.update();
+	              }
+	          });
+	      }
+	      Object.defineProperty(RouterLinkActive.prototype, "isActive", {
+	          /**
+	           * @return {?}
+	           */
+	          get: function () { return this.hasActiveLink(); },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      /**
+	       * @return {?}
+	       */
+	      RouterLinkActive.prototype.ngAfterContentInit = function () {
+	          var _this = this;
+	          this.links.changes.subscribe(function (s) { return _this.update(); });
+	          this.linksWithHrefs.changes.subscribe(function (s) { return _this.update(); });
+	          this.update();
+	      };
+	      Object.defineProperty(RouterLinkActive.prototype, "routerLinkActive", {
+	          /**
+	           * @param {?} data
+	           * @return {?}
+	           */
+	          set: function (data) {
+	              if (Array.isArray(data)) {
+	                  this.classes = (data);
+	              }
+	              else {
+	                  this.classes = data.split(' ');
+	              }
+	          },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      /**
+	       * @param {?} changes
+	       * @return {?}
+	       */
+	      RouterLinkActive.prototype.ngOnChanges = function (changes) { this.update(); };
+	      /**
+	       * @return {?}
+	       */
+	      RouterLinkActive.prototype.ngOnDestroy = function () { this.subscription.unsubscribe(); };
+	      /**
+	       * @return {?}
+	       */
+	      RouterLinkActive.prototype.update = function () {
+	          var _this = this;
+	          if (!this.links || !this.linksWithHrefs || !this.router.navigated)
+	              return;
+	          var /** @type {?} */ isActive = this.hasActiveLink();
+	          this.classes.forEach(function (c) {
+	              if (c) {
+	                  _this.renderer.setElementClass(_this.element.nativeElement, c, isActive);
+	              }
+	          });
+	      };
+	      /**
+	       * @param {?} router
+	       * @return {?}
+	       */
+	      RouterLinkActive.prototype.isLinkActive = function (router) {
+	          var _this = this;
+	          return function (link) {
+	              return router.isActive(link.urlTree, _this.routerLinkActiveOptions.exact);
+	          };
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      RouterLinkActive.prototype.hasActiveLink = function () {
+	          return this.links.some(this.isLinkActive(this.router)) ||
+	              this.linksWithHrefs.some(this.isLinkActive(this.router));
+	      };
+	      RouterLinkActive.decorators = [
+	          { type: _angular_core.Directive, args: [{
+	                      selector: '[routerLinkActive]',
+	                      exportAs: 'routerLinkActive',
+	                  },] },
+	      ];
+	      /** @nocollapse */
+	      RouterLinkActive.ctorParameters = function () { return [
+	          { type: Router, },
+	          { type: _angular_core.ElementRef, },
+	          { type: _angular_core.Renderer, },
+	      ]; };
+	      RouterLinkActive.propDecorators = {
+	          'links': [{ type: _angular_core.ContentChildren, args: [RouterLink, { descendants: true },] },],
+	          'linksWithHrefs': [{ type: _angular_core.ContentChildren, args: [RouterLinkWithHref, { descendants: true },] },],
+	          'routerLinkActiveOptions': [{ type: _angular_core.Input },],
+	          'routerLinkActive': [{ type: _angular_core.Input },],
+	      };
+	      return RouterLinkActive;
+	  }());
+
+	  /**
+	   *  state.
+	    * *
+	    * *
+	    * ```
+	    * <router-outlet></router-outlet>
+	    * <router-outlet name='left'></router-outlet>
+	    * <router-outlet name='right'></router-outlet>
+	    * ```
+	    * *
+	    * A router outlet will emit an activate event any time a new component is being instantiated,
+	    * and a deactivate event when it is being destroyed.
+	    * *
+	    * ```
+	    * <router-outlet
+	    * (activate)='onActivate($event)'
+	    * (deactivate)='onDeactivate($event)'></router-outlet>
+	    * ```
+	    * *
+	   */
+	  var RouterOutlet = (function () {
+	      /**
+	       * @param {?} parentOutletMap
+	       * @param {?} location
+	       * @param {?} resolver
+	       * @param {?} name
+	       */
+	      function RouterOutlet(parentOutletMap, location, resolver, name) {
+	          this.parentOutletMap = parentOutletMap;
+	          this.location = location;
+	          this.resolver = resolver;
+	          this.name = name;
+	          this.activateEvents = new _angular_core.EventEmitter();
+	          this.deactivateEvents = new _angular_core.EventEmitter();
+	          parentOutletMap.registerOutlet(name ? name : PRIMARY_OUTLET, this);
+	      }
+	      /**
+	       * @return {?}
+	       */
+	      RouterOutlet.prototype.ngOnDestroy = function () { this.parentOutletMap.removeOutlet(this.name ? this.name : PRIMARY_OUTLET); };
+	      Object.defineProperty(RouterOutlet.prototype, "locationInjector", {
+	          /**
+	           * @return {?}
+	           */
+	          get: function () { return this.location.injector; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      Object.defineProperty(RouterOutlet.prototype, "locationFactoryResolver", {
+	          /**
+	           * @return {?}
+	           */
+	          get: function () { return this.resolver; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      Object.defineProperty(RouterOutlet.prototype, "isActivated", {
+	          /**
+	           * @return {?}
+	           */
+	          get: function () { return !!this.activated; },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      Object.defineProperty(RouterOutlet.prototype, "component", {
+	          /**
+	           * @return {?}
+	           */
+	          get: function () {
+	              if (!this.activated)
+	                  throw new Error('Outlet is not activated');
+	              return this.activated.instance;
+	          },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      Object.defineProperty(RouterOutlet.prototype, "activatedRoute", {
+	          /**
+	           * @return {?}
+	           */
+	          get: function () {
+	              if (!this.activated)
+	                  throw new Error('Outlet is not activated');
+	              return this._activatedRoute;
+	          },
+	          enumerable: true,
+	          configurable: true
+	      });
+	      /**
+	       * @return {?}
+	       */
+	      RouterOutlet.prototype.detach = function () {
+	          if (!this.activated)
+	              throw new Error('Outlet is not activated');
+	          this.location.detach();
+	          var /** @type {?} */ r = this.activated;
+	          this.activated = null;
+	          this._activatedRoute = null;
+	          return r;
+	      };
+	      /**
+	       * @param {?} ref
+	       * @param {?} activatedRoute
+	       * @return {?}
+	       */
+	      RouterOutlet.prototype.attach = function (ref, activatedRoute) {
+	          this.activated = ref;
+	          this._activatedRoute = activatedRoute;
+	          this.location.insert(ref.hostView);
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      RouterOutlet.prototype.deactivate = function () {
+	          if (this.activated) {
+	              var /** @type {?} */ c = this.component;
+	              this.activated.destroy();
+	              this.activated = null;
+	              this._activatedRoute = null;
+	              this.deactivateEvents.emit(c);
+	          }
+	      };
+	      /**
+	       * @param {?} activatedRoute
+	       * @param {?} resolver
+	       * @param {?} injector
+	       * @param {?} providers
+	       * @param {?} outletMap
+	       * @return {?}
+	       */
+	      RouterOutlet.prototype.activate = function (activatedRoute, resolver, injector, providers, outletMap) {
+	          if (this.isActivated) {
+	              throw new Error('Cannot activate an already activated outlet');
+	          }
+	          this.outletMap = outletMap;
+	          this._activatedRoute = activatedRoute;
+	          var /** @type {?} */ snapshot = activatedRoute._futureSnapshot;
+	          var /** @type {?} */ component = (snapshot._routeConfig.component);
+	          var /** @type {?} */ factory = resolver.resolveComponentFactory(component);
+	          var /** @type {?} */ inj = _angular_core.ReflectiveInjector.fromResolvedProviders(providers, injector);
+	          this.activated = this.location.createComponent(factory, this.location.length, inj, []);
+	          this.activated.changeDetectorRef.detectChanges();
+	          this.activateEvents.emit(this.activated.instance);
+	      };
+	      RouterOutlet.decorators = [
+	          { type: _angular_core.Directive, args: [{ selector: 'router-outlet' },] },
+	      ];
+	      /** @nocollapse */
+	      RouterOutlet.ctorParameters = function () { return [
+	          { type: RouterOutletMap, },
+	          { type: _angular_core.ViewContainerRef, },
+	          { type: _angular_core.ComponentFactoryResolver, },
+	          { type: undefined, decorators: [{ type: _angular_core.Attribute, args: ['name',] },] },
+	      ]; };
+	      RouterOutlet.propDecorators = {
+	          'activateEvents': [{ type: _angular_core.Output, args: ['activate',] },],
+	          'deactivateEvents': [{ type: _angular_core.Output, args: ['deactivate',] },],
+	      };
+	      return RouterOutlet;
+	  }());
+
+	  /**
+	   * @license
+	   * Copyright Google Inc. All Rights Reserved.
+	   *
+	   * Use of this source code is governed by an MIT-style license that can be
+	   * found in the LICENSE file at https://angular.io/license
+	   */
+	  /**
+	   *  *
+	   * @abstract
+	   */
+	  var RouteReuseStrategy = (function () {
+	      function RouteReuseStrategy() {
+	      }
+	      /**
+	       *  Determines if this route (and its subtree) should be detached to be reused later
+	       * @abstract
+	       * @param {?} route
+	       * @return {?}
+	       */
+	      RouteReuseStrategy.prototype.shouldDetach = function (route) { };
+	      /**
+	       *  Stores the detached route
+	       * @abstract
+	       * @param {?} route
+	       * @param {?} handle
+	       * @return {?}
+	       */
+	      RouteReuseStrategy.prototype.store = function (route, handle) { };
+	      /**
+	       *  Determines if this route (and its subtree) should be reattached
+	       * @abstract
+	       * @param {?} route
+	       * @return {?}
+	       */
+	      RouteReuseStrategy.prototype.shouldAttach = function (route) { };
+	      /**
+	       *  Retrieves the previously stored route
+	       * @abstract
+	       * @param {?} route
+	       * @return {?}
+	       */
+	      RouteReuseStrategy.prototype.retrieve = function (route) { };
+	      /**
+	       *  Determines if a route should be reused
+	       * @abstract
+	       * @param {?} future
+	       * @param {?} curr
+	       * @return {?}
+	       */
+	      RouteReuseStrategy.prototype.shouldReuseRoute = function (future, curr) { };
+	      return RouteReuseStrategy;
+	  }());
+
+	  var /** @type {?} */ getDOM = _angular_platformBrowser.__platform_browser_private__.getDOM;
+
+	  /**
+	   *  *
+	   * @abstract
+	   */
+	  var PreloadingStrategy = (function () {
+	      function PreloadingStrategy() {
+	      }
+	      /**
+	       * @abstract
+	       * @param {?} route
+	       * @param {?} fn
+	       * @return {?}
+	       */
+	      PreloadingStrategy.prototype.preload = function (route, fn) { };
+	      return PreloadingStrategy;
+	  }());
+	  /**
+	   *  *
+	    * *
+	    * ```
+	    * RouteModule.forRoot(ROUTES, {preloadingStrategy: PreloadAllModules})
+	    * ```
+	    * *
+	   */
+	  var PreloadAllModules = (function () {
+	      function PreloadAllModules() {
+	      }
+	      /**
+	       * @param {?} route
+	       * @param {?} fn
+	       * @return {?}
+	       */
+	      PreloadAllModules.prototype.preload = function (route, fn) {
+	          return rxjs_operator_catch._catch.call(fn(), function () { return rxjs_observable_of.of(null); });
+	      };
+	      return PreloadAllModules;
+	  }());
+	  /**
+	   *  *
+	    * *
+	    * This strategy is enabled by default.
+	    * *
+	   */
+	  var NoPreloading = (function () {
+	      function NoPreloading() {
+	      }
+	      /**
+	       * @param {?} route
+	       * @param {?} fn
+	       * @return {?}
+	       */
+	      NoPreloading.prototype.preload = function (route, fn) { return rxjs_observable_of.of(null); };
+	      return NoPreloading;
+	  }());
+	  /**
+	   *  The preloader optimistically loads all router configurations to
+	    * make navigations into lazily-loaded sections of the application faster.
+	    * *
+	    * The preloader runs in the background. When the router bootstraps, the preloader
+	    * starts listening to all navigation events. After every such event, the preloader
+	    * will check if any configurations can be loaded lazily.
+	    * *
+	    * If a route is protected by `canLoad` guards, the preloaded will not load it.
+	    * *
+	   */
+	  var RouterPreloader = (function () {
+	      /**
+	       * @param {?} router
+	       * @param {?} moduleLoader
+	       * @param {?} compiler
+	       * @param {?} injector
+	       * @param {?} preloadingStrategy
+	       */
+	      function RouterPreloader(router, moduleLoader, compiler, injector, preloadingStrategy) {
+	          this.router = router;
+	          this.injector = injector;
+	          this.preloadingStrategy = preloadingStrategy;
+	          this.loader = new RouterConfigLoader(moduleLoader, compiler);
+	      }
+	      ;
+	      /**
+	       * @return {?}
+	       */
+	      RouterPreloader.prototype.setUpPreloading = function () {
+	          var _this = this;
+	          var /** @type {?} */ navigations = rxjs_operator_filter.filter.call(this.router.events, function (e) { return e instanceof NavigationEnd; });
+	          this.subscription = rxjs_operator_concatMap.concatMap.call(navigations, function () { return _this.preload(); }).subscribe(function (v) { });
+	      };
+	      /**
+	       * @return {?}
+	       */
+	      RouterPreloader.prototype.preload = function () { return this.processRoutes(this.injector, this.router.config); };
+	      /**
+	       * @return {?}
+	       */
+	      RouterPreloader.prototype.ngOnDestroy = function () { this.subscription.unsubscribe(); };
+	      /**
+	       * @param {?} injector
+	       * @param {?} routes
+	       * @return {?}
+	       */
+	      RouterPreloader.prototype.processRoutes = function (injector, routes) {
+	          var /** @type {?} */ res = [];
+	          for (var _i = 0, routes_1 = routes; _i < routes_1.length; _i++) {
+	              var c = routes_1[_i];
+	              // we already have the config loaded, just recurce
+	              if (c.loadChildren && !c.canLoad && ((c))._loadedConfig) {
+	                  var /** @type {?} */ childConfig = ((c))._loadedConfig;
+	                  res.push(this.processRoutes(childConfig.injector, childConfig.routes));
+	              }
+	              else if (c.loadChildren && !c.canLoad) {
+	                  res.push(this.preloadConfig(injector, c));
+	              }
+	              else if (c.children) {
+	                  res.push(this.processRoutes(injector, c.children));
+	              }
+	          }
+	          return rxjs_operator_mergeAll.mergeAll.call(rxjs_observable_from.from(res));
+	      };
+	      /**
+	       * @param {?} injector
+	       * @param {?} route
+	       * @return {?}
+	       */
+	      RouterPreloader.prototype.preloadConfig = function (injector, route) {
+	          var _this = this;
+	          return this.preloadingStrategy.preload(route, function () {
+	              var /** @type {?} */ loaded = _this.loader.load(injector, route.loadChildren);
+	              return rxjs_operator_mergeMap.mergeMap.call(loaded, function (config) {
+	                  var /** @type {?} */ c = route;
+	                  c._loadedConfig = config;
+	                  return _this.processRoutes(config.injector, config.routes);
+	              });
+	          });
+	      };
+	      RouterPreloader.decorators = [
+	          { type: _angular_core.Injectable },
+	      ];
+	      /** @nocollapse */
+	      RouterPreloader.ctorParameters = function () { return [
+	          { type: Router, },
+	          { type: _angular_core.NgModuleFactoryLoader, },
+	          { type: _angular_core.Compiler, },
+	          { type: _angular_core.Injector, },
+	          { type: PreloadingStrategy, },
+	      ]; };
+	      return RouterPreloader;
+	  }());
+
+	  /**
+	   * @whatItDoes Contains a list of directives
+	   * @stable
+	   */
+	  var /** @type {?} */ ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
+	  /**
+	   * @whatItDoes Is used in DI to configure the router.
+	   * @stable
+	   */
+	  var /** @type {?} */ ROUTER_CONFIGURATION = new _angular_core.OpaqueToken('ROUTER_CONFIGURATION');
+	  /**
+	   * @docsNotRequired
+	   */
+	  var /** @type {?} */ ROUTER_FORROOT_GUARD = new _angular_core.OpaqueToken('ROUTER_FORROOT_GUARD');
+	  var /** @type {?} */ ROUTER_PROVIDERS = [
+	      _angular_common.Location,
+	      { provide: UrlSerializer, useClass: DefaultUrlSerializer },
+	      {
+	          provide: Router,
+	          useFactory: setupRouter,
+	          deps: [
+	              _angular_core.ApplicationRef, UrlSerializer, RouterOutletMap, _angular_common.Location, _angular_core.Injector, _angular_core.NgModuleFactoryLoader,
+	              _angular_core.Compiler, ROUTES, ROUTER_CONFIGURATION, [UrlHandlingStrategy, new _angular_core.Optional()],
+	              [RouteReuseStrategy, new _angular_core.Optional()]
+	          ]
+	      },
+	      RouterOutletMap,
+	      { provide: ActivatedRoute, useFactory: rootRoute, deps: [Router] },
+	      { provide: _angular_core.NgModuleFactoryLoader, useClass: _angular_core.SystemJsNgModuleLoader },
+	      RouterPreloader,
+	      NoPreloading,
+	      PreloadAllModules,
+	      { provide: ROUTER_CONFIGURATION, useValue: { enableTracing: false } },
+	  ];
+	  /**
+	   * @return {?}
+	   */
+	  function routerNgProbeToken() {
+	      return new _angular_core.NgProbeToken('Router', Router);
+	  }
+	  /**
+	   *  *
+	    * *
+	    * RouterModule can be imported multiple times: once per lazily-loaded bundle.
+	    * Since the router deals with a global shared resource--location, we cannot have
+	    * more than one router service active.
+	    * *
+	    * That is why there are two ways to create the module: `RouterModule.forRoot` and
+	    * `RouterModule.forChild`.
+	    * *
+	    * * `forRoot` creates a module that contains all the directives, the given routes, and the router
+	    * service itself.
+	    * * `forChild` creates a module that contains all the directives and the given routes, but does not
+	    * include the router service.
+	    * *
+	    * When registered at the root, the module should be used as follows
+	    * *
+	    * ```
+	    * imports: [RouterModule.forRoot(ROUTES)]
+	    * })
+	    * class MyNgModule {}
+	    * ```
+	    * *
+	    * For submodules and lazy loaded submodules the module should be used as follows:
+	    * *
+	    * ```
+	    * imports: [RouterModule.forChild(ROUTES)]
+	    * })
+	    * class MyNgModule {}
+	    * ```
+	    * *
+	    * *
+	    * Managing state transitions is one of the hardest parts of building applications. This is
+	    * especially true on the web, where you also need to ensure that the state is reflected in the URL.
+	    * In addition, we often want to split applications into multiple bundles and load them on demand.
+	    * Doing this transparently is not trivial.
+	    * *
+	    * The Angular 2 router solves these problems. Using the router, you can declaratively specify
+	    * application states, manage state transitions while taking care of the URL, and load bundles on
+	    * demand.
+	    * *
+	    * [Read this developer guide](https://angular.io/docs/ts/latest/guide/router.html) to get an
+	    * overview of how the router should be used.
+	    * *
+	   */
+	  var RouterModule = (function () {
+	      /**
+	       * @param {?} guard
+	       */
+	      function RouterModule(guard) {
+	      }
+	      /**
+	       *  Creates a module with all the router providers and directives. It also optionally sets up an
+	        * application listener to perform an initial navigation.
+	        * *
+	        * Options:
+	        * * `enableTracing` makes the router log all its internal events to the console.
+	        * * `useHash` enables the location strategy that uses the URL fragment instead of the history
+	        * API.
+	        * * `initialNavigation` disables the initial navigation.
+	        * * `errorHandler` provides a custom error handler.
+	       * @param {?} routes
+	       * @param {?=} config
+	       * @return {?}
+	       */
+	      RouterModule.forRoot = function (routes, config) {
+	          return {
+	              ngModule: RouterModule,
+	              providers: [
+	                  ROUTER_PROVIDERS,
+	                  provideRoutes(routes),
+	                  {
+	                      provide: ROUTER_FORROOT_GUARD,
+	                      useFactory: provideForRootGuard,
+	                      deps: [[Router, new _angular_core.Optional(), new _angular_core.SkipSelf()]]
+	                  },
+	                  { provide: ROUTER_CONFIGURATION, useValue: config ? config : {} },
+	                  {
+	                      provide: _angular_common.LocationStrategy,
+	                      useFactory: provideLocationStrategy,
+	                      deps: [
+	                          _angular_common.PlatformLocation, [new _angular_core.Inject(_angular_common.APP_BASE_HREF), new _angular_core.Optional()], ROUTER_CONFIGURATION
+	                      ]
+	                  },
+	                  {
+	                      provide: PreloadingStrategy,
+	                      useExisting: config && config.preloadingStrategy ? config.preloadingStrategy :
+	                          NoPreloading
+	                  },
+	                  { provide: _angular_core.NgProbeToken, multi: true, useFactory: routerNgProbeToken },
+	                  provideRouterInitializer(),
+	              ],
+	          };
+	      };
+	      /**
+	       *  Creates a module with all the router directives and a provider registering routes.
+	       * @param {?} routes
+	       * @return {?}
+	       */
+	      RouterModule.forChild = function (routes) {
+	          return { ngModule: RouterModule, providers: [provideRoutes(routes)] };
+	      };
+	      RouterModule.decorators = [
+	          { type: _angular_core.NgModule, args: [{ declarations: ROUTER_DIRECTIVES, exports: ROUTER_DIRECTIVES },] },
+	      ];
+	      /** @nocollapse */
+	      RouterModule.ctorParameters = function () { return [
+	          { type: undefined, decorators: [{ type: _angular_core.Optional }, { type: _angular_core.Inject, args: [ROUTER_FORROOT_GUARD,] },] },
+	      ]; };
+	      return RouterModule;
+	  }());
+	  /**
+	   * @param {?} platformLocationStrategy
+	   * @param {?} baseHref
+	   * @param {?=} options
+	   * @return {?}
+	   */
+	  function provideLocationStrategy(platformLocationStrategy, baseHref, options) {
+	      if (options === void 0) { options = {}; }
+	      return options.useHash ? new _angular_common.HashLocationStrategy(platformLocationStrategy, baseHref) :
+	          new _angular_common.PathLocationStrategy(platformLocationStrategy, baseHref);
+	  }
+	  /**
+	   * @param {?} router
+	   * @return {?}
+	   */
+	  function provideForRootGuard(router) {
+	      if (router) {
+	          throw new Error("RouterModule.forRoot() called twice. Lazy loaded modules should use RouterModule.forChild() instead.");
+	      }
+	      return 'guarded';
+	  }
+	  /**
+	   *  *
+	    * *
+	    * ```
+	    * imports: [RouterModule.forChild(ROUTES)],
+	    * providers: [provideRoutes(EXTRA_ROUTES)]
+	    * })
+	    * class MyNgModule {}
+	    * ```
+	    * *
+	   * @param {?} routes
+	   * @return {?}
+	   */
+	  function provideRoutes(routes) {
+	      return [
+	          { provide: _angular_core.ANALYZE_FOR_ENTRY_COMPONENTS, multi: true, useValue: routes },
+	          { provide: ROUTES, multi: true, useValue: routes },
+	      ];
+	  }
+	  /**
+	   * @param {?} ref
+	   * @param {?} urlSerializer
+	   * @param {?} outletMap
+	   * @param {?} location
+	   * @param {?} injector
+	   * @param {?} loader
+	   * @param {?} compiler
+	   * @param {?} config
+	   * @param {?=} opts
+	   * @param {?=} urlHandlingStrategy
+	   * @param {?=} routeReuseStrategy
+	   * @return {?}
+	   */
+	  function setupRouter(ref, urlSerializer, outletMap, location, injector, loader, compiler, config, opts, urlHandlingStrategy, routeReuseStrategy) {
+	      if (opts === void 0) { opts = {}; }
+	      var /** @type {?} */ router = new Router(null, urlSerializer, outletMap, location, injector, loader, compiler, flatten(config));
+	      if (urlHandlingStrategy) {
+	          router.urlHandlingStrategy = urlHandlingStrategy;
+	      }
+	      if (routeReuseStrategy) {
+	          router.routeReuseStrategy = routeReuseStrategy;
+	      }
+	      if (opts.errorHandler) {
+	          router.errorHandler = opts.errorHandler;
+	      }
+	      if (opts.enableTracing) {
+	          var /** @type {?} */ dom_1 = getDOM();
+	          router.events.subscribe(function (e) {
+	              dom_1.logGroup("Router Event: " + ((e.constructor)).name);
+	              dom_1.log(e.toString());
+	              dom_1.log(e);
+	              dom_1.logGroupEnd();
+	          });
+	      }
+	      return router;
+	  }
+	  /**
+	   * @param {?} router
+	   * @return {?}
+	   */
+	  function rootRoute(router) {
+	      return router.routerState.root;
+	  }
+	  /**
+	   * @param {?} router
+	   * @param {?} ref
+	   * @param {?} preloader
+	   * @param {?} opts
+	   * @return {?}
+	   */
+	  function initialRouterNavigation(router, ref, preloader, opts) {
+	      return function (bootstrappedComponentRef) {
+	          if (bootstrappedComponentRef !== ref.components[0]) {
+	              return;
+	          }
+	          router.resetRootComponentType(ref.componentTypes[0]);
+	          preloader.setUpPreloading();
+	          if (opts.initialNavigation === false) {
+	              router.setUpLocationChangeListener();
+	          }
+	          else {
+	              router.initialNavigation();
+	          }
+	      };
+	  }
+	  /**
+	   * A token for the router initializer that will be called after the app is bootstrapped.
+	   *
+	   * @experimental
+	   */
+	  var /** @type {?} */ ROUTER_INITIALIZER = new _angular_core.OpaqueToken('Router Initializer');
+	  /**
+	   * @return {?}
+	   */
+	  function provideRouterInitializer() {
+	      return [
+	          {
+	              provide: ROUTER_INITIALIZER,
+	              useFactory: initialRouterNavigation,
+	              deps: [Router, _angular_core.ApplicationRef, RouterPreloader, ROUTER_CONFIGURATION]
+	          },
+	          { provide: _angular_core.APP_BOOTSTRAP_LISTENER, multi: true, useExisting: ROUTER_INITIALIZER },
+	      ];
+	  }
+
+	  /**
+	   * @stable
+	   */
+	  var /** @type {?} */ VERSION = new _angular_core.Version('3.4.1');
+
+	  var /** @type {?} */ __router_private__ = {
+	      ROUTER_PROVIDERS: ROUTER_PROVIDERS,
+	      ROUTES: ROUTES,
+	      flatten: flatten,
+	  };
+
+	  exports.RouterLink = RouterLink;
+	  exports.RouterLinkWithHref = RouterLinkWithHref;
+	  exports.RouterLinkActive = RouterLinkActive;
+	  exports.RouterOutlet = RouterOutlet;
+	  exports.RouteReuseStrategy = RouteReuseStrategy;
+	  exports.NavigationCancel = NavigationCancel;
+	  exports.NavigationEnd = NavigationEnd;
+	  exports.NavigationError = NavigationError;
+	  exports.NavigationStart = NavigationStart;
+	  exports.Router = Router;
+	  exports.RoutesRecognized = RoutesRecognized;
+	  exports.ROUTER_CONFIGURATION = ROUTER_CONFIGURATION;
+	  exports.ROUTER_INITIALIZER = ROUTER_INITIALIZER;
+	  exports.RouterModule = RouterModule;
+	  exports.provideRoutes = provideRoutes;
+	  exports.RouterOutletMap = RouterOutletMap;
+	  exports.NoPreloading = NoPreloading;
+	  exports.PreloadAllModules = PreloadAllModules;
+	  exports.PreloadingStrategy = PreloadingStrategy;
+	  exports.RouterPreloader = RouterPreloader;
+	  exports.ActivatedRoute = ActivatedRoute;
+	  exports.ActivatedRouteSnapshot = ActivatedRouteSnapshot;
+	  exports.RouterState = RouterState;
+	  exports.RouterStateSnapshot = RouterStateSnapshot;
+	  exports.PRIMARY_OUTLET = PRIMARY_OUTLET;
+	  exports.UrlHandlingStrategy = UrlHandlingStrategy;
+	  exports.DefaultUrlSerializer = DefaultUrlSerializer;
+	  exports.UrlSegment = UrlSegment;
+	  exports.UrlSegmentGroup = UrlSegmentGroup;
+	  exports.UrlSerializer = UrlSerializer;
+	  exports.UrlTree = UrlTree;
+	  exports.VERSION = VERSION;
+	  exports.__router_private__ = __router_private__;
+
+	}));
+
+/***/ },
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Subject_1 = __webpack_require__(4);
+	var ObjectUnsubscribedError_1 = __webpack_require__(19);
+	/**
+	 * @class BehaviorSubject<T>
+	 */
+	var BehaviorSubject = (function (_super) {
+	    __extends(BehaviorSubject, _super);
+	    function BehaviorSubject(_value) {
+	        _super.call(this);
+	        this._value = _value;
+	    }
+	    Object.defineProperty(BehaviorSubject.prototype, "value", {
+	        get: function () {
+	            return this.getValue();
+	        },
+	        enumerable: true,
+	        configurable: true
+	    });
+	    BehaviorSubject.prototype._subscribe = function (subscriber) {
+	        var subscription = _super.prototype._subscribe.call(this, subscriber);
+	        if (subscription && !subscription.closed) {
+	            subscriber.next(this._value);
+	        }
+	        return subscription;
+	    };
+	    BehaviorSubject.prototype.getValue = function () {
+	        if (this.hasError) {
+	            throw this.thrownError;
+	        }
+	        else if (this.closed) {
+	            throw new ObjectUnsubscribedError_1.ObjectUnsubscribedError();
+	        }
+	        else {
+	            return this._value;
+	        }
+	    };
+	    BehaviorSubject.prototype.next = function (value) {
+	        _super.prototype.next.call(this, this._value = value);
+	    };
+	    return BehaviorSubject;
+	}(Subject_1.Subject));
+	exports.BehaviorSubject = BehaviorSubject;
+	//# sourceMappingURL=BehaviorSubject.js.map
+
+/***/ },
 /* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var FromObservable_1 = __webpack_require__(27);
+	exports.from = FromObservable_1.FromObservable.create;
+	//# sourceMappingURL=from.js.map
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var isArray_1 = __webpack_require__(11);
+	var isPromise_1 = __webpack_require__(28);
+	var PromiseObservable_1 = __webpack_require__(29);
+	var IteratorObservable_1 = __webpack_require__(30);
+	var ArrayObservable_1 = __webpack_require__(32);
+	var ArrayLikeObservable_1 = __webpack_require__(36);
+	var iterator_1 = __webpack_require__(31);
+	var Observable_1 = __webpack_require__(5);
+	var observeOn_1 = __webpack_require__(37);
+	var observable_1 = __webpack_require__(18);
+	var isArrayLike = (function (x) { return x && typeof x.length === 'number'; });
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @extends {Ignored}
+	 * @hide true
+	 */
+	var FromObservable = (function (_super) {
+	    __extends(FromObservable, _super);
+	    function FromObservable(ish, scheduler) {
+	        _super.call(this, null);
+	        this.ish = ish;
+	        this.scheduler = scheduler;
+	    }
+	    /**
+	     * Creates an Observable from an Array, an array-like object, a Promise, an
+	     * iterable object, or an Observable-like object.
+	     *
+	     * <span class="informal">Converts almost anything to an Observable.</span>
+	     *
+	     * <img src="./img/from.png" width="100%">
+	     *
+	     * Convert various other objects and data types into Observables. `from`
+	     * converts a Promise or an array-like or an
+	     * [iterable](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#iterable)
+	     * object into an Observable that emits the items in that promise or array or
+	     * iterable. A String, in this context, is treated as an array of characters.
+	     * Observable-like objects (contains a function named with the ES2015 Symbol
+	     * for Observable) can also be converted through this operator.
+	     *
+	     * @example <caption>Converts an array to an Observable</caption>
+	     * var array = [10, 20, 30];
+	     * var result = Rx.Observable.from(array);
+	     * result.subscribe(x => console.log(x));
+	     *
+	     * // Results in the following:
+	     * // 10 20 30
+	     *
+	     * @example <caption>Convert an infinite iterable (from a generator) to an Observable</caption>
+	     * function* generateDoubles(seed) {
+	     *   var i = seed;
+	     *   while (true) {
+	     *     yield i;
+	     *     i = 2 * i; // double it
+	     *   }
+	     * }
+	     *
+	     * var iterator = generateDoubles(3);
+	     * var result = Rx.Observable.from(iterator).take(10);
+	     * result.subscribe(x => console.log(x));
+	     *
+	     * // Results in the following:
+	     * // 3 6 12 24 48 96 192 384 768 1536
+	     *
+	     * @see {@link create}
+	     * @see {@link fromEvent}
+	     * @see {@link fromEventPattern}
+	     * @see {@link fromPromise}
+	     *
+	     * @param {ObservableInput<T>} ish A subscribable object, a Promise, an
+	     * Observable-like, an Array, an iterable or an array-like object to be
+	     * converted.
+	     * @param {Scheduler} [scheduler] The scheduler on which to schedule the
+	     * emissions of values.
+	     * @return {Observable<T>} The Observable whose values are originally from the
+	     * input object that was converted.
+	     * @static true
+	     * @name from
+	     * @owner Observable
+	     */
+	    FromObservable.create = function (ish, scheduler) {
+	        if (ish != null) {
+	            if (typeof ish[observable_1.$$observable] === 'function') {
+	                if (ish instanceof Observable_1.Observable && !scheduler) {
+	                    return ish;
+	                }
+	                return new FromObservable(ish, scheduler);
+	            }
+	            else if (isArray_1.isArray(ish)) {
+	                return new ArrayObservable_1.ArrayObservable(ish, scheduler);
+	            }
+	            else if (isPromise_1.isPromise(ish)) {
+	                return new PromiseObservable_1.PromiseObservable(ish, scheduler);
+	            }
+	            else if (typeof ish[iterator_1.$$iterator] === 'function' || typeof ish === 'string') {
+	                return new IteratorObservable_1.IteratorObservable(ish, scheduler);
+	            }
+	            else if (isArrayLike(ish)) {
+	                return new ArrayLikeObservable_1.ArrayLikeObservable(ish, scheduler);
+	            }
+	        }
+	        throw new TypeError((ish !== null && typeof ish || ish) + ' is not observable');
+	    };
+	    FromObservable.prototype._subscribe = function (subscriber) {
+	        var ish = this.ish;
+	        var scheduler = this.scheduler;
+	        if (scheduler == null) {
+	            return ish[observable_1.$$observable]().subscribe(subscriber);
+	        }
+	        else {
+	            return ish[observable_1.$$observable]().subscribe(new observeOn_1.ObserveOnSubscriber(subscriber, scheduler, 0));
+	        }
+	    };
+	    return FromObservable;
+	}(Observable_1.Observable));
+	exports.FromObservable = FromObservable;
+	//# sourceMappingURL=FromObservable.js.map
+
+/***/ },
+/* 28 */
+/***/ function(module, exports) {
+
+	"use strict";
+	function isPromise(value) {
+	    return value && typeof value.subscribe !== 'function' && typeof value.then === 'function';
+	}
+	exports.isPromise = isPromise;
+	//# sourceMappingURL=isPromise.js.map
+
+/***/ },
+/* 29 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var root_1 = __webpack_require__(6);
+	var Observable_1 = __webpack_require__(5);
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @extends {Ignored}
+	 * @hide true
+	 */
+	var PromiseObservable = (function (_super) {
+	    __extends(PromiseObservable, _super);
+	    function PromiseObservable(promise, scheduler) {
+	        _super.call(this);
+	        this.promise = promise;
+	        this.scheduler = scheduler;
+	    }
+	    /**
+	     * Converts a Promise to an Observable.
+	     *
+	     * <span class="informal">Returns an Observable that just emits the Promise's
+	     * resolved value, then completes.</span>
+	     *
+	     * Converts an ES2015 Promise or a Promises/A+ spec compliant Promise to an
+	     * Observable. If the Promise resolves with a value, the output Observable
+	     * emits that resolved value as a `next`, and then completes. If the Promise
+	     * is rejected, then the output Observable emits the corresponding Error.
+	     *
+	     * @example <caption>Convert the Promise returned by Fetch to an Observable</caption>
+	     * var result = Rx.Observable.fromPromise(fetch('http://myserver.com/'));
+	     * result.subscribe(x => console.log(x), e => console.error(e));
+	     *
+	     * @see {@link bindCallback}
+	     * @see {@link from}
+	     *
+	     * @param {Promise<T>} promise The promise to be converted.
+	     * @param {Scheduler} [scheduler] An optional Scheduler to use for scheduling
+	     * the delivery of the resolved value (or the rejection).
+	     * @return {Observable<T>} An Observable which wraps the Promise.
+	     * @static true
+	     * @name fromPromise
+	     * @owner Observable
+	     */
+	    PromiseObservable.create = function (promise, scheduler) {
+	        return new PromiseObservable(promise, scheduler);
+	    };
+	    PromiseObservable.prototype._subscribe = function (subscriber) {
+	        var _this = this;
+	        var promise = this.promise;
+	        var scheduler = this.scheduler;
+	        if (scheduler == null) {
+	            if (this._isScalar) {
+	                if (!subscriber.closed) {
+	                    subscriber.next(this.value);
+	                    subscriber.complete();
+	                }
+	            }
+	            else {
+	                promise.then(function (value) {
+	                    _this.value = value;
+	                    _this._isScalar = true;
+	                    if (!subscriber.closed) {
+	                        subscriber.next(value);
+	                        subscriber.complete();
+	                    }
+	                }, function (err) {
+	                    if (!subscriber.closed) {
+	                        subscriber.error(err);
+	                    }
+	                })
+	                    .then(null, function (err) {
+	                    // escape the promise trap, throw unhandled errors
+	                    root_1.root.setTimeout(function () { throw err; });
+	                });
+	            }
+	        }
+	        else {
+	            if (this._isScalar) {
+	                if (!subscriber.closed) {
+	                    return scheduler.schedule(dispatchNext, 0, { value: this.value, subscriber: subscriber });
+	                }
+	            }
+	            else {
+	                promise.then(function (value) {
+	                    _this.value = value;
+	                    _this._isScalar = true;
+	                    if (!subscriber.closed) {
+	                        subscriber.add(scheduler.schedule(dispatchNext, 0, { value: value, subscriber: subscriber }));
+	                    }
+	                }, function (err) {
+	                    if (!subscriber.closed) {
+	                        subscriber.add(scheduler.schedule(dispatchError, 0, { err: err, subscriber: subscriber }));
+	                    }
+	                })
+	                    .then(null, function (err) {
+	                    // escape the promise trap, throw unhandled errors
+	                    root_1.root.setTimeout(function () { throw err; });
+	                });
+	            }
+	        }
+	    };
+	    return PromiseObservable;
+	}(Observable_1.Observable));
+	exports.PromiseObservable = PromiseObservable;
+	function dispatchNext(arg) {
+	    var value = arg.value, subscriber = arg.subscriber;
+	    if (!subscriber.closed) {
+	        subscriber.next(value);
+	        subscriber.complete();
+	    }
+	}
+	function dispatchError(arg) {
+	    var err = arg.err, subscriber = arg.subscriber;
+	    if (!subscriber.closed) {
+	        subscriber.error(err);
+	    }
+	}
+	//# sourceMappingURL=PromiseObservable.js.map
+
+/***/ },
+/* 30 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var root_1 = __webpack_require__(6);
+	var Observable_1 = __webpack_require__(5);
+	var iterator_1 = __webpack_require__(31);
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @extends {Ignored}
+	 * @hide true
+	 */
+	var IteratorObservable = (function (_super) {
+	    __extends(IteratorObservable, _super);
+	    function IteratorObservable(iterator, scheduler) {
+	        _super.call(this);
+	        this.scheduler = scheduler;
+	        if (iterator == null) {
+	            throw new Error('iterator cannot be null.');
+	        }
+	        this.iterator = getIterator(iterator);
+	    }
+	    IteratorObservable.create = function (iterator, scheduler) {
+	        return new IteratorObservable(iterator, scheduler);
+	    };
+	    IteratorObservable.dispatch = function (state) {
+	        var index = state.index, hasError = state.hasError, iterator = state.iterator, subscriber = state.subscriber;
+	        if (hasError) {
+	            subscriber.error(state.error);
+	            return;
+	        }
+	        var result = iterator.next();
+	        if (result.done) {
+	            subscriber.complete();
+	            return;
+	        }
+	        subscriber.next(result.value);
+	        state.index = index + 1;
+	        if (subscriber.closed) {
+	            if (typeof iterator.return === 'function') {
+	                iterator.return();
+	            }
+	            return;
+	        }
+	        this.schedule(state);
+	    };
+	    IteratorObservable.prototype._subscribe = function (subscriber) {
+	        var index = 0;
+	        var _a = this, iterator = _a.iterator, scheduler = _a.scheduler;
+	        if (scheduler) {
+	            return scheduler.schedule(IteratorObservable.dispatch, 0, {
+	                index: index, iterator: iterator, subscriber: subscriber
+	            });
+	        }
+	        else {
+	            do {
+	                var result = iterator.next();
+	                if (result.done) {
+	                    subscriber.complete();
+	                    break;
+	                }
+	                else {
+	                    subscriber.next(result.value);
+	                }
+	                if (subscriber.closed) {
+	                    if (typeof iterator.return === 'function') {
+	                        iterator.return();
+	                    }
+	                    break;
+	                }
+	            } while (true);
+	        }
+	    };
+	    return IteratorObservable;
+	}(Observable_1.Observable));
+	exports.IteratorObservable = IteratorObservable;
+	var StringIterator = (function () {
+	    function StringIterator(str, idx, len) {
+	        if (idx === void 0) { idx = 0; }
+	        if (len === void 0) { len = str.length; }
+	        this.str = str;
+	        this.idx = idx;
+	        this.len = len;
+	    }
+	    StringIterator.prototype[iterator_1.$$iterator] = function () { return (this); };
+	    StringIterator.prototype.next = function () {
+	        return this.idx < this.len ? {
+	            done: false,
+	            value: this.str.charAt(this.idx++)
+	        } : {
+	            done: true,
+	            value: undefined
+	        };
+	    };
+	    return StringIterator;
+	}());
+	var ArrayIterator = (function () {
+	    function ArrayIterator(arr, idx, len) {
+	        if (idx === void 0) { idx = 0; }
+	        if (len === void 0) { len = toLength(arr); }
+	        this.arr = arr;
+	        this.idx = idx;
+	        this.len = len;
+	    }
+	    ArrayIterator.prototype[iterator_1.$$iterator] = function () { return this; };
+	    ArrayIterator.prototype.next = function () {
+	        return this.idx < this.len ? {
+	            done: false,
+	            value: this.arr[this.idx++]
+	        } : {
+	            done: true,
+	            value: undefined
+	        };
+	    };
+	    return ArrayIterator;
+	}());
+	function getIterator(obj) {
+	    var i = obj[iterator_1.$$iterator];
+	    if (!i && typeof obj === 'string') {
+	        return new StringIterator(obj);
+	    }
+	    if (!i && obj.length !== undefined) {
+	        return new ArrayIterator(obj);
+	    }
+	    if (!i) {
+	        throw new TypeError('object is not iterable');
+	    }
+	    return obj[iterator_1.$$iterator]();
+	}
+	var maxSafeInteger = Math.pow(2, 53) - 1;
+	function toLength(o) {
+	    var len = +o.length;
+	    if (isNaN(len)) {
+	        return 0;
+	    }
+	    if (len === 0 || !numberIsFinite(len)) {
+	        return len;
+	    }
+	    len = sign(len) * Math.floor(Math.abs(len));
+	    if (len <= 0) {
+	        return 0;
+	    }
+	    if (len > maxSafeInteger) {
+	        return maxSafeInteger;
+	    }
+	    return len;
+	}
+	function numberIsFinite(value) {
+	    return typeof value === 'number' && root_1.root.isFinite(value);
+	}
+	function sign(value) {
+	    var valueAsNumber = +value;
+	    if (valueAsNumber === 0) {
+	        return valueAsNumber;
+	    }
+	    if (isNaN(valueAsNumber)) {
+	        return valueAsNumber;
+	    }
+	    return valueAsNumber < 0 ? -1 : 1;
+	}
+	//# sourceMappingURL=IteratorObservable.js.map
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var root_1 = __webpack_require__(6);
+	function symbolIteratorPonyfill(root) {
+	    var Symbol = root.Symbol;
+	    if (typeof Symbol === 'function') {
+	        if (!Symbol.iterator) {
+	            Symbol.iterator = Symbol('iterator polyfill');
+	        }
+	        return Symbol.iterator;
+	    }
+	    else {
+	        // [for Mozilla Gecko 27-35:](https://mzl.la/2ewE1zC)
+	        var Set_1 = root.Set;
+	        if (Set_1 && typeof new Set_1()['@@iterator'] === 'function') {
+	            return '@@iterator';
+	        }
+	        var Map_1 = root.Map;
+	        // required for compatability with es6-shim
+	        if (Map_1) {
+	            var keys = Object.getOwnPropertyNames(Map_1.prototype);
+	            for (var i = 0; i < keys.length; ++i) {
+	                var key = keys[i];
+	                // according to spec, Map.prototype[@@iterator] and Map.orototype.entries must be equal.
+	                if (key !== 'entries' && key !== 'size' && Map_1.prototype[key] === Map_1.prototype['entries']) {
+	                    return key;
+	                }
+	            }
+	        }
+	        return '@@iterator';
+	    }
+	}
+	exports.symbolIteratorPonyfill = symbolIteratorPonyfill;
+	exports.$$iterator = symbolIteratorPonyfill(root_1.root);
+	//# sourceMappingURL=iterator.js.map
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Observable_1 = __webpack_require__(5);
+	var ScalarObservable_1 = __webpack_require__(33);
+	var EmptyObservable_1 = __webpack_require__(34);
+	var isScheduler_1 = __webpack_require__(35);
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @extends {Ignored}
+	 * @hide true
+	 */
+	var ArrayObservable = (function (_super) {
+	    __extends(ArrayObservable, _super);
+	    function ArrayObservable(array, scheduler) {
+	        _super.call(this);
+	        this.array = array;
+	        this.scheduler = scheduler;
+	        if (!scheduler && array.length === 1) {
+	            this._isScalar = true;
+	            this.value = array[0];
+	        }
+	    }
+	    ArrayObservable.create = function (array, scheduler) {
+	        return new ArrayObservable(array, scheduler);
+	    };
+	    /**
+	     * Creates an Observable that emits some values you specify as arguments,
+	     * immediately one after the other, and then emits a complete notification.
+	     *
+	     * <span class="informal">Emits the arguments you provide, then completes.
+	     * </span>
+	     *
+	     * <img src="./img/of.png" width="100%">
+	     *
+	     * This static operator is useful for creating a simple Observable that only
+	     * emits the arguments given, and the complete notification thereafter. It can
+	     * be used for composing with other Observables, such as with {@link concat}.
+	     * By default, it uses a `null` Scheduler, which means the `next`
+	     * notifications are sent synchronously, although with a different Scheduler
+	     * it is possible to determine when those notifications will be delivered.
+	     *
+	     * @example <caption>Emit 10, 20, 30, then 'a', 'b', 'c', then start ticking every second.</caption>
+	     * var numbers = Rx.Observable.of(10, 20, 30);
+	     * var letters = Rx.Observable.of('a', 'b', 'c');
+	     * var interval = Rx.Observable.interval(1000);
+	     * var result = numbers.concat(letters).concat(interval);
+	     * result.subscribe(x => console.log(x));
+	     *
+	     * @see {@link create}
+	     * @see {@link empty}
+	     * @see {@link never}
+	     * @see {@link throw}
+	     *
+	     * @param {...T} values Arguments that represent `next` values to be emitted.
+	     * @param {Scheduler} [scheduler] A {@link Scheduler} to use for scheduling
+	     * the emissions of the `next` notifications.
+	     * @return {Observable<T>} An Observable that emits each given input value.
+	     * @static true
+	     * @name of
+	     * @owner Observable
+	     */
+	    ArrayObservable.of = function () {
+	        var array = [];
+	        for (var _i = 0; _i < arguments.length; _i++) {
+	            array[_i - 0] = arguments[_i];
+	        }
+	        var scheduler = array[array.length - 1];
+	        if (isScheduler_1.isScheduler(scheduler)) {
+	            array.pop();
+	        }
+	        else {
+	            scheduler = null;
+	        }
+	        var len = array.length;
+	        if (len > 1) {
+	            return new ArrayObservable(array, scheduler);
+	        }
+	        else if (len === 1) {
+	            return new ScalarObservable_1.ScalarObservable(array[0], scheduler);
+	        }
+	        else {
+	            return new EmptyObservable_1.EmptyObservable(scheduler);
+	        }
+	    };
+	    ArrayObservable.dispatch = function (state) {
+	        var array = state.array, index = state.index, count = state.count, subscriber = state.subscriber;
+	        if (index >= count) {
+	            subscriber.complete();
+	            return;
+	        }
+	        subscriber.next(array[index]);
+	        if (subscriber.closed) {
+	            return;
+	        }
+	        state.index = index + 1;
+	        this.schedule(state);
+	    };
+	    ArrayObservable.prototype._subscribe = function (subscriber) {
+	        var index = 0;
+	        var array = this.array;
+	        var count = array.length;
+	        var scheduler = this.scheduler;
+	        if (scheduler) {
+	            return scheduler.schedule(ArrayObservable.dispatch, 0, {
+	                array: array, index: index, count: count, subscriber: subscriber
+	            });
+	        }
+	        else {
+	            for (var i = 0; i < count && !subscriber.closed; i++) {
+	                subscriber.next(array[i]);
+	            }
+	            subscriber.complete();
+	        }
+	    };
+	    return ArrayObservable;
+	}(Observable_1.Observable));
+	exports.ArrayObservable = ArrayObservable;
+	//# sourceMappingURL=ArrayObservable.js.map
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Observable_1 = __webpack_require__(5);
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @extends {Ignored}
+	 * @hide true
+	 */
+	var ScalarObservable = (function (_super) {
+	    __extends(ScalarObservable, _super);
+	    function ScalarObservable(value, scheduler) {
+	        _super.call(this);
+	        this.value = value;
+	        this.scheduler = scheduler;
+	        this._isScalar = true;
+	        if (scheduler) {
+	            this._isScalar = false;
+	        }
+	    }
+	    ScalarObservable.create = function (value, scheduler) {
+	        return new ScalarObservable(value, scheduler);
+	    };
+	    ScalarObservable.dispatch = function (state) {
+	        var done = state.done, value = state.value, subscriber = state.subscriber;
+	        if (done) {
+	            subscriber.complete();
+	            return;
+	        }
+	        subscriber.next(value);
+	        if (subscriber.closed) {
+	            return;
+	        }
+	        state.done = true;
+	        this.schedule(state);
+	    };
+	    ScalarObservable.prototype._subscribe = function (subscriber) {
+	        var value = this.value;
+	        var scheduler = this.scheduler;
+	        if (scheduler) {
+	            return scheduler.schedule(ScalarObservable.dispatch, 0, {
+	                done: false, value: value, subscriber: subscriber
+	            });
+	        }
+	        else {
+	            subscriber.next(value);
+	            if (!subscriber.closed) {
+	                subscriber.complete();
+	            }
+	        }
+	    };
+	    return ScalarObservable;
+	}(Observable_1.Observable));
+	exports.ScalarObservable = ScalarObservable;
+	//# sourceMappingURL=ScalarObservable.js.map
+
+/***/ },
+/* 34 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Observable_1 = __webpack_require__(5);
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @extends {Ignored}
+	 * @hide true
+	 */
+	var EmptyObservable = (function (_super) {
+	    __extends(EmptyObservable, _super);
+	    function EmptyObservable(scheduler) {
+	        _super.call(this);
+	        this.scheduler = scheduler;
+	    }
+	    /**
+	     * Creates an Observable that emits no items to the Observer and immediately
+	     * emits a complete notification.
+	     *
+	     * <span class="informal">Just emits 'complete', and nothing else.
+	     * </span>
+	     *
+	     * <img src="./img/empty.png" width="100%">
+	     *
+	     * This static operator is useful for creating a simple Observable that only
+	     * emits the complete notification. It can be used for composing with other
+	     * Observables, such as in a {@link mergeMap}.
+	     *
+	     * @example <caption>Emit the number 7, then complete.</caption>
+	     * var result = Rx.Observable.empty().startWith(7);
+	     * result.subscribe(x => console.log(x));
+	     *
+	     * @example <caption>Map and flatten only odd numbers to the sequence 'a', 'b', 'c'</caption>
+	     * var interval = Rx.Observable.interval(1000);
+	     * var result = interval.mergeMap(x =>
+	     *   x % 2 === 1 ? Rx.Observable.of('a', 'b', 'c') : Rx.Observable.empty()
+	     * );
+	     * result.subscribe(x => console.log(x));
+	     *
+	     * // Results in the following to the console:
+	     * // x is equal to the count on the interval eg(0,1,2,3,...)
+	     * // x will occur every 1000ms
+	     * // if x % 2 is equal to 1 print abc
+	     * // if x % 2 is not equal to 1 nothing will be output
+	     *
+	     * @see {@link create}
+	     * @see {@link never}
+	     * @see {@link of}
+	     * @see {@link throw}
+	     *
+	     * @param {Scheduler} [scheduler] A {@link Scheduler} to use for scheduling
+	     * the emission of the complete notification.
+	     * @return {Observable} An "empty" Observable: emits only the complete
+	     * notification.
+	     * @static true
+	     * @name empty
+	     * @owner Observable
+	     */
+	    EmptyObservable.create = function (scheduler) {
+	        return new EmptyObservable(scheduler);
+	    };
+	    EmptyObservable.dispatch = function (arg) {
+	        var subscriber = arg.subscriber;
+	        subscriber.complete();
+	    };
+	    EmptyObservable.prototype._subscribe = function (subscriber) {
+	        var scheduler = this.scheduler;
+	        if (scheduler) {
+	            return scheduler.schedule(EmptyObservable.dispatch, 0, { subscriber: subscriber });
+	        }
+	        else {
+	            subscriber.complete();
+	        }
+	    };
+	    return EmptyObservable;
+	}(Observable_1.Observable));
+	exports.EmptyObservable = EmptyObservable;
+	//# sourceMappingURL=EmptyObservable.js.map
+
+/***/ },
+/* 35 */
+/***/ function(module, exports) {
+
+	"use strict";
+	function isScheduler(value) {
+	    return value && typeof value.schedule === 'function';
+	}
+	exports.isScheduler = isScheduler;
+	//# sourceMappingURL=isScheduler.js.map
+
+/***/ },
+/* 36 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Observable_1 = __webpack_require__(5);
+	var ScalarObservable_1 = __webpack_require__(33);
+	var EmptyObservable_1 = __webpack_require__(34);
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @extends {Ignored}
+	 * @hide true
+	 */
+	var ArrayLikeObservable = (function (_super) {
+	    __extends(ArrayLikeObservable, _super);
+	    function ArrayLikeObservable(arrayLike, scheduler) {
+	        _super.call(this);
+	        this.arrayLike = arrayLike;
+	        this.scheduler = scheduler;
+	        if (!scheduler && arrayLike.length === 1) {
+	            this._isScalar = true;
+	            this.value = arrayLike[0];
+	        }
+	    }
+	    ArrayLikeObservable.create = function (arrayLike, scheduler) {
+	        var length = arrayLike.length;
+	        if (length === 0) {
+	            return new EmptyObservable_1.EmptyObservable();
+	        }
+	        else if (length === 1) {
+	            return new ScalarObservable_1.ScalarObservable(arrayLike[0], scheduler);
+	        }
+	        else {
+	            return new ArrayLikeObservable(arrayLike, scheduler);
+	        }
+	    };
+	    ArrayLikeObservable.dispatch = function (state) {
+	        var arrayLike = state.arrayLike, index = state.index, length = state.length, subscriber = state.subscriber;
+	        if (subscriber.closed) {
+	            return;
+	        }
+	        if (index >= length) {
+	            subscriber.complete();
+	            return;
+	        }
+	        subscriber.next(arrayLike[index]);
+	        state.index = index + 1;
+	        this.schedule(state);
+	    };
+	    ArrayLikeObservable.prototype._subscribe = function (subscriber) {
+	        var index = 0;
+	        var _a = this, arrayLike = _a.arrayLike, scheduler = _a.scheduler;
+	        var length = arrayLike.length;
+	        if (scheduler) {
+	            return scheduler.schedule(ArrayLikeObservable.dispatch, 0, {
+	                arrayLike: arrayLike, index: index, length: length, subscriber: subscriber
+	            });
+	        }
+	        else {
+	            for (var i = 0; i < length && !subscriber.closed; i++) {
+	                subscriber.next(arrayLike[i]);
+	            }
+	            subscriber.complete();
+	        }
+	    };
+	    return ArrayLikeObservable;
+	}(Observable_1.Observable));
+	exports.ArrayLikeObservable = ArrayLikeObservable;
+	//# sourceMappingURL=ArrayLikeObservable.js.map
+
+/***/ },
+/* 37 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Subscriber_1 = __webpack_require__(8);
+	var Notification_1 = __webpack_require__(38);
+	/**
+	 * @see {@link Notification}
+	 *
+	 * @param scheduler
+	 * @param delay
+	 * @return {Observable<R>|WebSocketSubject<T>|Observable<T>}
+	 * @method observeOn
+	 * @owner Observable
+	 */
+	function observeOn(scheduler, delay) {
+	    if (delay === void 0) { delay = 0; }
+	    return this.lift(new ObserveOnOperator(scheduler, delay));
+	}
+	exports.observeOn = observeOn;
+	var ObserveOnOperator = (function () {
+	    function ObserveOnOperator(scheduler, delay) {
+	        if (delay === void 0) { delay = 0; }
+	        this.scheduler = scheduler;
+	        this.delay = delay;
+	    }
+	    ObserveOnOperator.prototype.call = function (subscriber, source) {
+	        return source.subscribe(new ObserveOnSubscriber(subscriber, this.scheduler, this.delay));
+	    };
+	    return ObserveOnOperator;
+	}());
+	exports.ObserveOnOperator = ObserveOnOperator;
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @ignore
+	 * @extends {Ignored}
+	 */
+	var ObserveOnSubscriber = (function (_super) {
+	    __extends(ObserveOnSubscriber, _super);
+	    function ObserveOnSubscriber(destination, scheduler, delay) {
+	        if (delay === void 0) { delay = 0; }
+	        _super.call(this, destination);
+	        this.scheduler = scheduler;
+	        this.delay = delay;
+	    }
+	    ObserveOnSubscriber.dispatch = function (arg) {
+	        var notification = arg.notification, destination = arg.destination;
+	        notification.observe(destination);
+	    };
+	    ObserveOnSubscriber.prototype.scheduleMessage = function (notification) {
+	        this.add(this.scheduler.schedule(ObserveOnSubscriber.dispatch, this.delay, new ObserveOnMessage(notification, this.destination)));
+	    };
+	    ObserveOnSubscriber.prototype._next = function (value) {
+	        this.scheduleMessage(Notification_1.Notification.createNext(value));
+	    };
+	    ObserveOnSubscriber.prototype._error = function (err) {
+	        this.scheduleMessage(Notification_1.Notification.createError(err));
+	    };
+	    ObserveOnSubscriber.prototype._complete = function () {
+	        this.scheduleMessage(Notification_1.Notification.createComplete());
+	    };
+	    return ObserveOnSubscriber;
+	}(Subscriber_1.Subscriber));
+	exports.ObserveOnSubscriber = ObserveOnSubscriber;
+	var ObserveOnMessage = (function () {
+	    function ObserveOnMessage(notification, destination) {
+	        this.notification = notification;
+	        this.destination = destination;
+	    }
+	    return ObserveOnMessage;
+	}());
+	exports.ObserveOnMessage = ObserveOnMessage;
+	//# sourceMappingURL=observeOn.js.map
+
+/***/ },
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var Observable_1 = __webpack_require__(5);
+	/**
+	 * Represents a push-based event or value that an {@link Observable} can emit.
+	 * This class is particularly useful for operators that manage notifications,
+	 * like {@link materialize}, {@link dematerialize}, {@link observeOn}, and
+	 * others. Besides wrapping the actual delivered value, it also annotates it
+	 * with metadata of, for instance, what type of push message it is (`next`,
+	 * `error`, or `complete`).
+	 *
+	 * @see {@link materialize}
+	 * @see {@link dematerialize}
+	 * @see {@link observeOn}
+	 *
+	 * @class Notification<T>
+	 */
+	var Notification = (function () {
+	    function Notification(kind, value, error) {
+	        this.kind = kind;
+	        this.value = value;
+	        this.error = error;
+	        this.hasValue = kind === 'N';
+	    }
+	    /**
+	     * Delivers to the given `observer` the value wrapped by this Notification.
+	     * @param {Observer} observer
+	     * @return
+	     */
+	    Notification.prototype.observe = function (observer) {
+	        switch (this.kind) {
+	            case 'N':
+	                return observer.next && observer.next(this.value);
+	            case 'E':
+	                return observer.error && observer.error(this.error);
+	            case 'C':
+	                return observer.complete && observer.complete();
+	        }
+	    };
+	    /**
+	     * Given some {@link Observer} callbacks, deliver the value represented by the
+	     * current Notification to the correctly corresponding callback.
+	     * @param {function(value: T): void} next An Observer `next` callback.
+	     * @param {function(err: any): void} [error] An Observer `error` callback.
+	     * @param {function(): void} [complete] An Observer `complete` callback.
+	     * @return {any}
+	     */
+	    Notification.prototype.do = function (next, error, complete) {
+	        var kind = this.kind;
+	        switch (kind) {
+	            case 'N':
+	                return next && next(this.value);
+	            case 'E':
+	                return error && error(this.error);
+	            case 'C':
+	                return complete && complete();
+	        }
+	    };
+	    /**
+	     * Takes an Observer or its individual callback functions, and calls `observe`
+	     * or `do` methods accordingly.
+	     * @param {Observer|function(value: T): void} nextOrObserver An Observer or
+	     * the `next` callback.
+	     * @param {function(err: any): void} [error] An Observer `error` callback.
+	     * @param {function(): void} [complete] An Observer `complete` callback.
+	     * @return {any}
+	     */
+	    Notification.prototype.accept = function (nextOrObserver, error, complete) {
+	        if (nextOrObserver && typeof nextOrObserver.next === 'function') {
+	            return this.observe(nextOrObserver);
+	        }
+	        else {
+	            return this.do(nextOrObserver, error, complete);
+	        }
+	    };
+	    /**
+	     * Returns a simple Observable that just delivers the notification represented
+	     * by this Notification instance.
+	     * @return {any}
+	     */
+	    Notification.prototype.toObservable = function () {
+	        var kind = this.kind;
+	        switch (kind) {
+	            case 'N':
+	                return Observable_1.Observable.of(this.value);
+	            case 'E':
+	                return Observable_1.Observable.throw(this.error);
+	            case 'C':
+	                return Observable_1.Observable.empty();
+	        }
+	        throw new Error('unexpected notification kind value');
+	    };
+	    /**
+	     * A shortcut to create a Notification instance of the type `next` from a
+	     * given value.
+	     * @param {T} value The `next` value.
+	     * @return {Notification<T>} The "next" Notification representing the
+	     * argument.
+	     */
+	    Notification.createNext = function (value) {
+	        if (typeof value !== 'undefined') {
+	            return new Notification('N', value);
+	        }
+	        return this.undefinedValueNotification;
+	    };
+	    /**
+	     * A shortcut to create a Notification instance of the type `error` from a
+	     * given error.
+	     * @param {any} [err] The `error` error.
+	     * @return {Notification<T>} The "error" Notification representing the
+	     * argument.
+	     */
+	    Notification.createError = function (err) {
+	        return new Notification('E', undefined, err);
+	    };
+	    /**
+	     * A shortcut to create a Notification instance of the type `complete`.
+	     * @return {Notification<any>} The valueless "complete" Notification.
+	     */
+	    Notification.createComplete = function () {
+	        return this.completeNotification;
+	    };
+	    Notification.completeNotification = new Notification('C');
+	    Notification.undefinedValueNotification = new Notification('N', undefined);
+	    return Notification;
+	}());
+	exports.Notification = Notification;
+	//# sourceMappingURL=Notification.js.map
+
+/***/ },
+/* 39 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var ArrayObservable_1 = __webpack_require__(32);
+	exports.of = ArrayObservable_1.ArrayObservable.of;
+	//# sourceMappingURL=of.js.map
+
+/***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var mergeMap_1 = __webpack_require__(41);
+	/* tslint:disable:max-line-length */
+	/**
+	 * Projects each source value to an Observable which is merged in the output
+	 * Observable, in a serialized fashion waiting for each one to complete before
+	 * merging the next.
+	 *
+	 * <span class="informal">Maps each value to an Observable, then flattens all of
+	 * these inner Observables using {@link concatAll}.</span>
+	 *
+	 * <img src="./img/concatMap.png" width="100%">
+	 *
+	 * Returns an Observable that emits items based on applying a function that you
+	 * supply to each item emitted by the source Observable, where that function
+	 * returns an (so-called "inner") Observable. Each new inner Observable is
+	 * concatenated with the previous inner Observable.
+	 *
+	 * __Warning:__ if source values arrive endlessly and faster than their
+	 * corresponding inner Observables can complete, it will result in memory issues
+	 * as inner Observables amass in an unbounded buffer waiting for their turn to
+	 * be subscribed to.
+	 *
+	 * Note: `concatMap` is equivalent to `mergeMap` with concurrency parameter set
+	 * to `1`.
+	 *
+	 * @example <caption>For each click event, tick every second from 0 to 3, with no concurrency</caption>
+	 * var clicks = Rx.Observable.fromEvent(document, 'click');
+	 * var result = clicks.concatMap(ev => Rx.Observable.interval(1000).take(4));
+	 * result.subscribe(x => console.log(x));
+	 *
+	 * // Results in the following:
+	 * // (results are not concurrent)
+	 * // For every click on the "document" it will emit values 0 to 3 spaced
+	 * // on a 1000ms interval
+	 * // one click = 1000ms-> 0 -1000ms-> 1 -1000ms-> 2 -1000ms-> 3
+	 *
+	 * @see {@link concat}
+	 * @see {@link concatAll}
+	 * @see {@link concatMapTo}
+	 * @see {@link exhaustMap}
+	 * @see {@link mergeMap}
+	 * @see {@link switchMap}
+	 *
+	 * @param {function(value: T, ?index: number): Observable} project A function
+	 * that, when applied to an item emitted by the source Observable, returns an
+	 * Observable.
+	 * @param {function(outerValue: T, innerValue: I, outerIndex: number, innerIndex: number): any} [resultSelector]
+	 * A function to produce the value on the output Observable based on the values
+	 * and the indices of the source (outer) emission and the inner Observable
+	 * emission. The arguments passed to this function are:
+	 * - `outerValue`: the value that came from the source
+	 * - `innerValue`: the value that came from the projected Observable
+	 * - `outerIndex`: the "index" of the value that came from the source
+	 * - `innerIndex`: the "index" of the value from the projected Observable
+	 * @return {Observable} an observable of values merged from the projected
+	 * Observables as they were subscribed to, one at a time. Optionally, these
+	 * values may have been projected from a passed `projectResult` argument.
+	 * @return {Observable} An Observable that emits the result of applying the
+	 * projection function (and the optional `resultSelector`) to each item emitted
+	 * by the source Observable and taking values from each projected inner
+	 * Observable sequentially.
+	 * @method concatMap
+	 * @owner Observable
+	 */
+	function concatMap(project, resultSelector) {
+	    return this.lift(new mergeMap_1.MergeMapOperator(project, resultSelector, 1));
+	}
+	exports.concatMap = concatMap;
+	//# sourceMappingURL=concatMap.js.map
+
+/***/ },
+/* 41 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var subscribeToResult_1 = __webpack_require__(42);
+	var OuterSubscriber_1 = __webpack_require__(44);
+	/* tslint:disable:max-line-length */
+	/**
+	 * Projects each source value to an Observable which is merged in the output
+	 * Observable.
+	 *
+	 * <span class="informal">Maps each value to an Observable, then flattens all of
+	 * these inner Observables using {@link mergeAll}.</span>
+	 *
+	 * <img src="./img/mergeMap.png" width="100%">
+	 *
+	 * Returns an Observable that emits items based on applying a function that you
+	 * supply to each item emitted by the source Observable, where that function
+	 * returns an Observable, and then merging those resulting Observables and
+	 * emitting the results of this merger.
+	 *
+	 * @example <caption>Map and flatten each letter to an Observable ticking every 1 second</caption>
+	 * var letters = Rx.Observable.of('a', 'b', 'c');
+	 * var result = letters.mergeMap(x =>
+	 *   Rx.Observable.interval(1000).map(i => x+i)
+	 * );
+	 * result.subscribe(x => console.log(x));
+	 *
+	 * // Results in the following:
+	 * // a0
+	 * // b0
+	 * // c0
+	 * // a1
+	 * // b1
+	 * // c1
+	 * // continues to list a,b,c with respective ascending integers
+	 *
+	 * @see {@link concatMap}
+	 * @see {@link exhaustMap}
+	 * @see {@link merge}
+	 * @see {@link mergeAll}
+	 * @see {@link mergeMapTo}
+	 * @see {@link mergeScan}
+	 * @see {@link switchMap}
+	 *
+	 * @param {function(value: T, ?index: number): Observable} project A function
+	 * that, when applied to an item emitted by the source Observable, returns an
+	 * Observable.
+	 * @param {function(outerValue: T, innerValue: I, outerIndex: number, innerIndex: number): any} [resultSelector]
+	 * A function to produce the value on the output Observable based on the values
+	 * and the indices of the source (outer) emission and the inner Observable
+	 * emission. The arguments passed to this function are:
+	 * - `outerValue`: the value that came from the source
+	 * - `innerValue`: the value that came from the projected Observable
+	 * - `outerIndex`: the "index" of the value that came from the source
+	 * - `innerIndex`: the "index" of the value from the projected Observable
+	 * @param {number} [concurrent=Number.POSITIVE_INFINITY] Maximum number of input
+	 * Observables being subscribed to concurrently.
+	 * @return {Observable} An Observable that emits the result of applying the
+	 * projection function (and the optional `resultSelector`) to each item emitted
+	 * by the source Observable and merging the results of the Observables obtained
+	 * from this transformation.
+	 * @method mergeMap
+	 * @owner Observable
+	 */
+	function mergeMap(project, resultSelector, concurrent) {
+	    if (concurrent === void 0) { concurrent = Number.POSITIVE_INFINITY; }
+	    if (typeof resultSelector === 'number') {
+	        concurrent = resultSelector;
+	        resultSelector = null;
+	    }
+	    return this.lift(new MergeMapOperator(project, resultSelector, concurrent));
+	}
+	exports.mergeMap = mergeMap;
+	var MergeMapOperator = (function () {
+	    function MergeMapOperator(project, resultSelector, concurrent) {
+	        if (concurrent === void 0) { concurrent = Number.POSITIVE_INFINITY; }
+	        this.project = project;
+	        this.resultSelector = resultSelector;
+	        this.concurrent = concurrent;
+	    }
+	    MergeMapOperator.prototype.call = function (observer, source) {
+	        return source.subscribe(new MergeMapSubscriber(observer, this.project, this.resultSelector, this.concurrent));
+	    };
+	    return MergeMapOperator;
+	}());
+	exports.MergeMapOperator = MergeMapOperator;
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @ignore
+	 * @extends {Ignored}
+	 */
+	var MergeMapSubscriber = (function (_super) {
+	    __extends(MergeMapSubscriber, _super);
+	    function MergeMapSubscriber(destination, project, resultSelector, concurrent) {
+	        if (concurrent === void 0) { concurrent = Number.POSITIVE_INFINITY; }
+	        _super.call(this, destination);
+	        this.project = project;
+	        this.resultSelector = resultSelector;
+	        this.concurrent = concurrent;
+	        this.hasCompleted = false;
+	        this.buffer = [];
+	        this.active = 0;
+	        this.index = 0;
+	    }
+	    MergeMapSubscriber.prototype._next = function (value) {
+	        if (this.active < this.concurrent) {
+	            this._tryNext(value);
+	        }
+	        else {
+	            this.buffer.push(value);
+	        }
+	    };
+	    MergeMapSubscriber.prototype._tryNext = function (value) {
+	        var result;
+	        var index = this.index++;
+	        try {
+	            result = this.project(value, index);
+	        }
+	        catch (err) {
+	            this.destination.error(err);
+	            return;
+	        }
+	        this.active++;
+	        this._innerSub(result, value, index);
+	    };
+	    MergeMapSubscriber.prototype._innerSub = function (ish, value, index) {
+	        this.add(subscribeToResult_1.subscribeToResult(this, ish, value, index));
+	    };
+	    MergeMapSubscriber.prototype._complete = function () {
+	        this.hasCompleted = true;
+	        if (this.active === 0 && this.buffer.length === 0) {
+	            this.destination.complete();
+	        }
+	    };
+	    MergeMapSubscriber.prototype.notifyNext = function (outerValue, innerValue, outerIndex, innerIndex, innerSub) {
+	        if (this.resultSelector) {
+	            this._notifyResultSelector(outerValue, innerValue, outerIndex, innerIndex);
+	        }
+	        else {
+	            this.destination.next(innerValue);
+	        }
+	    };
+	    MergeMapSubscriber.prototype._notifyResultSelector = function (outerValue, innerValue, outerIndex, innerIndex) {
+	        var result;
+	        try {
+	            result = this.resultSelector(outerValue, innerValue, outerIndex, innerIndex);
+	        }
+	        catch (err) {
+	            this.destination.error(err);
+	            return;
+	        }
+	        this.destination.next(result);
+	    };
+	    MergeMapSubscriber.prototype.notifyComplete = function (innerSub) {
+	        var buffer = this.buffer;
+	        this.remove(innerSub);
+	        this.active--;
+	        if (buffer.length > 0) {
+	            this._next(buffer.shift());
+	        }
+	        else if (this.active === 0 && this.hasCompleted) {
+	            this.destination.complete();
+	        }
+	    };
+	    return MergeMapSubscriber;
+	}(OuterSubscriber_1.OuterSubscriber));
+	exports.MergeMapSubscriber = MergeMapSubscriber;
+	//# sourceMappingURL=mergeMap.js.map
+
+/***/ },
+/* 42 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var root_1 = __webpack_require__(6);
+	var isArray_1 = __webpack_require__(11);
+	var isPromise_1 = __webpack_require__(28);
+	var isObject_1 = __webpack_require__(12);
+	var Observable_1 = __webpack_require__(5);
+	var iterator_1 = __webpack_require__(31);
+	var InnerSubscriber_1 = __webpack_require__(43);
+	var observable_1 = __webpack_require__(18);
+	function subscribeToResult(outerSubscriber, result, outerValue, outerIndex) {
+	    var destination = new InnerSubscriber_1.InnerSubscriber(outerSubscriber, outerValue, outerIndex);
+	    if (destination.closed) {
+	        return null;
+	    }
+	    if (result instanceof Observable_1.Observable) {
+	        if (result._isScalar) {
+	            destination.next(result.value);
+	            destination.complete();
+	            return null;
+	        }
+	        else {
+	            return result.subscribe(destination);
+	        }
+	    }
+	    else if (isArray_1.isArray(result)) {
+	        for (var i = 0, len = result.length; i < len && !destination.closed; i++) {
+	            destination.next(result[i]);
+	        }
+	        if (!destination.closed) {
+	            destination.complete();
+	        }
+	    }
+	    else if (isPromise_1.isPromise(result)) {
+	        result.then(function (value) {
+	            if (!destination.closed) {
+	                destination.next(value);
+	                destination.complete();
+	            }
+	        }, function (err) { return destination.error(err); })
+	            .then(null, function (err) {
+	            // Escaping the Promise trap: globally throw unhandled errors
+	            root_1.root.setTimeout(function () { throw err; });
+	        });
+	        return destination;
+	    }
+	    else if (result && typeof result[iterator_1.$$iterator] === 'function') {
+	        var iterator = result[iterator_1.$$iterator]();
+	        do {
+	            var item = iterator.next();
+	            if (item.done) {
+	                destination.complete();
+	                break;
+	            }
+	            destination.next(item.value);
+	            if (destination.closed) {
+	                break;
+	            }
+	        } while (true);
+	    }
+	    else if (result && typeof result[observable_1.$$observable] === 'function') {
+	        var obs = result[observable_1.$$observable]();
+	        if (typeof obs.subscribe !== 'function') {
+	            destination.error(new TypeError('Provided object does not correctly implement Symbol.observable'));
+	        }
+	        else {
+	            return obs.subscribe(new InnerSubscriber_1.InnerSubscriber(outerSubscriber, outerValue, outerIndex));
+	        }
+	    }
+	    else {
+	        var value = isObject_1.isObject(result) ? 'an invalid object' : "'" + result + "'";
+	        var msg = ("You provided " + value + " where a stream was expected.")
+	            + ' You can provide an Observable, Promise, Array, or Iterable.';
+	        destination.error(new TypeError(msg));
+	    }
+	    return null;
+	}
+	exports.subscribeToResult = subscribeToResult;
+	//# sourceMappingURL=subscribeToResult.js.map
+
+/***/ },
+/* 43 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Subscriber_1 = __webpack_require__(8);
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @ignore
+	 * @extends {Ignored}
+	 */
+	var InnerSubscriber = (function (_super) {
+	    __extends(InnerSubscriber, _super);
+	    function InnerSubscriber(parent, outerValue, outerIndex) {
+	        _super.call(this);
+	        this.parent = parent;
+	        this.outerValue = outerValue;
+	        this.outerIndex = outerIndex;
+	        this.index = 0;
+	    }
+	    InnerSubscriber.prototype._next = function (value) {
+	        this.parent.notifyNext(this.outerValue, value, this.outerIndex, this.index++, this);
+	    };
+	    InnerSubscriber.prototype._error = function (error) {
+	        this.parent.notifyError(error, this);
+	        this.unsubscribe();
+	    };
+	    InnerSubscriber.prototype._complete = function () {
+	        this.parent.notifyComplete(this);
+	        this.unsubscribe();
+	    };
+	    return InnerSubscriber;
+	}(Subscriber_1.Subscriber));
+	exports.InnerSubscriber = InnerSubscriber;
+	//# sourceMappingURL=InnerSubscriber.js.map
+
+/***/ },
+/* 44 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Subscriber_1 = __webpack_require__(8);
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @ignore
+	 * @extends {Ignored}
+	 */
+	var OuterSubscriber = (function (_super) {
+	    __extends(OuterSubscriber, _super);
+	    function OuterSubscriber() {
+	        _super.apply(this, arguments);
+	    }
+	    OuterSubscriber.prototype.notifyNext = function (outerValue, innerValue, outerIndex, innerIndex, innerSub) {
+	        this.destination.next(innerValue);
+	    };
+	    OuterSubscriber.prototype.notifyError = function (error, innerSub) {
+	        this.destination.error(error);
+	    };
+	    OuterSubscriber.prototype.notifyComplete = function (innerSub) {
+	        this.destination.complete();
+	    };
+	    return OuterSubscriber;
+	}(Subscriber_1.Subscriber));
+	exports.OuterSubscriber = OuterSubscriber;
+	//# sourceMappingURL=OuterSubscriber.js.map
+
+/***/ },
+/* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Subscriber_1 = __webpack_require__(8);
+	/**
+	 * Returns an Observable that emits whether or not every item of the source satisfies the condition specified.
+	 * @param {function} predicate a function for determining if an item meets a specified condition.
+	 * @param {any} [thisArg] optional object to use for `this` in the callback
+	 * @return {Observable} an Observable of booleans that determines if all items of the source Observable meet the condition specified.
+	 * @method every
+	 * @owner Observable
+	 */
+	function every(predicate, thisArg) {
+	    return this.lift(new EveryOperator(predicate, thisArg, this));
+	}
+	exports.every = every;
+	var EveryOperator = (function () {
+	    function EveryOperator(predicate, thisArg, source) {
+	        this.predicate = predicate;
+	        this.thisArg = thisArg;
+	        this.source = source;
+	    }
+	    EveryOperator.prototype.call = function (observer, source) {
+	        return source.subscribe(new EverySubscriber(observer, this.predicate, this.thisArg, this.source));
+	    };
+	    return EveryOperator;
+	}());
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @ignore
+	 * @extends {Ignored}
+	 */
+	var EverySubscriber = (function (_super) {
+	    __extends(EverySubscriber, _super);
+	    function EverySubscriber(destination, predicate, thisArg, source) {
+	        _super.call(this, destination);
+	        this.predicate = predicate;
+	        this.thisArg = thisArg;
+	        this.source = source;
+	        this.index = 0;
+	        this.thisArg = thisArg || this;
+	    }
+	    EverySubscriber.prototype.notifyComplete = function (everyValueMatch) {
+	        this.destination.next(everyValueMatch);
+	        this.destination.complete();
+	    };
+	    EverySubscriber.prototype._next = function (value) {
+	        var result = false;
+	        try {
+	            result = this.predicate.call(this.thisArg, value, this.index++, this.source);
+	        }
+	        catch (err) {
+	            this.destination.error(err);
+	            return;
+	        }
+	        if (!result) {
+	            this.notifyComplete(false);
+	        }
+	    };
+	    EverySubscriber.prototype._complete = function () {
+	        this.notifyComplete(true);
+	    };
+	    return EverySubscriber;
+	}(Subscriber_1.Subscriber));
+	//# sourceMappingURL=every.js.map
+
+/***/ },
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Subscriber_1 = __webpack_require__(8);
+	var EmptyError_1 = __webpack_require__(47);
+	/**
+	 * Emits only the first value (or the first value that meets some condition)
+	 * emitted by the source Observable.
+	 *
+	 * <span class="informal">Emits only the first value. Or emits only the first
+	 * value that passes some test.</span>
+	 *
+	 * <img src="./img/first.png" width="100%">
+	 *
+	 * If called with no arguments, `first` emits the first value of the source
+	 * Observable, then completes. If called with a `predicate` function, `first`
+	 * emits the first value of the source that matches the specified condition. It
+	 * may also take a `resultSelector` function to produce the output value from
+	 * the input value, and a `defaultValue` to emit in case the source completes
+	 * before it is able to emit a valid value. Throws an error if `defaultValue`
+	 * was not provided and a matching element is not found.
+	 *
+	 * @example <caption>Emit only the first click that happens on the DOM</caption>
+	 * var clicks = Rx.Observable.fromEvent(document, 'click');
+	 * var result = clicks.first();
+	 * result.subscribe(x => console.log(x));
+	 *
+	 * @example <caption>Emits the first click that happens on a DIV</caption>
+	 * var clicks = Rx.Observable.fromEvent(document, 'click');
+	 * var result = clicks.first(ev => ev.target.tagName === 'DIV');
+	 * result.subscribe(x => console.log(x));
+	 *
+	 * @see {@link filter}
+	 * @see {@link find}
+	 * @see {@link take}
+	 *
+	 * @throws {EmptyError} Delivers an EmptyError to the Observer's `error`
+	 * callback if the Observable completes before any `next` notification was sent.
+	 *
+	 * @param {function(value: T, index: number, source: Observable<T>): boolean} [predicate]
+	 * An optional function called with each item to test for condition matching.
+	 * @param {function(value: T, index: number): R} [resultSelector] A function to
+	 * produce the value on the output Observable based on the values
+	 * and the indices of the source Observable. The arguments passed to this
+	 * function are:
+	 * - `value`: the value that was emitted on the source.
+	 * - `index`: the "index" of the value from the source.
+	 * @param {R} [defaultValue] The default value emitted in case no valid value
+	 * was found on the source.
+	 * @return {Observable<T|R>} an Observable of the first item that matches the
+	 * condition.
+	 * @method first
+	 * @owner Observable
+	 */
+	function first(predicate, resultSelector, defaultValue) {
+	    return this.lift(new FirstOperator(predicate, resultSelector, defaultValue, this));
+	}
+	exports.first = first;
+	var FirstOperator = (function () {
+	    function FirstOperator(predicate, resultSelector, defaultValue, source) {
+	        this.predicate = predicate;
+	        this.resultSelector = resultSelector;
+	        this.defaultValue = defaultValue;
+	        this.source = source;
+	    }
+	    FirstOperator.prototype.call = function (observer, source) {
+	        return source.subscribe(new FirstSubscriber(observer, this.predicate, this.resultSelector, this.defaultValue, this.source));
+	    };
+	    return FirstOperator;
+	}());
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @ignore
+	 * @extends {Ignored}
+	 */
+	var FirstSubscriber = (function (_super) {
+	    __extends(FirstSubscriber, _super);
+	    function FirstSubscriber(destination, predicate, resultSelector, defaultValue, source) {
+	        _super.call(this, destination);
+	        this.predicate = predicate;
+	        this.resultSelector = resultSelector;
+	        this.defaultValue = defaultValue;
+	        this.source = source;
+	        this.index = 0;
+	        this.hasCompleted = false;
+	        this._emitted = false;
+	    }
+	    FirstSubscriber.prototype._next = function (value) {
+	        var index = this.index++;
+	        if (this.predicate) {
+	            this._tryPredicate(value, index);
+	        }
+	        else {
+	            this._emit(value, index);
+	        }
+	    };
+	    FirstSubscriber.prototype._tryPredicate = function (value, index) {
+	        var result;
+	        try {
+	            result = this.predicate(value, index, this.source);
+	        }
+	        catch (err) {
+	            this.destination.error(err);
+	            return;
+	        }
+	        if (result) {
+	            this._emit(value, index);
+	        }
+	    };
+	    FirstSubscriber.prototype._emit = function (value, index) {
+	        if (this.resultSelector) {
+	            this._tryResultSelector(value, index);
+	            return;
+	        }
+	        this._emitFinal(value);
+	    };
+	    FirstSubscriber.prototype._tryResultSelector = function (value, index) {
+	        var result;
+	        try {
+	            result = this.resultSelector(value, index);
+	        }
+	        catch (err) {
+	            this.destination.error(err);
+	            return;
+	        }
+	        this._emitFinal(result);
+	    };
+	    FirstSubscriber.prototype._emitFinal = function (value) {
+	        var destination = this.destination;
+	        if (!this._emitted) {
+	            this._emitted = true;
+	            destination.next(value);
+	            destination.complete();
+	            this.hasCompleted = true;
+	        }
+	    };
+	    FirstSubscriber.prototype._complete = function () {
+	        var destination = this.destination;
+	        if (!this.hasCompleted && typeof this.defaultValue !== 'undefined') {
+	            destination.next(this.defaultValue);
+	            destination.complete();
+	        }
+	        else if (!this.hasCompleted) {
+	            destination.error(new EmptyError_1.EmptyError);
+	        }
+	    };
+	    return FirstSubscriber;
+	}(Subscriber_1.Subscriber));
+	//# sourceMappingURL=first.js.map
+
+/***/ },
+/* 47 */
+/***/ function(module, exports) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	/**
+	 * An error thrown when an Observable or a sequence was queried but has no
+	 * elements.
+	 *
+	 * @see {@link first}
+	 * @see {@link last}
+	 * @see {@link single}
+	 *
+	 * @class EmptyError
+	 */
+	var EmptyError = (function (_super) {
+	    __extends(EmptyError, _super);
+	    function EmptyError() {
+	        var err = _super.call(this, 'no elements in sequence');
+	        this.name = err.name = 'EmptyError';
+	        this.stack = err.stack;
+	        this.message = err.message;
+	    }
+	    return EmptyError;
+	}(Error));
+	exports.EmptyError = EmptyError;
+	//# sourceMappingURL=EmptyError.js.map
+
+/***/ },
+/* 48 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Subscriber_1 = __webpack_require__(8);
+	/**
+	 * Applies a given `project` function to each value emitted by the source
+	 * Observable, and emits the resulting values as an Observable.
+	 *
+	 * <span class="informal">Like [Array.prototype.map()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map),
+	 * it passes each source value through a transformation function to get
+	 * corresponding output values.</span>
+	 *
+	 * <img src="./img/map.png" width="100%">
+	 *
+	 * Similar to the well known `Array.prototype.map` function, this operator
+	 * applies a projection to each value and emits that projection in the output
+	 * Observable.
+	 *
+	 * @example <caption>Map every every click to the clientX position of that click</caption>
+	 * var clicks = Rx.Observable.fromEvent(document, 'click');
+	 * var positions = clicks.map(ev => ev.clientX);
+	 * positions.subscribe(x => console.log(x));
+	 *
+	 * @see {@link mapTo}
+	 * @see {@link pluck}
+	 *
+	 * @param {function(value: T, index: number): R} project The function to apply
+	 * to each `value` emitted by the source Observable. The `index` parameter is
+	 * the number `i` for the i-th emission that has happened since the
+	 * subscription, starting from the number `0`.
+	 * @param {any} [thisArg] An optional argument to define what `this` is in the
+	 * `project` function.
+	 * @return {Observable<R>} An Observable that emits the values from the source
+	 * Observable transformed by the given `project` function.
+	 * @method map
+	 * @owner Observable
+	 */
+	function map(project, thisArg) {
+	    if (typeof project !== 'function') {
+	        throw new TypeError('argument is not a function. Are you looking for `mapTo()`?');
+	    }
+	    return this.lift(new MapOperator(project, thisArg));
+	}
+	exports.map = map;
+	var MapOperator = (function () {
+	    function MapOperator(project, thisArg) {
+	        this.project = project;
+	        this.thisArg = thisArg;
+	    }
+	    MapOperator.prototype.call = function (subscriber, source) {
+	        return source.subscribe(new MapSubscriber(subscriber, this.project, this.thisArg));
+	    };
+	    return MapOperator;
+	}());
+	exports.MapOperator = MapOperator;
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @ignore
+	 * @extends {Ignored}
+	 */
+	var MapSubscriber = (function (_super) {
+	    __extends(MapSubscriber, _super);
+	    function MapSubscriber(destination, project, thisArg) {
+	        _super.call(this, destination);
+	        this.project = project;
+	        this.count = 0;
+	        this.thisArg = thisArg || this;
+	    }
+	    // NOTE: This looks unoptimized, but it's actually purposefully NOT
+	    // using try/catch optimizations.
+	    MapSubscriber.prototype._next = function (value) {
+	        var result;
+	        try {
+	            result = this.project.call(this.thisArg, value, this.count++);
+	        }
+	        catch (err) {
+	            this.destination.error(err);
+	            return;
+	        }
+	        this.destination.next(result);
+	    };
+	    return MapSubscriber;
+	}(Subscriber_1.Subscriber));
+	//# sourceMappingURL=map.js.map
+
+/***/ },
+/* 49 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Subscriber_1 = __webpack_require__(8);
+	/* tslint:disable:max-line-length */
+	/**
+	 * Applies an accumulator function over the source Observable, and returns the
+	 * accumulated result when the source completes, given an optional seed value.
+	 *
+	 * <span class="informal">Combines together all values emitted on the source,
+	 * using an accumulator function that knows how to join a new source value into
+	 * the accumulation from the past.</span>
+	 *
+	 * <img src="./img/reduce.png" width="100%">
+	 *
+	 * Like
+	 * [Array.prototype.reduce()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce),
+	 * `reduce` applies an `accumulator` function against an accumulation and each
+	 * value of the source Observable (from the past) to reduce it to a single
+	 * value, emitted on the output Observable. Note that `reduce` will only emit
+	 * one value, only when the source Observable completes. It is equivalent to
+	 * applying operator {@link scan} followed by operator {@link last}.
+	 *
+	 * Returns an Observable that applies a specified `accumulator` function to each
+	 * item emitted by the source Observable. If a `seed` value is specified, then
+	 * that value will be used as the initial value for the accumulator. If no seed
+	 * value is specified, the first item of the source is used as the seed.
+	 *
+	 * @example <caption>Count the number of click events that happened in 5 seconds</caption>
+	 * var clicksInFiveSeconds = Rx.Observable.fromEvent(document, 'click')
+	 *   .takeUntil(Rx.Observable.interval(5000));
+	 * var ones = clicksInFiveSeconds.mapTo(1);
+	 * var seed = 0;
+	 * var count = ones.reduce((acc, one) => acc + one, seed);
+	 * count.subscribe(x => console.log(x));
+	 *
+	 * @see {@link count}
+	 * @see {@link expand}
+	 * @see {@link mergeScan}
+	 * @see {@link scan}
+	 *
+	 * @param {function(acc: R, value: T): R} accumulator The accumulator function
+	 * called on each source value.
+	 * @param {R} [seed] The initial accumulation value.
+	 * @return {Observable<R>} An observable of the accumulated values.
+	 * @return {Observable<R>} An Observable that emits a single value that is the
+	 * result of accumulating the values emitted by the source Observable.
+	 * @method reduce
+	 * @owner Observable
+	 */
+	function reduce(accumulator, seed) {
+	    var hasSeed = false;
+	    // providing a seed of `undefined` *should* be valid and trigger
+	    // hasSeed! so don't use `seed !== undefined` checks!
+	    // For this reason, we have to check it here at the original call site
+	    // otherwise inside Operator/Subscriber we won't know if `undefined`
+	    // means they didn't provide anything or if they literally provided `undefined`
+	    if (arguments.length >= 2) {
+	        hasSeed = true;
+	    }
+	    return this.lift(new ReduceOperator(accumulator, seed, hasSeed));
+	}
+	exports.reduce = reduce;
+	var ReduceOperator = (function () {
+	    function ReduceOperator(accumulator, seed, hasSeed) {
+	        if (hasSeed === void 0) { hasSeed = false; }
+	        this.accumulator = accumulator;
+	        this.seed = seed;
+	        this.hasSeed = hasSeed;
+	    }
+	    ReduceOperator.prototype.call = function (subscriber, source) {
+	        return source.subscribe(new ReduceSubscriber(subscriber, this.accumulator, this.seed, this.hasSeed));
+	    };
+	    return ReduceOperator;
+	}());
+	exports.ReduceOperator = ReduceOperator;
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @ignore
+	 * @extends {Ignored}
+	 */
+	var ReduceSubscriber = (function (_super) {
+	    __extends(ReduceSubscriber, _super);
+	    function ReduceSubscriber(destination, accumulator, seed, hasSeed) {
+	        _super.call(this, destination);
+	        this.accumulator = accumulator;
+	        this.hasSeed = hasSeed;
+	        this.hasValue = false;
+	        this.acc = seed;
+	    }
+	    ReduceSubscriber.prototype._next = function (value) {
+	        if (this.hasValue || (this.hasValue = this.hasSeed)) {
+	            this._tryReduce(value);
+	        }
+	        else {
+	            this.acc = value;
+	            this.hasValue = true;
+	        }
+	    };
+	    ReduceSubscriber.prototype._tryReduce = function (value) {
+	        var result;
+	        try {
+	            result = this.accumulator(this.acc, value);
+	        }
+	        catch (err) {
+	            this.destination.error(err);
+	            return;
+	        }
+	        this.acc = result;
+	    };
+	    ReduceSubscriber.prototype._complete = function () {
+	        if (this.hasValue || this.hasSeed) {
+	            this.destination.next(this.acc);
+	        }
+	        this.destination.complete();
+	    };
+	    return ReduceSubscriber;
+	}(Subscriber_1.Subscriber));
+	exports.ReduceSubscriber = ReduceSubscriber;
+	//# sourceMappingURL=reduce.js.map
+
+/***/ },
+/* 50 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var OuterSubscriber_1 = __webpack_require__(44);
+	var subscribeToResult_1 = __webpack_require__(42);
+	/**
+	 * Catches errors on the observable to be handled by returning a new observable or throwing an error.
+	 * @param {function} selector a function that takes as arguments `err`, which is the error, and `caught`, which
+	 *  is the source observable, in case you'd like to "retry" that observable by returning it again. Whatever observable
+	 *  is returned by the `selector` will be used to continue the observable chain.
+	 * @return {Observable} an observable that originates from either the source or the observable returned by the
+	 *  catch `selector` function.
+	 * @method catch
+	 * @name catch
+	 * @owner Observable
+	 */
+	function _catch(selector) {
+	    var operator = new CatchOperator(selector);
+	    var caught = this.lift(operator);
+	    return (operator.caught = caught);
+	}
+	exports._catch = _catch;
+	var CatchOperator = (function () {
+	    function CatchOperator(selector) {
+	        this.selector = selector;
+	    }
+	    CatchOperator.prototype.call = function (subscriber, source) {
+	        return source.subscribe(new CatchSubscriber(subscriber, this.selector, this.caught));
+	    };
+	    return CatchOperator;
+	}());
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @ignore
+	 * @extends {Ignored}
+	 */
+	var CatchSubscriber = (function (_super) {
+	    __extends(CatchSubscriber, _super);
+	    function CatchSubscriber(destination, selector, caught) {
+	        _super.call(this, destination);
+	        this.selector = selector;
+	        this.caught = caught;
+	    }
+	    // NOTE: overriding `error` instead of `_error` because we don't want
+	    // to have this flag this subscriber as `isStopped`.
+	    CatchSubscriber.prototype.error = function (err) {
+	        if (!this.isStopped) {
+	            var result = void 0;
+	            try {
+	                result = this.selector(err, this.caught);
+	            }
+	            catch (err) {
+	                this.destination.error(err);
+	                return;
+	            }
+	            this.unsubscribe();
+	            this.destination.remove(this);
+	            subscribeToResult_1.subscribeToResult(this, result);
+	        }
+	    };
+	    return CatchSubscriber;
+	}(OuterSubscriber_1.OuterSubscriber));
+	//# sourceMappingURL=catch.js.map
+
+/***/ },
+/* 51 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var mergeAll_1 = __webpack_require__(52);
+	/* tslint:disable:max-line-length */
+	/**
+	 * Converts a higher-order Observable into a first-order Observable by
+	 * concatenating the inner Observables in order.
+	 *
+	 * <span class="informal">Flattens an Observable-of-Observables by putting one
+	 * inner Observable after the other.</span>
+	 *
+	 * <img src="./img/concatAll.png" width="100%">
+	 *
+	 * Joins every Observable emitted by the source (a higher-order Observable), in
+	 * a serial fashion. It subscribes to each inner Observable only after the
+	 * previous inner Observable has completed, and merges all of their values into
+	 * the returned observable.
+	 *
+	 * __Warning:__ If the source Observable emits Observables quickly and
+	 * endlessly, and the inner Observables it emits generally complete slower than
+	 * the source emits, you can run into memory issues as the incoming Observables
+	 * collect in an unbounded buffer.
+	 *
+	 * Note: `concatAll` is equivalent to `mergeAll` with concurrency parameter set
+	 * to `1`.
+	 *
+	 * @example <caption>For each click event, tick every second from 0 to 3, with no concurrency</caption>
+	 * var clicks = Rx.Observable.fromEvent(document, 'click');
+	 * var higherOrder = clicks.map(ev => Rx.Observable.interval(1000).take(4));
+	 * var firstOrder = higherOrder.concatAll();
+	 * firstOrder.subscribe(x => console.log(x));
+	 *
+	 * // Results in the following:
+	 * // (results are not concurrent)
+	 * // For every click on the "document" it will emit values 0 to 3 spaced
+	 * // on a 1000ms interval
+	 * // one click = 1000ms-> 0 -1000ms-> 1 -1000ms-> 2 -1000ms-> 3
+	 *
+	 * @see {@link combineAll}
+	 * @see {@link concat}
+	 * @see {@link concatMap}
+	 * @see {@link concatMapTo}
+	 * @see {@link exhaust}
+	 * @see {@link mergeAll}
+	 * @see {@link switch}
+	 * @see {@link zipAll}
+	 *
+	 * @return {Observable} An Observable emitting values from all the inner
+	 * Observables concatenated.
+	 * @method concatAll
+	 * @owner Observable
+	 */
+	function concatAll() {
+	    return this.lift(new mergeAll_1.MergeAllOperator(1));
+	}
+	exports.concatAll = concatAll;
+	//# sourceMappingURL=concatAll.js.map
+
+/***/ },
+/* 52 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var OuterSubscriber_1 = __webpack_require__(44);
+	var subscribeToResult_1 = __webpack_require__(42);
+	/**
+	 * Converts a higher-order Observable into a first-order Observable which
+	 * concurrently delivers all values that are emitted on the inner Observables.
+	 *
+	 * <span class="informal">Flattens an Observable-of-Observables.</span>
+	 *
+	 * <img src="./img/mergeAll.png" width="100%">
+	 *
+	 * `mergeAll` subscribes to an Observable that emits Observables, also known as
+	 * a higher-order Observable. Each time it observes one of these emitted inner
+	 * Observables, it subscribes to that and delivers all the values from the
+	 * inner Observable on the output Observable. The output Observable only
+	 * completes once all inner Observables have completed. Any error delivered by
+	 * a inner Observable will be immediately emitted on the output Observable.
+	 *
+	 * @example <caption>Spawn a new interval Observable for each click event, and blend their outputs as one Observable</caption>
+	 * var clicks = Rx.Observable.fromEvent(document, 'click');
+	 * var higherOrder = clicks.map((ev) => Rx.Observable.interval(1000));
+	 * var firstOrder = higherOrder.mergeAll();
+	 * firstOrder.subscribe(x => console.log(x));
+	 *
+	 * @example <caption>Count from 0 to 9 every second for each click, but only allow 2 concurrent timers</caption>
+	 * var clicks = Rx.Observable.fromEvent(document, 'click');
+	 * var higherOrder = clicks.map((ev) => Rx.Observable.interval(1000).take(10));
+	 * var firstOrder = higherOrder.mergeAll(2);
+	 * firstOrder.subscribe(x => console.log(x));
+	 *
+	 * @see {@link combineAll}
+	 * @see {@link concatAll}
+	 * @see {@link exhaust}
+	 * @see {@link merge}
+	 * @see {@link mergeMap}
+	 * @see {@link mergeMapTo}
+	 * @see {@link mergeScan}
+	 * @see {@link switch}
+	 * @see {@link zipAll}
+	 *
+	 * @param {number} [concurrent=Number.POSITIVE_INFINITY] Maximum number of inner
+	 * Observables being subscribed to concurrently.
+	 * @return {Observable} An Observable that emits values coming from all the
+	 * inner Observables emitted by the source Observable.
+	 * @method mergeAll
+	 * @owner Observable
+	 */
+	function mergeAll(concurrent) {
+	    if (concurrent === void 0) { concurrent = Number.POSITIVE_INFINITY; }
+	    return this.lift(new MergeAllOperator(concurrent));
+	}
+	exports.mergeAll = mergeAll;
+	var MergeAllOperator = (function () {
+	    function MergeAllOperator(concurrent) {
+	        this.concurrent = concurrent;
+	    }
+	    MergeAllOperator.prototype.call = function (observer, source) {
+	        return source.subscribe(new MergeAllSubscriber(observer, this.concurrent));
+	    };
+	    return MergeAllOperator;
+	}());
+	exports.MergeAllOperator = MergeAllOperator;
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @ignore
+	 * @extends {Ignored}
+	 */
+	var MergeAllSubscriber = (function (_super) {
+	    __extends(MergeAllSubscriber, _super);
+	    function MergeAllSubscriber(destination, concurrent) {
+	        _super.call(this, destination);
+	        this.concurrent = concurrent;
+	        this.hasCompleted = false;
+	        this.buffer = [];
+	        this.active = 0;
+	    }
+	    MergeAllSubscriber.prototype._next = function (observable) {
+	        if (this.active < this.concurrent) {
+	            this.active++;
+	            this.add(subscribeToResult_1.subscribeToResult(this, observable));
+	        }
+	        else {
+	            this.buffer.push(observable);
+	        }
+	    };
+	    MergeAllSubscriber.prototype._complete = function () {
+	        this.hasCompleted = true;
+	        if (this.active === 0 && this.buffer.length === 0) {
+	            this.destination.complete();
+	        }
+	    };
+	    MergeAllSubscriber.prototype.notifyComplete = function (innerSub) {
+	        var buffer = this.buffer;
+	        this.remove(innerSub);
+	        this.active--;
+	        if (buffer.length > 0) {
+	            this._next(buffer.shift());
+	        }
+	        else if (this.active === 0 && this.hasCompleted) {
+	            this.destination.complete();
+	        }
+	    };
+	    return MergeAllSubscriber;
+	}(OuterSubscriber_1.OuterSubscriber));
+	exports.MergeAllSubscriber = MergeAllSubscriber;
+	//# sourceMappingURL=mergeAll.js.map
+
+/***/ },
+/* 53 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var PromiseObservable_1 = __webpack_require__(29);
+	exports.fromPromise = PromiseObservable_1.PromiseObservable.create;
+	//# sourceMappingURL=fromPromise.js.map
+
+/***/ },
+/* 54 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Subscriber_1 = __webpack_require__(8);
+	var EmptyError_1 = __webpack_require__(47);
+	/* tslint:disable:max-line-length */
+	/**
+	 * Returns an Observable that emits only the last item emitted by the source Observable.
+	 * It optionally takes a predicate function as a parameter, in which case, rather than emitting
+	 * the last item from the source Observable, the resulting Observable will emit the last item
+	 * from the source Observable that satisfies the predicate.
+	 *
+	 * <img src="./img/last.png" width="100%">
+	 *
+	 * @throws {EmptyError} Delivers an EmptyError to the Observer's `error`
+	 * callback if the Observable completes before any `next` notification was sent.
+	 * @param {function} predicate - the condition any source emitted item has to satisfy.
+	 * @return {Observable} an Observable that emits only the last item satisfying the given condition
+	 * from the source, or an NoSuchElementException if no such items are emitted.
+	 * @throws - Throws if no items that match the predicate are emitted by the source Observable.
+	 * @method last
+	 * @owner Observable
+	 */
+	function last(predicate, resultSelector, defaultValue) {
+	    return this.lift(new LastOperator(predicate, resultSelector, defaultValue, this));
+	}
+	exports.last = last;
+	var LastOperator = (function () {
+	    function LastOperator(predicate, resultSelector, defaultValue, source) {
+	        this.predicate = predicate;
+	        this.resultSelector = resultSelector;
+	        this.defaultValue = defaultValue;
+	        this.source = source;
+	    }
+	    LastOperator.prototype.call = function (observer, source) {
+	        return source.subscribe(new LastSubscriber(observer, this.predicate, this.resultSelector, this.defaultValue, this.source));
+	    };
+	    return LastOperator;
+	}());
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @ignore
+	 * @extends {Ignored}
+	 */
+	var LastSubscriber = (function (_super) {
+	    __extends(LastSubscriber, _super);
+	    function LastSubscriber(destination, predicate, resultSelector, defaultValue, source) {
+	        _super.call(this, destination);
+	        this.predicate = predicate;
+	        this.resultSelector = resultSelector;
+	        this.defaultValue = defaultValue;
+	        this.source = source;
+	        this.hasValue = false;
+	        this.index = 0;
+	        if (typeof defaultValue !== 'undefined') {
+	            this.lastValue = defaultValue;
+	            this.hasValue = true;
+	        }
+	    }
+	    LastSubscriber.prototype._next = function (value) {
+	        var index = this.index++;
+	        if (this.predicate) {
+	            this._tryPredicate(value, index);
+	        }
+	        else {
+	            if (this.resultSelector) {
+	                this._tryResultSelector(value, index);
+	                return;
+	            }
+	            this.lastValue = value;
+	            this.hasValue = true;
+	        }
+	    };
+	    LastSubscriber.prototype._tryPredicate = function (value, index) {
+	        var result;
+	        try {
+	            result = this.predicate(value, index, this.source);
+	        }
+	        catch (err) {
+	            this.destination.error(err);
+	            return;
+	        }
+	        if (result) {
+	            if (this.resultSelector) {
+	                this._tryResultSelector(value, index);
+	                return;
+	            }
+	            this.lastValue = value;
+	            this.hasValue = true;
+	        }
+	    };
+	    LastSubscriber.prototype._tryResultSelector = function (value, index) {
+	        var result;
+	        try {
+	            result = this.resultSelector(value, index);
+	        }
+	        catch (err) {
+	            this.destination.error(err);
+	            return;
+	        }
+	        this.lastValue = result;
+	        this.hasValue = true;
+	    };
+	    LastSubscriber.prototype._complete = function () {
+	        var destination = this.destination;
+	        if (this.hasValue) {
+	            destination.next(this.lastValue);
+	            destination.complete();
+	        }
+	        else {
+	            destination.error(new EmptyError_1.EmptyError);
+	        }
+	    };
+	    return LastSubscriber;
+	}(Subscriber_1.Subscriber));
+	//# sourceMappingURL=last.js.map
+
+/***/ },
+/* 55 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var Subscriber_1 = __webpack_require__(8);
+	/* tslint:disable:max-line-length */
+	/**
+	 * Filter items emitted by the source Observable by only emitting those that
+	 * satisfy a specified predicate.
+	 *
+	 * <span class="informal">Like
+	 * [Array.prototype.filter()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter),
+	 * it only emits a value from the source if it passes a criterion function.</span>
+	 *
+	 * <img src="./img/filter.png" width="100%">
+	 *
+	 * Similar to the well-known `Array.prototype.filter` method, this operator
+	 * takes values from the source Observable, passes them through a `predicate`
+	 * function and only emits those values that yielded `true`.
+	 *
+	 * @example <caption>Emit only click events whose target was a DIV element</caption>
+	 * var clicks = Rx.Observable.fromEvent(document, 'click');
+	 * var clicksOnDivs = clicks.filter(ev => ev.target.tagName === 'DIV');
+	 * clicksOnDivs.subscribe(x => console.log(x));
+	 *
+	 * @see {@link distinct}
+	 * @see {@link distinctUntilChanged}
+	 * @see {@link distinctUntilKeyChanged}
+	 * @see {@link ignoreElements}
+	 * @see {@link partition}
+	 * @see {@link skip}
+	 *
+	 * @param {function(value: T, index: number): boolean} predicate A function that
+	 * evaluates each value emitted by the source Observable. If it returns `true`,
+	 * the value is emitted, if `false` the value is not passed to the output
+	 * Observable. The `index` parameter is the number `i` for the i-th source
+	 * emission that has happened since the subscription, starting from the number
+	 * `0`.
+	 * @param {any} [thisArg] An optional argument to determine the value of `this`
+	 * in the `predicate` function.
+	 * @return {Observable} An Observable of values from the source that were
+	 * allowed by the `predicate` function.
+	 * @method filter
+	 * @owner Observable
+	 */
+	function filter(predicate, thisArg) {
+	    return this.lift(new FilterOperator(predicate, thisArg));
+	}
+	exports.filter = filter;
+	var FilterOperator = (function () {
+	    function FilterOperator(predicate, thisArg) {
+	        this.predicate = predicate;
+	        this.thisArg = thisArg;
+	    }
+	    FilterOperator.prototype.call = function (subscriber, source) {
+	        return source.subscribe(new FilterSubscriber(subscriber, this.predicate, this.thisArg));
+	    };
+	    return FilterOperator;
+	}());
+	/**
+	 * We need this JSDoc comment for affecting ESDoc.
+	 * @ignore
+	 * @extends {Ignored}
+	 */
+	var FilterSubscriber = (function (_super) {
+	    __extends(FilterSubscriber, _super);
+	    function FilterSubscriber(destination, predicate, thisArg) {
+	        _super.call(this, destination);
+	        this.predicate = predicate;
+	        this.thisArg = thisArg;
+	        this.count = 0;
+	        this.predicate = predicate;
+	    }
+	    // the try catch block below is left specifically for
+	    // optimization and perf reasons. a tryCatcher is not necessary here.
+	    FilterSubscriber.prototype._next = function (value) {
+	        var result;
+	        try {
+	            result = this.predicate.call(this.thisArg, value, this.count++);
+	        }
+	        catch (err) {
+	            this.destination.error(err);
+	            return;
+	        }
+	        if (result) {
+	            this.destination.next(value);
+	        }
+	    };
+	    return FilterSubscriber;
+	}(Subscriber_1.Subscriber));
+	//# sourceMappingURL=filter.js.map
+
+/***/ },
+/* 56 */,
+/* 57 */,
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -24017,7 +40183,7 @@
 
 
 /***/ },
-/* 27 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process) {/**
@@ -25634,10 +41800,10 @@
 
 	})));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(28)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(60)))
 
 /***/ },
-/* 28 */
+/* 60 */
 /***/ function(module, exports) {
 
 	// shim for using process in browser
@@ -25823,7 +41989,7 @@
 
 
 /***/ },
-/* 29 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*! *****************************************************************************
@@ -26665,7 +42831,7 @@
 	    function CreateWeakMapPolyfill() {
 	        var UUID_SIZE = 16;
 	        var isNode = typeof global !== "undefined" && Object.prototype.toString.call(global.process) === '[object process]';
-	        var nodeCrypto = isNode && __webpack_require__(30);
+	        var nodeCrypto = isNode && __webpack_require__(62);
 	        var hasOwn = Object.prototype.hasOwnProperty;
 	        var keys = {};
 	        var rootKey = CreateUniqueKey();
@@ -26791,10 +42957,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 30 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {var rng = __webpack_require__(35)
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var rng = __webpack_require__(67)
 
 	function error () {
 	  var m = [].slice.call(arguments).join(' ')
@@ -26805,9 +42971,9 @@
 	    ].join('\n'))
 	}
 
-	exports.createHash = __webpack_require__(37)
+	exports.createHash = __webpack_require__(69)
 
-	exports.createHmac = __webpack_require__(49)
+	exports.createHmac = __webpack_require__(81)
 
 	exports.randomBytes = function(size, callback) {
 	  if (callback && callback.call) {
@@ -26828,7 +42994,7 @@
 	  return ['sha1', 'sha256', 'sha512', 'md5', 'rmd160']
 	}
 
-	var p = __webpack_require__(50)(exports)
+	var p = __webpack_require__(82)(exports)
 	exports.pbkdf2 = p.pbkdf2
 	exports.pbkdf2Sync = p.pbkdf2Sync
 
@@ -26848,10 +43014,10 @@
 	  }
 	})
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(63).Buffer))
 
 /***/ },
-/* 31 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer, global) {/*!
@@ -26864,9 +43030,9 @@
 
 	'use strict'
 
-	var base64 = __webpack_require__(32)
-	var ieee754 = __webpack_require__(33)
-	var isArray = __webpack_require__(34)
+	var base64 = __webpack_require__(64)
+	var ieee754 = __webpack_require__(65)
+	var isArray = __webpack_require__(66)
 
 	exports.Buffer = Buffer
 	exports.SlowBuffer = SlowBuffer
@@ -28644,10 +44810,10 @@
 	  return val !== val // eslint-disable-line no-self-compare
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31).Buffer, (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(63).Buffer, (function() { return this; }())))
 
 /***/ },
-/* 32 */
+/* 64 */
 /***/ function(module, exports) {
 
 	'use strict'
@@ -28767,7 +44933,7 @@
 
 
 /***/ },
-/* 33 */
+/* 65 */
 /***/ function(module, exports) {
 
 	exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -28857,7 +45023,7 @@
 
 
 /***/ },
-/* 34 */
+/* 66 */
 /***/ function(module, exports) {
 
 	var toString = {}.toString;
@@ -28868,13 +45034,13 @@
 
 
 /***/ },
-/* 35 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, Buffer) {(function() {
 	  var g = ('undefined' === typeof window ? global : window) || {}
 	  _crypto = (
-	    g.crypto || g.msCrypto || __webpack_require__(36)
+	    g.crypto || g.msCrypto || __webpack_require__(68)
 	  )
 	  module.exports = function(size) {
 	    // Modern Browsers
@@ -28898,22 +45064,22 @@
 	  }
 	}())
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(31).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(63).Buffer))
 
 /***/ },
-/* 36 */
+/* 68 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 37 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {var createHash = __webpack_require__(38)
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var createHash = __webpack_require__(70)
 
-	var md5 = toConstructor(__webpack_require__(46))
-	var rmd160 = toConstructor(__webpack_require__(48))
+	var md5 = toConstructor(__webpack_require__(78))
+	var rmd160 = toConstructor(__webpack_require__(80))
 
 	function toConstructor (fn) {
 	  return function () {
@@ -28941,10 +45107,10 @@
 	  return createHash(alg)
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(63).Buffer))
 
 /***/ },
-/* 38 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var exports = module.exports = function (alg) {
@@ -28953,16 +45119,16 @@
 	  return new Alg()
 	}
 
-	var Buffer = __webpack_require__(31).Buffer
-	var Hash   = __webpack_require__(39)(Buffer)
+	var Buffer = __webpack_require__(63).Buffer
+	var Hash   = __webpack_require__(71)(Buffer)
 
-	exports.sha1 = __webpack_require__(40)(Buffer, Hash)
-	exports.sha256 = __webpack_require__(44)(Buffer, Hash)
-	exports.sha512 = __webpack_require__(45)(Buffer, Hash)
+	exports.sha1 = __webpack_require__(72)(Buffer, Hash)
+	exports.sha256 = __webpack_require__(76)(Buffer, Hash)
+	exports.sha512 = __webpack_require__(77)(Buffer, Hash)
 
 
 /***/ },
-/* 39 */
+/* 71 */
 /***/ function(module, exports) {
 
 	module.exports = function (Buffer) {
@@ -29045,7 +45211,7 @@
 
 
 /***/ },
-/* 40 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -29057,7 +45223,7 @@
 	 * See http://pajhome.org.uk/crypt/md5 for details.
 	 */
 
-	var inherits = __webpack_require__(41).inherits
+	var inherits = __webpack_require__(73).inherits
 
 	module.exports = function (Buffer, Hash) {
 
@@ -29189,7 +45355,7 @@
 
 
 /***/ },
-/* 41 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -29717,7 +45883,7 @@
 	}
 	exports.isPrimitive = isPrimitive;
 
-	exports.isBuffer = __webpack_require__(42);
+	exports.isBuffer = __webpack_require__(74);
 
 	function objectToString(o) {
 	  return Object.prototype.toString.call(o);
@@ -29761,7 +45927,7 @@
 	 *     prototype.
 	 * @param {function} superCtor Constructor function to inherit prototype from.
 	 */
-	exports.inherits = __webpack_require__(43);
+	exports.inherits = __webpack_require__(75);
 
 	exports._extend = function(origin, add) {
 	  // Don't do anything if add isn't an object
@@ -29779,10 +45945,10 @@
 	  return Object.prototype.hasOwnProperty.call(obj, prop);
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(28)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(60)))
 
 /***/ },
-/* 42 */
+/* 74 */
 /***/ function(module, exports) {
 
 	module.exports = function isBuffer(arg) {
@@ -29793,7 +45959,7 @@
 	}
 
 /***/ },
-/* 43 */
+/* 75 */
 /***/ function(module, exports) {
 
 	if (typeof Object.create === 'function') {
@@ -29822,7 +45988,7 @@
 
 
 /***/ },
-/* 44 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -29834,7 +46000,7 @@
 	 *
 	 */
 
-	var inherits = __webpack_require__(41).inherits
+	var inherits = __webpack_require__(73).inherits
 
 	module.exports = function (Buffer, Hash) {
 
@@ -29975,10 +46141,10 @@
 
 
 /***/ },
-/* 45 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var inherits = __webpack_require__(41).inherits
+	var inherits = __webpack_require__(73).inherits
 
 	module.exports = function (Buffer, Hash) {
 	  var K = [
@@ -30225,7 +46391,7 @@
 
 
 /***/ },
-/* 46 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -30237,7 +46403,7 @@
 	 * See http://pajhome.org.uk/crypt/md5 for more info.
 	 */
 
-	var helpers = __webpack_require__(47);
+	var helpers = __webpack_require__(79);
 
 	/*
 	 * Calculate the MD5 of an array of little-endian words, and a bit length
@@ -30386,7 +46552,7 @@
 
 
 /***/ },
-/* 47 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {var intSize = 4;
@@ -30424,10 +46590,10 @@
 
 	module.exports = { hash: hash };
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(63).Buffer))
 
 /***/ },
-/* 48 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {
@@ -30636,13 +46802,13 @@
 
 
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(63).Buffer))
 
 /***/ },
-/* 49 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {var createHash = __webpack_require__(37)
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var createHash = __webpack_require__(69)
 
 	var zeroBuffer = new Buffer(128)
 	zeroBuffer.fill(0)
@@ -30686,13 +46852,13 @@
 	}
 
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(63).Buffer))
 
 /***/ },
-/* 50 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var pbkdf2Export = __webpack_require__(51)
+	var pbkdf2Export = __webpack_require__(83)
 
 	module.exports = function (crypto, exports) {
 	  exports = exports || {}
@@ -30707,7 +46873,7 @@
 
 
 /***/ },
-/* 51 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {module.exports = function(crypto) {
@@ -30795,7 +46961,7 @@
 	  }
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(63).Buffer))
 
 /***/ }
 /******/ ]);

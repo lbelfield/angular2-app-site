@@ -8,17 +8,29 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 // necessary imports
 const core_1 = require("@angular/core");
 const platform_browser_1 = require("@angular/platform-browser");
-// import { RouterModule }   from '@angular/router';
+const router_1 = require('@angular/router');
+const common_1 = require('@angular/common');
 // bespoke components
 const app_component_1 = require("./app.component");
 const showHide_component_1 = require("./showHide/showHide.component");
+const appRoutes = [
+    { path: "myapp", component: app_component_1.default },
+    { path: "showHide", component: showHide_component_1.default },
+    { path: '',
+        redirectTo: '/showHide',
+        pathMatch: 'full'
+    }
+];
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     core_1.NgModule({
         imports: [
-            platform_browser_1.BrowserModule
+            platform_browser_1.BrowserModule,
+            //routing still not working!!!! - do index.html too
+            router_1.RouterModule.forRoot(appRoutes)
         ],
+        providers: [{ provide: common_1.LocationStrategy, useClass: common_1.HashLocationStrategy }],
         //need to add every component to our declarations
         declarations: [
             app_component_1.default,

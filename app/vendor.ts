@@ -4,3 +4,4 @@ import "jquery";
 import "@angular/core";
 import "zone.js";
 import "reflect-metadata";
+import "@angular/router";
