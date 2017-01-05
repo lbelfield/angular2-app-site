@@ -5,22 +5,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-// Import
-// importing Component from core
 const core_1 = require("@angular/core");
-// Decorator
-let AppComponent = class AppComponent {
+let WadupComponent = class WadupComponent {
 };
-AppComponent = __decorate([
+WadupComponent = __decorate([
     core_1.Component({
-        // the element defined in the index.html
-        selector: "my-app",
-        // Given this configuration, when the browser URL for this application becomes /showHide, 
-        // the router matches that URL to the route path /showHide 
-        // and displays the ShowHideComponent after a RouterOutlet that you've placed in the host view's HTML.
-        template: `<router-outlet></router-outlet>`
+        selector: "my-wadup",
+        templateUrl: "../../app/wadup/wadup.html"
     })
-], AppComponent);
+], WadupComponent);
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = AppComponent;
-//# sourceMappingURL=app.component.js.map
+exports.default = WadupComponent;
+//# sourceMappingURL=wadup.component.js.map

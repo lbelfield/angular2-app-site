@@ -13,29 +13,21 @@ const common_1 = require('@angular/common');
 // bespoke components
 const app_component_1 = require("./app.component");
 const showHide_component_1 = require("./showHide/showHide.component");
+const wadup_component_1 = require("./wadup/wadup.component");
 const appRoutes = [
     { path: "myapp", component: app_component_1.default },
     { path: "showHide", component: showHide_component_1.default },
-    { path: '',
-        redirectTo: '/showHide',
-        pathMatch: 'full'
-    }
+    { path: "wadup", component: wadup_component_1.default },
+    { path: '', redirectTo: '/showHide', pathMatch: 'full' }
 ];
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     core_1.NgModule({
-        imports: [
-            platform_browser_1.BrowserModule,
-            //routing still not working!!!! - do index.html too
-            router_1.RouterModule.forRoot(appRoutes)
-        ],
+        imports: [platform_browser_1.BrowserModule, router_1.RouterModule.forRoot(appRoutes)],
         providers: [{ provide: common_1.LocationStrategy, useClass: common_1.HashLocationStrategy }],
         //need to add every component to our declarations
-        declarations: [
-            app_component_1.default,
-            showHide_component_1.default
-        ],
+        declarations: [app_component_1.default, showHide_component_1.default, wadup_component_1.default],
         // our bootstrap is AppComponent
         bootstrap: [app_component_1.default]
     })

@@ -50701,20 +50701,16 @@
 	// bespoke components
 	var app_component_1 = __webpack_require__(56);
 	var showHide_component_1 = __webpack_require__(57);
-	var appRoutes = [{ path: "myapp", component: app_component_1.default }, { path: "showHide", component: showHide_component_1.default }, { path: '',
-	    redirectTo: '/showHide',
-	    pathMatch: 'full'
-	}];
+	var wadup_component_1 = __webpack_require__(58);
+	var appRoutes = [{ path: "myapp", component: app_component_1.default }, { path: "showHide", component: showHide_component_1.default }, { path: "wadup", component: wadup_component_1.default }, { path: '', redirectTo: '/showHide', pathMatch: 'full' }];
 	var AppModule = function AppModule() {
 	    _classCallCheck(this, AppModule);
 	};
 	AppModule = __decorate([core_1.NgModule({
-	    imports: [platform_browser_1.BrowserModule,
-	    //routing still not working!!!! - do index.html too
-	    router_1.RouterModule.forRoot(appRoutes)],
+	    imports: [platform_browser_1.BrowserModule, router_1.RouterModule.forRoot(appRoutes)],
 	    providers: [{ provide: common_1.LocationStrategy, useClass: common_1.HashLocationStrategy }],
 	    //need to add every component to our declarations
-	    declarations: [app_component_1.default, showHide_component_1.default],
+	    declarations: [app_component_1.default, showHide_component_1.default, wadup_component_1.default],
 	    // our bootstrap is AppComponent
 	    bootstrap: [app_component_1.default]
 	})], AppModule);
@@ -58708,9 +58704,10 @@
 	AppComponent = __decorate([core_1.Component({
 	    // the element defined in the index.html
 	    selector: "my-app",
-	    // this is the template to put in the component. Note this is the directive of showHide.component.ts
-	    // the name of the directive is defined in the Decorator's selector
-	    template: "<my-showHide></my-showHide> <router-outlet></router-outlet>"
+	    // Given this configuration, when the browser URL for this application becomes /showHide, 
+	    // the router matches that URL to the route path /showHide 
+	    // and displays the ShowHideComponent after a RouterOutlet that you've placed in the host view's HTML.
+	    template: "<router-outlet></router-outlet>"
 	})], AppComponent);
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = AppComponent;
@@ -58768,6 +58765,36 @@
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = ShowHideComponent;
 	//# sourceMappingURL=showHide.component.js.map
+
+/***/ },
+/* 58 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var __decorate = undefined && undefined.__decorate || function (decorators, target, key, desc) {
+	    var c = arguments.length,
+	        r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+	        d;
+	    if ((typeof Reflect === "undefined" ? "undefined" : _typeof(Reflect)) === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) {
+	        if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    }return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var core_1 = __webpack_require__(3);
+	var WadupComponent = function WadupComponent() {
+	    _classCallCheck(this, WadupComponent);
+	};
+	WadupComponent = __decorate([core_1.Component({
+	    selector: "my-wadup",
+	    templateUrl: "../../app/wadup/wadup.html"
+	})], WadupComponent);
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = WadupComponent;
+	//# sourceMappingURL=wadup.component.js.map
 
 /***/ }
 /******/ ]);

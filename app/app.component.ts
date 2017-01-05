@@ -7,10 +7,10 @@ import {Component} from "@angular/core";
     // the element defined in the index.html
     selector: "my-app",
     
-    // this is the template to put in the component. Note this is the directive of showHide.component.ts
-    // the name of the directive is defined in the Decorator's selector
-    template: `<my-showHide></my-showHide> <router-outlet></router-outlet>`   
-    // template: `sup`   
+    // Given this configuration, when the browser URL for this application becomes /showHide, 
+    // the router matches that URL to the route path /showHide 
+    // and displays the ShowHideComponent after a RouterOutlet that you've placed in the host view's HTML.
+    template: `<router-outlet></router-outlet>`   
 })
 
 // Class
